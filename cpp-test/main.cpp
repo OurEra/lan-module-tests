@@ -9,18 +9,24 @@
 #include <stdio.h>
 #include "TestVector.h"
 #include "TestScale.h"
+#include "TestSet.h"
 
 int main() {
-    
+
     TestVector testVecotr;
     testVecotr.setUp();
     testVecotr.run();
     testVecotr.tearDown();
-    
+
     TestSacle testScale;
     testScale.setUp();
     testScale.run();
     testScale.tearDown();
-    
+
+    TestSet testSet;
+    testSet.setUp();
+    testSet.run();
+    testSet.tearDown();
+
     return 0;
 }

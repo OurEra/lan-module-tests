@@ -11,12 +11,12 @@
 
 #include "TestBase.h"
 class TestVector : public TestBase {
-    
+
 public:
     void setUp();
     void run();
     void tearDown();
-    
+
 };
 
 

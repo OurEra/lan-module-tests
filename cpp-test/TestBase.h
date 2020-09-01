@@ -10,12 +10,12 @@
 #define TestBase_h
 
 class TestBase {
-  
+
 public:
     virtual void setUp() = 0;
     virtual void run()  = 0;
     virtual void tearDown() = 0;
-    
+
 };
 
 

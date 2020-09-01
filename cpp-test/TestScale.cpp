@@ -82,26 +82,28 @@ Fraction FindScale(int input_pixels, int target_pixels, int max_pixels) {
   return best_scale;
 }
 
-void TestSacle::setUp() {}
+void TestSacle::setUp() {
+    printf("\n");
+}
 
 void TestSacle::run() {
-    
+
   int align = 32;
-  
+
   int inW = 720;
   int inH = 1280;
   int outW = 176;
   int outH = 312;
-  
+
   const float requested_aspect = outW / static_cast<float>(outH);
   int cropW = std::min(inW, static_cast<int>(inH * requested_aspect));
   int cropH = std::min(inH, static_cast<int>(inW / requested_aspect));
-  
+
   printf("== in %dx%d request %dx%d crop %dx%d\n", inW, inH, outW, outH, cropW, cropH);
-    
+
   Fraction outFraction = FindScale(cropW * cropH, outW * outH, outW * outH);
   printf("== out fraction %dx%d\n", outFraction.numerator, outFraction.denominator);
-  
+
   int cropWithRound =
     roundUp(cropW,
             outFraction.denominator * align, inW);
@@ -109,10 +111,12 @@ void TestSacle::run() {
       roundUp(cropH,
               outFraction.denominator * align, inH);
   printf("== cropWithRound %d cropHeightRound %d\n", cropWithRound, cropHeightRound);
-  
+
   printf("== result %dx%d\n",
          cropWithRound / outFraction.denominator * outFraction.numerator,
          cropHeightRound /  outFraction.denominator * outFraction.numerator);
 }
 
-void TestSacle::tearDown() {}
+void TestSacle::tearDown() {
+    printf("\n");
+}

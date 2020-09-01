@@ -10,7 +10,10 @@
 #include <stdio.h>
 #include <vector>
 
-void TestVector::setUp() {}
+void TestVector::setUp() {
+    printf("\n");
+}
+
 void TestVector::run() {
     std::vector<int> v;
 
@@ -36,5 +39,8 @@ void TestVector::run() {
     printf("%s over cost %ds %dms\n", __func__, _costs, _costms);
 
 }
-void TestVector::tearDown() {}
+
+void TestVector::tearDown() {
+    printf("\n");
+}
 
