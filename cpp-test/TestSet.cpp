@@ -4,7 +4,7 @@
 #include <set>
 
 void TestSet::setUp() {
-    printf("\n");
+    printf("TestSet::setUp \n");
 }
 
 void TestSet::run() {
@@ -33,6 +33,6 @@ void TestSet::run() {
 }
 
 void TestSet::tearDown() {
-    printf("\n");
+    printf("TestSet::tearDown \n\n");
 }
 

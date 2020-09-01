@@ -1,0 +1,16 @@
+#ifndef TestTemplete_h
+#define TestTemplete_h
+
+#include "TestBase.h"
+class TestTemplete : public TestBase {
+
+public:
+    void setUp();
+    void run();
+    void tearDown();
+
+};
+
+
+#endif /* TestTemplete_h */
+

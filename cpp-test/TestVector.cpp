@@ -11,7 +11,7 @@
 #include <vector>
 
 void TestVector::setUp() {
-    printf("\n");
+    printf("TestVector::setUp \n");
 }
 
 void TestVector::run() {
@@ -41,6 +41,6 @@ void TestVector::run() {
 }
 
 void TestVector::tearDown() {
-    printf("\n");
+    printf("TestVector::tearDown \n\n");
 }
 

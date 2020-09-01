@@ -83,7 +83,7 @@ Fraction FindScale(int input_pixels, int target_pixels, int max_pixels) {
 }
 
 void TestSacle::setUp() {
-    printf("\n");
+    printf("TestSacle::setUp \n");
 }
 
 void TestSacle::run() {
@@ -118,5 +118,5 @@ void TestSacle::run() {
 }
 
 void TestSacle::tearDown() {
-    printf("\n");
+    printf("TestSacle::tearDown \n\n");
 }

@@ -20,7 +20,7 @@ public:
 };
 
 void TestSlot::setUp() {
-    printf("\n");
+    printf("TestSlot::setUp \n");
 }
 
 void TestSlot::run() {
@@ -37,5 +37,5 @@ void TestSlot::run() {
 }
 
 void TestSlot::tearDown() {
-    printf("\n");
+    printf("TestSlot::tearDown \n\n");
 }

@@ -1,0 +1,13 @@
+#include "TestTemplete.h"
+#include <stdio.h>
+
+void TestTemplete::setUp() {
+    printf("TestTemplete::setUp \n");
+}
+
+void TestTemplete::run() {
+}
+
+void TestTemplete::tearDown() {
+    printf("TestTemplete::tearDown \n\n");
+}

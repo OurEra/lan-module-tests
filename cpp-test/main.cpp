@@ -11,6 +11,7 @@
 #include "TestScale.h"
 #include "TestSet.h"
 #include "TestSlot.h"
+#include "TestDeque.h"
 
 int main() {
 
@@ -33,6 +34,11 @@ int main() {
     testSlot.setUp();
     testSlot.run();
     testSlot.tearDown();
+
+    TestDeque testDeque;
+    testDeque.setUp();
+    testDeque.run();
+    testDeque.tearDown();
 
     return 0;
 }
