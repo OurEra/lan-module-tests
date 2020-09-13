@@ -4,8 +4,8 @@ from termcolor import colored
 
 orignal_log = open("test-json2.txt", "r", encoding='utf-8')
 
-filter_out_media = True
-
+# filter out MediaStatistics item
+FILTER_OUT_MEDIA = True
 
 # IDLE,
 # CONNECTING,
@@ -75,12 +75,12 @@ for line in lines:
     elif line['item']['event_id'] == 18:
         room = convert_room_name(line['item']['room_state'])
         print (colored(rdate + " : " + platform + " : " + event + " : " + room, 'red'))
-    elif filter_out_media and line['item']['event_id'] == 30:
+    elif FILTER_OUT_MEDIA and line['item']['event_id'] == 30:
         pass
     else:
         print (colored(rdate + " : " + platform + " : " + event, 'red'))
 
-    if filter_out_media and line['item']['event_id'] == 30:
+    if FILTER_OUT_MEDIA and line['item']['event_id'] == 30:
         pass
     else:
         print (line)
