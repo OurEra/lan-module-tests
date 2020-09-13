@@ -3,6 +3,7 @@
 .//com/srw/javatest/TestEnum.java
 .//com/srw/javatest/TestSync.java
 .//com/srw/javatest/TestEquals.java
+.//com/srw/javatest/TestBlockingDeque.java
 .//com/srw/javatest/TestStackTrace.java
 .//com/srw/javatest/TestEntry.java
 .//com/srw/javatest/TestJSON.java

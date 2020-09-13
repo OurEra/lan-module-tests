@@ -1,5 +1,8 @@
 package com.example.lib.java;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class FormatLog {
 
     private static final int OFFSET = 2;
@@ -19,15 +22,17 @@ public class FormatLog {
         void onLog(String log);
     }
 
-
-    public static void LogI(String COLOR , String msg) {
+    public static void LogI(String COLOR , String msg, int offset ) {
         long tid = Thread.currentThread().getId();
         StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-        String format = "[" +
-                trace[OFFSET].getFileName() + "(" + tid + ")"
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        String timestamp = sdf.format(now);
+        String format = timestamp + " [" +
+                trace[offset].getFileName() + "(" + tid + ")"
                 + " "
-                + trace[OFFSET].getMethodName() + ":" + trace[OFFSET].getLineNumber()
-                + "]";
+                + trace[offset].getMethodName() + ":" + trace[offset].getLineNumber()
+                + "] ";
         if (mCallback != null) {
             mCallback.onLog(format + msg);
         } else {
@@ -35,7 +40,11 @@ public class FormatLog {
         }
     }
 
+    public static void LogI(String COLOR , String msg) {
+        LogI(COLOR, msg, OFFSET + 1);
+    }
+
     public static void LogI(String msg) {
-        LogI(ANSI_CYAN, msg);
+        LogI(ANSI_CYAN, msg, OFFSET + 1);
     }
 }
