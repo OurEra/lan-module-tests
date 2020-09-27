@@ -1,8 +1,9 @@
 import json
+import sys
 from datetime import datetime
 from termcolor import colored
 
-orignal_log = open("test-json2.txt", "r", encoding='utf-8')
+orignal_log = open(sys.argv[1], "r", encoding='utf-8')
 
 # filter out MediaStatistics item
 FILTER_OUT_MEDIA = True

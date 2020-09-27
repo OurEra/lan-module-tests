@@ -2,16 +2,17 @@ package com.srw.javatest;
 
 import com.example.lib.java.FormatLog;
 
-
 public class TestEntry {
 
-    private static final boolean TEST_BYTE_BUFFER = true;
+    private static final boolean TEST_BYTE_BUFFER = false;
     private static final boolean TEST_JSON        = false;
     private static final boolean TEST_STACK_TRACE = false;
     private static final boolean TEST_SYNC        = false;
     private static final boolean TEST_EQUAL       = false;
     private static final boolean TEST_ENUM        = true;
     private static final boolean TEST_DEQUE       = true;
+    private static final boolean TEST_SEM         = false;
+    private static final boolean TEST_BARR        = true;
     public static void main(String[] args) {
 
         if (TEST_BYTE_BUFFER) {
@@ -55,6 +56,18 @@ public class TestEntry {
             TestBlockingDeque test = new TestBlockingDeque();
             test.test();
             FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestBlockingDeque.class.getSimpleName());
+        }
+        if (TEST_SEM) {
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST BEGIN " + TestSemphore.class.getSimpleName());
+            TestSemphore test = new TestSemphore();
+            test.test();
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestSemphore.class.getSimpleName());
+        }
+        if (TEST_BARR) {
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST BEGIN " + TestBarrier.class.getSimpleName());
+            TestBarrier test = new TestBarrier();
+            test.test();
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestBarrier.class.getSimpleName());
         }
     }
 }
