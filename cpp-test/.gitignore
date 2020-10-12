@@ -1,8 +1,1 @@
-*
-!.gitignore
-!*.h
-!*.hpp
-!*.cpp
-!*.cc
-!*.c
-!*.sh
+*.obj
