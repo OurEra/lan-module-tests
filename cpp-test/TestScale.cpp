@@ -10,6 +10,8 @@
 
 #include <stdio.h>
 #include <vector>
+#include <limits>
+#include <cstdlib>
 
 // Round |value_to_round| to a multiple of |multiple|. Prefer rounding upwards,
 // but never more than |max_value|.
