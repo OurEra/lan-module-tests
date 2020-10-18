@@ -12,6 +12,7 @@
 #include "TestSet.h"
 #include "TestSlot.h"
 #include "TestDeque.h"
+#include "TestGLM.h"
 
 int main() {
 
@@ -39,6 +40,11 @@ int main() {
     testDeque.setUp();
     testDeque.run();
     testDeque.tearDown();
+
+    TestGLM testGLM;
+    testGLM.setUp();
+    testGLM.run();
+    testGLM.tearDown();
 
     return 0;
 }
