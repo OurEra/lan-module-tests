@@ -12,7 +12,8 @@ public class TestEntry {
     private static final boolean TEST_ENUM        = true;
     private static final boolean TEST_DEQUE       = true;
     private static final boolean TEST_SEM         = false;
-    private static final boolean TEST_BARR        = true;
+    private static final boolean TEST_BARR        = false;
+    private static final boolean TEST_COMPARE     = true;
     public static void main(String[] args) {
 
         if (TEST_BYTE_BUFFER) {
@@ -68,6 +69,12 @@ public class TestEntry {
             TestBarrier test = new TestBarrier();
             test.test();
             FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestBarrier.class.getSimpleName());
+        }
+        if (TEST_COMPARE) {
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST BEGIN " + TestCompare.class.getSimpleName());
+            TestCompare test = new TestCompare();
+            test.test();
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestCompare.class.getSimpleName());
         }
     }
 }

@@ -4,6 +4,7 @@
 .//com/srw/javatest/TestSemphore.java
 .//com/srw/javatest/TestEnum.java
 .//com/srw/javatest/TestSync.java
+.//com/srw/javatest/TestCompare.java
 .//com/srw/javatest/TestEquals.java
 .//com/srw/javatest/TestBlockingDeque.java
 .//com/srw/javatest/TestStackTrace.java
