@@ -6,6 +6,7 @@
 //  Copyright © 2020 shiruiwei. All rights reserved.
 //
 
+#include <time.h>
 #include <stdio.h>
 #include "TestVector.h"
 #include "TestScale.h"
@@ -13,6 +14,7 @@
 #include "TestSlot.h"
 #include "TestDeque.h"
 #include "TestGLM.h"
+#include "TestTimestampExtrapolator.h"
 
 int main() {
 
@@ -45,6 +47,11 @@ int main() {
     testGLM.setUp();
     testGLM.run();
     testGLM.tearDown();
+
+    TimestampExtrapolator testTimestamp(390012248);
+    testTimestamp.setUp();
+    testTimestamp.run();
+    testTimestamp.tearDown();
 
     return 0;
 }
