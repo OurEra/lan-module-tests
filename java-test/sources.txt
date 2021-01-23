@@ -2,6 +2,7 @@
 .//com/srw/javatest/BaseTest.java
 .//com/srw/javatest/TestBarrier.java
 .//com/srw/javatest/TestSemphore.java
+.//com/srw/javatest/TestExeutor.java
 .//com/srw/javatest/TestEnum.java
 .//com/srw/javatest/TestSync.java
 .//com/srw/javatest/TestCompare.java

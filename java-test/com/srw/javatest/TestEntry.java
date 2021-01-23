@@ -14,6 +14,7 @@ public class TestEntry {
     private static final boolean TEST_SEM         = false;
     private static final boolean TEST_BARR        = false;
     private static final boolean TEST_COMPARE     = true;
+    private static final boolean TEST_EXEUTOR     = true;
     public static void main(String[] args) {
 
         if (TEST_BYTE_BUFFER) {
@@ -75,6 +76,12 @@ public class TestEntry {
             TestCompare test = new TestCompare();
             test.test();
             FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestCompare.class.getSimpleName());
+        }
+        if (TEST_EXEUTOR) {
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST BEGIN " + TestExeutor.class.getSimpleName());
+            TestExeutor test = new TestExeutor();
+            test.test();
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestExeutor.class.getSimpleName());
         }
     }
 }
