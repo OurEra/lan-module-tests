@@ -11,4 +11,5 @@
 .//com/srw/javatest/TestStackTrace.java
 .//com/srw/javatest/TestEntry.java
 .//com/srw/javatest/TestJSON.java
+.//com/srw/javatest/TestMap.java
 .//com/srw/javatest/TestByteBuffer.java

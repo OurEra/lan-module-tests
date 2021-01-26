@@ -13,8 +13,9 @@ public class TestEntry {
     private static final boolean TEST_DEQUE       = true;
     private static final boolean TEST_SEM         = false;
     private static final boolean TEST_BARR        = false;
-    private static final boolean TEST_COMPARE     = true;
-    private static final boolean TEST_EXEUTOR     = true;
+    private static final boolean TEST_COMPARE     = false;
+    private static final boolean TEST_EXEUTOR     = false;
+    private static final boolean TEST_MAP         = true;
     public static void main(String[] args) {
 
         if (TEST_BYTE_BUFFER) {
@@ -82,6 +83,12 @@ public class TestEntry {
             TestExeutor test = new TestExeutor();
             test.test();
             FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestExeutor.class.getSimpleName());
+        }
+        if (TEST_MAP) {
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST BEGIN " + TestMap.class.getSimpleName());
+            TestMap test = new TestMap();
+            test.test();
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestMap.class.getSimpleName());
         }
     }
 }

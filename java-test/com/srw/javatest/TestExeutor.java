@@ -22,5 +22,10 @@ public class TestExeutor extends BaseTest {
         }, 5, TimeUnit.SECONDS);
 
         mExecutor.shutdown();
+
+        try {
+            mExecutor.awaitTermination(3000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {}
+        FormatLog.LogI("await donw");
     }
 }
