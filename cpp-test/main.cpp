@@ -15,6 +15,7 @@
 #include "TestDeque.h"
 #include "TestGLM.h"
 #include "TestTimestampExtrapolator.h"
+#include "TestJMP.h"
 
 int main() {
 
@@ -52,6 +53,11 @@ int main() {
     testTimestamp.setUp();
     testTimestamp.run();
     testTimestamp.tearDown();
+
+    TestJMP testJMP;
+    testJMP.setUp();
+    testJMP.run();
+    testJMP.tearDown();
 
     return 0;
 }
