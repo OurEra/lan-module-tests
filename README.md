@@ -1,2 +1,2 @@
 # lan-tests
-common usage language test case
+language and module test case
