@@ -16,9 +16,12 @@ py_dev_y = [45372, 48876, 53850, 57287, 63016,
 # plt.plot(dev_x, py_dev_y, color="#444444", label="py dev")
 
 # draw bar
-plt.bar(range_x, dev_y, width = 0.25, color="#e5ae38", label="dev")
-plt.bar(range_x + 0.25, py_dev_y, width = 0.25, color="#444444", label="py dev")
-plt.xticks(ticks=range_x, labels=dev_x)
+#plt.bar(range_x, dev_y, width = 0.25, color="#e5ae38", label="dev")
+#plt.bar(range_x + 0.25, py_dev_y, width = 0.25, color="#444444", label="py dev")
+#plt.xticks(ticks=range_x, labels=dev_x)
+
+# draw scatter
+plt.scatter(dev_x, dev_y)
 
 plt.legend()
 plt.show()
