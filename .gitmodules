@@ -1,8 +1,9 @@
 [submodule "external/x264"]
 	path = external/x264
 	url = https://code.videolan.org/videolan/x264.git
-    ignore = dirty
 [submodule "external/ffmpeg"]
 	path = external/ffmpeg
 	url = https://github.com/FFmpeg/FFmpeg.git
-    ignore = dirty
+[submodule "external/state-threads"]
+	path = external/state-threads
+	url = https://github.com/ossrs/state-threads
