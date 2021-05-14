@@ -16,6 +16,8 @@
 #include "TestGLM.h"
 #include "TestTimestampExtrapolator.h"
 #include "TestJMP.h"
+#include "TestMap.h"
+#include "TestPtr.h"
 
 int main() {
 
@@ -58,6 +60,16 @@ int main() {
     testJMP.setUp();
     testJMP.run();
     testJMP.tearDown();
+
+    TestMap testMap;
+    testMap.setUp();
+    testMap.run();
+    testMap.tearDown();
+
+    TestPtr testPtr;
+    testPtr.setUp();
+    testPtr.run();
+    testPtr.tearDown();
 
     return 0;
 }
