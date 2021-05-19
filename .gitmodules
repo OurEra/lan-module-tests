@@ -7,3 +7,6 @@
 [submodule "external/state-threads"]
 	path = external/state-threads
 	url = https://github.com/ossrs/state-threads
+[submodule "external/glm"]
+	path = external/glm
+	url = https://github.com/g-truc/glm.git
