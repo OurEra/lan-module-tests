@@ -4,7 +4,7 @@ import com.example.lib.java.FormatLog;
 
 public class TestEntry {
 
-    private static final boolean TEST_BYTE_BUFFER = false;
+    private static final boolean TEST_BYTE_BUFFER = true;
     private static final boolean TEST_JSON        = false;
     private static final boolean TEST_STACK_TRACE = false;
     private static final boolean TEST_SYNC        = false;
@@ -15,7 +15,7 @@ public class TestEntry {
     private static final boolean TEST_BARR        = false;
     private static final boolean TEST_COMPARE     = false;
     private static final boolean TEST_EXEUTOR     = false;
-    private static final boolean TEST_MAP         = true;
+    private static final boolean TEST_MAP         = false;
     public static void main(String[] args) {
 
         if (TEST_BYTE_BUFFER) {
