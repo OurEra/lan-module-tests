@@ -1,0 +1,15 @@
+[submodule "external/x264"]
+	path = external/x264
+	url = https://code.videolan.org/videolan/x264.git
+[submodule "external/ffmpeg"]
+	path = external/ffmpeg
+	url = https://github.com/FFmpeg/FFmpeg.git
+[submodule "external/state-threads"]
+	path = external/state-threads
+	url = https://github.com/ossrs/state-threads
+[submodule "external/glm"]
+	path = external/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "external/gtest"]
+	path = external/gtest
+	url = https://github.com/google/googletest.git

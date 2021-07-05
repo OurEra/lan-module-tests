@@ -13,6 +13,32 @@
 #include <limits>
 #include <cstdlib>
 
+struct dimension {
+  int32_t w;
+  int32_t h;
+};
+
+static dimension valid_sizes[] = {
+  { 1920, 1080}, // 1080p
+  { 1440, 1080}, // Wide HD
+  { 1280, 960},
+  { 1280, 720},  // 720P, reserved
+  { 864, 480},   // FWVGA
+  { 800, 480},   // WVGA
+  { 768, 432},
+  { 720, 480},
+  { 640, 640},
+  { 640, 480},   // VGA
+  { 480, 640},   // VGA portrait
+  { 640, 360},
+  { 576, 432},
+  { 480, 360},   // HVGA for HFR support
+  { 480, 320},   // HVGA
+  { 384, 288},
+  { 352, 288},   // CIF
+  { 320, 240},   // QVGA
+};
+
 // Round |value_to_round| to a multiple of |multiple|. Prefer rounding upwards,
 // but never more than |max_value|.
 int roundUp(int value_to_round, int multiple, int max_value) {
