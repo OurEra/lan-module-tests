@@ -16,6 +16,7 @@ public class TestEntry {
     private static final boolean TEST_COMPARE     = false;
     private static final boolean TEST_EXEUTOR     = false;
     private static final boolean TEST_MAP         = false;
+    private static final boolean TEST_FILE        = true;
     public static void main(String[] args) {
 
         if (TEST_BYTE_BUFFER) {
@@ -89,6 +90,12 @@ public class TestEntry {
             TestMap test = new TestMap();
             test.test();
             FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestMap.class.getSimpleName());
+        }
+        if (TEST_FILE) {
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST BEGIN " + TestRandomAccessFile.class.getSimpleName());
+            TestRandomAccessFile test = new TestRandomAccessFile();
+            test.test();
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestRandomAccessFile.class.getSimpleName());
         }
     }
 }
