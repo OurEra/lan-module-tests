@@ -4,19 +4,20 @@ import com.example.lib.java.FormatLog;
 
 public class TestEntry {
 
-    private static final boolean TEST_BYTE_BUFFER = true;
+    private static final boolean TEST_BYTE_BUFFER = false;
     private static final boolean TEST_JSON        = false;
     private static final boolean TEST_STACK_TRACE = false;
     private static final boolean TEST_SYNC        = false;
     private static final boolean TEST_EQUAL       = false;
     private static final boolean TEST_ENUM        = true;
-    private static final boolean TEST_DEQUE       = true;
+    private static final boolean TEST_DEQUE       = false;
     private static final boolean TEST_SEM         = false;
     private static final boolean TEST_BARR        = false;
     private static final boolean TEST_COMPARE     = false;
     private static final boolean TEST_EXEUTOR     = false;
     private static final boolean TEST_MAP         = false;
-    private static final boolean TEST_FILE        = true;
+    private static final boolean TEST_FILE        = false;
+    private static final boolean TEST_REFLECT     = true;
     public static void main(String[] args) {
 
         if (TEST_BYTE_BUFFER) {
@@ -96,6 +97,12 @@ public class TestEntry {
             TestRandomAccessFile test = new TestRandomAccessFile();
             test.test();
             FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestRandomAccessFile.class.getSimpleName());
+        }
+        if (TEST_REFLECT) {
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST BEGIN " + TestReflect.class.getSimpleName());
+            TestReflect test = new TestReflect();
+            test.test();
+            FormatLog.LogI(FormatLog.ANSI_RED, "TEST END " + TestReflect.class.getSimpleName());
         }
     }
 }

@@ -6,6 +6,7 @@
 .//com/srw/javatest/TestRandomAccessFile.java
 .//com/srw/javatest/TestEnum.java
 .//com/srw/javatest/TestSync.java
+.//com/srw/javatest/TestReflect.java
 .//com/srw/javatest/TestCompare.java
 .//com/srw/javatest/TestEquals.java
 .//com/srw/javatest/TestBlockingDeque.java
