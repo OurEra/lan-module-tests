@@ -18,6 +18,7 @@
 #include "TestJMP.h"
 #include "TestMap.h"
 #include "TestPtr.h"
+#include "TestJson.h"
 
 int main() {
 
@@ -70,6 +71,11 @@ int main() {
     testPtr.setUp();
     testPtr.run();
     testPtr.tearDown();
+
+    TestJson testJson;
+    testJson.setUp();
+    testJson.run();
+    testJson.tearDown();
 
     return 0;
 }
