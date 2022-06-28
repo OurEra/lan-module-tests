@@ -19,57 +19,91 @@
 #include "TestMap.h"
 #include "TestPtr.h"
 
+#define TEST_VECTOR false
+#define TEST_SCALE false
+#define TEST_SET false
+#define TEST_SLOT false
+#define TEST_SLOT false
+#define TEST_QUEUE false
+#define TEST_QUEUE false
+#define TEST_GLM false
+#define TEST_GLM false
+#define TEST_TIME_EXTRAPOLATOR false
+#define TEST_JMP false
+#define TEST_MAP false
+#define TEST_PTR false
+
 int main() {
 
-    TestVector testVecotr;
-    testVecotr.setUp();
-    testVecotr.run();
-    testVecotr.tearDown();
+    if (TEST_VECTOR) {
+        TestVector testVecotr;
+        testVecotr.setUp();
+        testVecotr.run();
+        testVecotr.tearDown();
+    }
 
-    TestSacle testScale;
-    testScale.setUp();
-    testScale.run();
-    testScale.tearDown();
+    if (TEST_SCALE) {
+        TestSacle testScale;
+        testScale.setUp();
+        testScale.run();
+        testScale.tearDown();
+    }
 
-    TestSet testSet;
-    testSet.setUp();
-    testSet.run();
-    testSet.tearDown();
+    if (TEST_SET) {
+        TestSet testSet;
+        testSet.setUp();
+        testSet.run();
+        testSet.tearDown();
+    }
 
-    TestSlot testSlot;
-    testSlot.setUp();
-    testSlot.run();
-    testSlot.tearDown();
+    if (TEST_SLOT) {
+        TestSlot testSlot;
+        testSlot.setUp();
+        testSlot.run();
+        testSlot.tearDown();
+    }
 
-    TestDeque testDeque;
-    testDeque.setUp();
-    testDeque.run();
-    testDeque.tearDown();
+    if (TEST_QUEUE) {
+        TestDeque testDeque;
+        testDeque.setUp();
+        testDeque.run();
+        testDeque.tearDown();
+    }
 
-    TestGLM testGLM;
-    testGLM.setUp();
-    testGLM.run();
-    testGLM.tearDown();
+    if (TEST_GLM) {
+        TestGLM testGLM;
+        testGLM.setUp();
+        testGLM.run();
+        testGLM.tearDown();
+    }
 
-    TimestampExtrapolator testTimestamp(390012248);
-    testTimestamp.setUp();
-    testTimestamp.run();
-    testTimestamp.tearDown();
+    if (TEST_TIME_EXTRAPOLATOR) {
+        TimestampExtrapolator testTimestamp(390012248);
+        testTimestamp.setUp();
+        testTimestamp.run();
+        testTimestamp.tearDown();
+    }
 
-    TestJMP testJMP;
-    testJMP.setUp();
-    testJMP.run();
-    testJMP.tearDown();
+    if (TEST_JMP) {
+        TestJMP testJMP;
+        testJMP.setUp();
+        testJMP.run();
+        testJMP.tearDown();
+    }
 
-    TestMap testMap;
-    testMap.setUp();
-    testMap.run();
-    testMap.tearDown();
+    if (TEST_MAP) {
+        TestMap testMap;
+        testMap.setUp();
+        testMap.run();
+        testMap.tearDown();
+    }
 
-    TestPtr testPtr;
-    testPtr.setUp();
-    testPtr.run();
-    testPtr.tearDown();
+    if (TEST_PTR) {
+        TestPtr testPtr;
+        testPtr.setUp();
+        testPtr.run();
+        testPtr.tearDown();
+    }
 
     return 0;
 }
