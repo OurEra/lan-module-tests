@@ -18,6 +18,7 @@
 #include "TestJMP.h"
 #include "TestMap.h"
 #include "TestPtr.h"
+#include "TestJson.h"
 
 #define TEST_VECTOR false
 #define TEST_SCALE false
@@ -104,6 +105,11 @@ int main() {
         testPtr.run();
         testPtr.tearDown();
     }
+
+    TestJson testJson;
+    testJson.setUp();
+    testJson.run();
+    testJson.tearDown();
 
     return 0;
 }
