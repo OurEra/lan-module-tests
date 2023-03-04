@@ -19,6 +19,7 @@
 #include "TestMap.h"
 #include "TestPtr.h"
 #include "TestJson.h"
+#include "TestCoder.h"
 
 #define TEST_VECTOR false
 #define TEST_SCALE false
@@ -33,6 +34,8 @@
 #define TEST_JMP false
 #define TEST_MAP false
 #define TEST_PTR false
+#define TEST_JSON false
+#define TEST_CODER true
 
 int main() {
 
@@ -106,10 +109,19 @@ int main() {
         testPtr.tearDown();
     }
 
-    TestJson testJson;
-    testJson.setUp();
-    testJson.run();
-    testJson.tearDown();
+    if (TEST_JSON) {
+        TestJson testJson;
+        testJson.setUp();
+        testJson.run();
+        testJson.tearDown();
+    }
+
+    if (TEST_CODER) {
+        TestCoder testCoder;
+        testCoder.setUp();
+        testCoder.run();
+        testCoder.tearDown();
+    }
 
     return 0;
 }
