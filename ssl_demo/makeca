@@ -1,0 +1,29 @@
+#!/bin/sh
+# Construct a simple openssl CA directory structure
+if [ "$#" -ne 1 ] ; then
+  echo "Usage: $0 <cadir>" >&2
+  exit 1
+fi
+
+# Make the directory - fail if already existing
+mkdir $1
+# Copy config 
+cp ca.config $1
+cp ocsp.txt $1
+cp signer.txt $1
+cd $1
+# Set up
+mkdir private
+mkdir newcerts
+touch index.txt
+# Check it works!
+openssl req -x509 -batch -subj '/C=GB/O=TEST ROOT/' -nodes -days 1000 -newkey rsa:1024 -keyout private/rootkey.pem -out root.pem
+echo 01 > serial
+# Make new private key and certificate request
+openssl req -batch -subj '/C=GB/O=TEST CERT/' -nodes -newkey rsa:1024 -keyout certkey.pem -out certreq.pem
+# And sign the certificate
+openssl ca -batch -config ./ca.config -in certreq.pem -out cert.pem -notext -extfile ocsp.txt
+
+# Make an OCSP signing certificate
+openssl req -batch -subj '/C=GB/O=SIGNER CERT/' -nodes -newkey rsa:1024 -keyout signerkey.pem -out signerreq.pem
+openssl ca -batch -config ./ca.config -in signerreq.pem -out signer.pem -notext -extfile signer.txt

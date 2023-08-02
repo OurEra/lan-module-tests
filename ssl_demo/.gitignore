@@ -1,0 +1,6 @@
+*.pem
+*.o
+*.srl
+/clientcerts
+ssl_server
+ssl_client
