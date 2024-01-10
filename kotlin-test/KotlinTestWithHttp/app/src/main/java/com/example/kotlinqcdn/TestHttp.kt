@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 import javax.net.ServerSocketFactory
 
-class Qcdn {
+class TestHttp {
 
     data class Config(var timeout: Int)
     data class Strategy(val backup: String, val boot: String)
@@ -85,7 +85,7 @@ class Qcdn {
             var httpUrl = HttpUrl(url)
             val strategy = strategies.get(UrlBase(httpUrl.scheme, httpUrl.host))
             if (strategy == null) {
-                Log.i("Qcdn", "no strategy")
+                Log.i("Test", "no strategy")
                 return url
             }
 
@@ -113,7 +113,7 @@ class Qcdn {
                 override fun newThread(p0: Runnable?): Thread {
                     index++
                     val thread = Thread(p0)
-                    thread.name = "Qcdn-thread-" + index
+                    thread.name = "Test-thread-" + index
                     return thread
                 }
             })
@@ -135,9 +135,9 @@ class Qcdn {
             countdown.await()
             address = "http://" + serverSocket.localSocketAddress.toString()
             localServerStart = true
-            Log.i("Qcdn", "start server: " + address)
+            Log.i("Test", "start server: " + address)
         } catch (e: Exception) {
-            Log.i("Qcdn", "e " + e.toString())
+            Log.i("Test", "e " + e.toString())
         }
     }
 
@@ -147,7 +147,7 @@ class Qcdn {
             try {
                 socket = serverSocket.accept()
             } catch (e: IOException) {
-                Log.i("Qcdn", "accept err " + e.toString())
+                Log.i("Test", "accept err " + e.toString())
                 return
             }
             executor.execute {
@@ -181,13 +181,13 @@ class Qcdn {
 
             val request =
                 headers?.let { Request.Builder().url(httpUrl.toString()).headers(it).build() }
-            Log.i("Qcdn", "redirect serveRequest " + request)
+            Log.i("Test", "redirect serveRequest " + request)
             val response = request?.let { serveRequest(socket.getOutputStream(), it, uri) }
             if (response != null) {
-                Log.e("Qcdn", "redirect ok " + request)
+                Log.e("Test", "redirect ok " + request)
                 return
             }
-            Log.e("Qcdn", "redirect fail")
+            Log.e("Test", "redirect fail")
         } else {
             httpUrl.rawPath = uri.rawPath;
             httpUrl.scheme = uri.base.scheme
@@ -196,13 +196,13 @@ class Qcdn {
 
             val request =
                 headers?.let { Request.Builder().url(httpUrl.toString()).headers(it).build() }
-            Log.i("Qcdn", "direct serveRequest " + request)
+            Log.i("Test", "direct serveRequest " + request)
             val response = request?.let { serveRequest(socket.getOutputStream(), it, uri) }
             if (response != null) {
-                Log.e("Qcdn", "direct ok " + request)
+                Log.e("Test", "direct ok " + request)
                 return
             }
-            Log.e("Qcdn", "direct fail")
+            Log.e("Test", "direct fail")
         }
 
         writeErrorResponse(socket.getOutputStream(), "backup/redirect fail")
@@ -242,7 +242,7 @@ class Qcdn {
                 return response
             }
         } catch (e: java.lang.Exception) {
-            Log.e("Qcdn", "errpr: " + e.toString())
+            Log.e("Test", "errpr: " + e.toString())
         }
         return null
     }

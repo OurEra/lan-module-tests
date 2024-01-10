@@ -14,28 +14,28 @@ class MainActivity : AppCompatActivity() {
 
         val qcdn = Qcdn(null)
         qcdn.setStrategy(
-            "http://sns-video-exp1-qn.xhscdn.com",
+            "http://base.com",
             Qcdn.Strategy(
-                "http://sns-video-exp4-qn.xhscdn.com",
-                "http://sns-video-exp4-qn.xhscdn.com"
+                "http://back.com",
+                "http://bacp.com"
             )
         )
         val proxyUrl =
-            qcdn.makeVodUrl("http://sns-video-exp1-qn.xhscdn.com/stream/110/408/01e4e8140c1269b5010370038a2af4a014_408.mp4")
-        Log.i("Qcdn", "url: " + proxyUrl)
+            qcdn.makeVodUrl("http://base.com/test.mp4")
+        Log.i("Test", "url: " + proxyUrl)
 
         Thread(object : Runnable {
             override fun run() {
                 run {
                     val request: Request = Request.Builder().url(proxyUrl).build()
                     val response = OkHttpClient().newCall(request).execute()
-                    Log.i("Qcdn", "res: " + response.message)
+                    Log.i("Test", "res: " + response.message)
                 }
 
                 run {
                     val request: Request = Request.Builder().url(proxyUrl).build()
                     val response = OkHttpClient().newCall(request).execute()
-                    Log.i("Qcdn", "res: " + response.message)
+                    Log.i("Test", "res: " + response.message)
                 }
 
             }
