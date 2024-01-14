@@ -16,12 +16,11 @@ include_directories(${CMAKE_SOURCE_DIR} ./include)
 #"-framework CoreServices"
 #  iconv
 
-add_executable(ffmpeg_test test_encode_avc.cpp)
-target_link_libraries(ffmpeg_test PRIVATE lzma z m c bz2 dl
+add_executable(ffmpeg_test test_encode_mutex.cpp)
+target_link_libraries(ffmpeg_test PRIVATE lzma z m c bz2 dl X11 va va-x11 va-drm x264
                      "-Wl,--whole-archive"
-                     ${CMAKE_SOURCE_DIR}/lib/libx264.a
+                     ${CMAKE_SOURCE_DIR}/lib/libavutil.a
                      ${CMAKE_SOURCE_DIR}/lib/libavcodec.a
                      ${CMAKE_SOURCE_DIR}/lib/libavformat.a
-                     ${CMAKE_SOURCE_DIR}/lib/libavutil.a
                      ${CMAKE_SOURCE_DIR}/lib/libswresample.a
                      "-Wl,--no-whole-archive")
