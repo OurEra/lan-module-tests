@@ -1,0 +1,17 @@
+*.iml
+.gradle
+/local.properties
+.idea
+.DS_Store
+/build
+/captures
+app/src/main/obj/
+.externalNativeBuild
+.cxx
+*.o
+.classpath
+.project
+.settings/
+
+cscope.*
+tags

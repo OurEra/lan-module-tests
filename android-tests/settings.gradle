@@ -1,0 +1,7 @@
+include ':camera-lib'
+include ':camera-test'
+include ':codec-test'
+include ':unit-test'
+include ':android-utils'
+include ':android-ui-lib'
+include ':opengl-test'
