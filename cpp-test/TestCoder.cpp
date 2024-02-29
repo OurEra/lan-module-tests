@@ -7,6 +7,7 @@ void TestCoder::setUp() {
 }
 
 // given arrays contain two kind character, find minimum steps to move two kind to different side
+// https://www.bilibili.com/video/BV1vi4y1R7g9?p=3&vd_source=97b4bf98c5b1c5e6ff06f5ab921071f7
 int getMinStepsToAdjustElement()(std::vector<char> array) {
   char target_char = array[0];
   int32_t target_char_count = 1;
@@ -25,6 +26,7 @@ int getMinStepsToAdjustElement()(std::vector<char> array) {
 }
 
 // how many node can integer 'k' cover given 'array'
+// https://www.bilibili.com/video/BV1vi4y1R7g9?p=2&vd_source=97b4bf98c5b1c5e6ff06f5ab921071f7
 int findIndexFromArray(std::vector<int32_t> array, int32_t from, int32_t to, int32_t k) {
   // check tail and head
   if (k < array[0] || k > array[array.size() - 1])
@@ -40,6 +42,8 @@ int findIndexFromArray(std::vector<int32_t> array, int32_t from, int32_t to, int
     return findIndexFromArray(array, from, (from - to) / 2, k);
   }
 }
+
+// https://en.wikipedia.org/wiki/Dynamic_programming
 
 void TestCoder::run() {
 
