@@ -1,0 +1,69 @@
+
+https://github.com/libusb/libusb:
+
+libjpeg-turbo-1.5.0/    libusb/     libuvc/    UVCCamera/  rapidjson/
+
+
+const struct usbi_os_backend * const usbi_backend = &android_usbfs_backend;
+
+const struct usbi_os_backend android_usbfs_backend = {
+	.name = "Android usbfs",
+	.caps = USBI_CAP_HAS_HID_ACCESS | USBI_CAP_SUPPORTS_DETACH_KERNEL_DRIVER,
+	.init = op_init,
+	.init2 = op_init2,	// XXX
+	.exit = op_exit,
+	.get_device_list = NULL,
+	.hotplug_poll = op_hotplug_poll,
+	.get_raw_descriptor = op_get_raw_descriptor,	// XXX
+	.get_device_descriptor = op_get_device_descriptor,
+	.get_active_config_descriptor = op_get_active_config_descriptor,
+	.get_config_descriptor = op_get_config_descriptor,
+	.get_config_descriptor_by_value = op_get_config_descriptor_by_value,
+	.set_device_fd = op_set_device_fd,	// XXX add for no-rooted Android devices
+	.open = op_open,
+	.close = op_close,
+	.get_configuration = op_get_configuration,
+	.set_configuration = op_set_configuration,
+	.claim_interface = op_claim_interface,
+	.release_interface = op_release_interface,
+
+	.set_interface_altsetting = op_set_interface,
+	.clear_halt = op_clear_halt,
+	.reset_device = op_reset_device,
+
+	.alloc_streams = op_alloc_streams,
+	.free_streams = op_free_streams,
+
+	.kernel_driver_active = op_kernel_driver_active,
+	.detach_kernel_driver = op_detach_kernel_driver,
+	.attach_kernel_driver = op_attach_kernel_driver,
+
+	.destroy_device = op_destroy_device,
+
+	.submit_transfer = op_submit_transfer,
+	.cancel_transfer = op_cancel_transfer,
+	.clear_transfer_priv = op_clear_transfer_priv,
+
+	.handle_events = op_handle_events,
+
+	.clock_gettime = op_clock_gettime,
+
+#ifdef USBI_TIMERFD_AVAILABLE
+	.get_timerfd_clockid = op_get_timerfd_clockid,
+#endif
+
+	.device_priv_size = sizeof(struct android_device_priv),
+	.device_handle_priv_size = sizeof(struct android_device_handle_priv),
+	.transfer_priv_size = sizeof(struct android_transfer_priv),
+	.add_iso_packet_size = 0,
+};
+
+
+
+Five Step To Start Transfers
+1. Alloc libusb_alloc_transfer()
+2. Filling struct libusb_transfer *
+3. libusb_submit_transfer()
+4. Handle result when callback through libusb_transfer->callback
+5. Free libusb_free_transfer()
+

@@ -1,0 +1,47 @@
+程序名称： 读取配置文件
+
+功能
+将文件中与代码运行相关的参数，和用户的帐户数据读入内存中
+忽略 ； # 与 空格
+
+[]为数据分段标志
+遇到[ 则分析 []中的字符串，确定下面的内容是属于配置，还是帐户
+
+难点：
+1. 文件中存放的数据，每行以\n结束，内存中的字符串以'\0'结束
+2. windows中换行以/r/n结束， linux中换行以/n结束，也需要识别
+3. 需要过滤读取到的不确定位置的空格
+4. 比较参数时，可能遇到大小写不统一，但也需要能识别
+5. 帐户的用户名和密码进行对比时，输入的字符串以回车/n结束，但内存中以'\0'结束
+
+把cfg数据，用key-item的方式，保存到链表里，需要参数赋值时，用一个get函数将item值取出赋值
+char* get(char *key);
+
+typedef struct _cfg
+{
+	char key[64];
+	char item[64];
+}cfg;
+
+
+typedef struct _node
+{
+	cfg data;
+	struct _node *next;
+}cfgNode, *cfgList;
+
+
+用户帐户的数据存到另一个链表结构中，并显示
+
+typedef struct _acc
+{
+	int perm;
+	char user[32];
+	char pswd[32];
+}acc;
+
+typedef struct _accNode
+{
+	acc data;
+	struct _accNode *next;
+}accNode, *accList;

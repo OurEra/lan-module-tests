@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">demo_app</string>
+    <string name="dummy_text">in activity</string>
+</resources>

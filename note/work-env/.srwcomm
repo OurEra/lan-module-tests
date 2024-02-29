@@ -1,0 +1,489 @@
+#!~/bin/bash
+
+function testf()
+{
+
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FKEY=${ALL[$Num]}
+
+echo "array ALL num: ${#ALL[@]}"
+echo "ALL: ${ALL[*]}"
+echo "FDIR: ${FDIR[*]}"
+echo "FKEY: $FKEY"
+find "${FDIR[@]}" -name "*\.c" -o -name "*\.cpp" \
+    -exec grep --color -n "$FKEY" {} +
+}
+
+
+# jfind dir1 dir2 "KEY"
+function jfind()
+{
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FKEY=${ALL[$Num]}
+find "${FDIR[@]}" -name tags -prune -o -name cscope.out -prune -o -type f \( -name '*.java' -o -name '*.aidl' \) \
+    -exec grep --color -n "$FKEY" {} +
+}
+
+function jsfind()
+{
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FKEY=${ALL[$Num]}
+find "${FDIR[@]}" -name tags -prune -o -name cscope.out -prune -o -type f \( -name '*.ts' -o -name '*.js' -o -name "*.tsx" \) \
+    -exec grep --color -n "$FKEY" {} +
+}
+
+function mdfind()
+{
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FKEY=${ALL[$Num]}
+find "${FDIR[@]}" -name tags -prune -o -name cscope.out -prune -o -type f \( -name '*.md' \) \
+    -exec grep --color -n "$FKEY" {} +
+}
+
+# cfind dir1 dir2 "KEY"
+function cfind()
+{
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FKEY=${ALL[$Num]}
+find "${FDIR[@]}" -name tags -prune -o -name cscope.out -prune -o -type f \( -name '*.c' -o -name '*.cc' -o -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) \
+    -exec grep --color -n "$FKEY" {} +
+}
+
+function gfind()
+{
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FKEY=${ALL[$Num]}
+find "${FDIR[@]}" -name tags -prune -o -name cscope.out -prune -o -type f \( -name '*.go' -o -name '*.mod' \) \
+    -exec grep --color -n "$FKEY" {} +
+}
+
+function ocfind()
+{
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FKEY=${ALL[$Num]}
+find "${FDIR[@]}" -name tags -prune -o -name cscope.out -prune -o -type f \( -name '*.h' -o -name '*.m' -o -name '*.mm' \) \
+    -exec grep --color -n "$FKEY" {} +
+}
+
+# mfind dir1 dir2 "KEY"
+function mfind()
+{
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FKEY=${ALL[$Num]}
+find "${FDIR[@]}" -name tags -prune -o -name cscope.out -prune -o -type f \( -name '*.mk' -o -name 'Makefile' -o -name '*.gn' \) \
+    -exec grep --color -n "$FKEY" {} +
+}
+
+# rfind dir1 dir2 "KEY"
+function rfind()
+{
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FKEY=${ALL[$Num]}
+find "${FDIR[@]}" -name tags -prune -o -name cscope.out -prune -o -type f \( -name '*.xml' \) \
+    -exec grep --color -n "$FKEY" {} +
+}
+
+# dfind "NAME"
+function dfind()
+{
+find ./ -type d -name "$1"
+}
+
+# ffind dir1 dir2 "NAME"
+function ffind()
+{
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FKEY=${ALL[$Num]}
+find "${FDIR[@]}" -name "$FKEY"
+}
+
+function testcd()
+{
+
+  LDIR=$(echo $1 | sed -e "s:/$::")
+  echo "LDIR $LDIR"
+  LSLASH=$(echo -ne $LDIR | sed -e "s:[^/]*::g")
+  NUMSLASH=$(echo -ne $LSLASH | wc -c)
+
+  echo "LDIR $LDIR LSLAH $LSLASH NUM $NUMSLASH"
+  LDIR=$(echo -e $LDIR | cut -d/ -f-$NUMSLASH)
+  echo "Now $LDIR"
+}
+
+# cdgit dir file
+function cdgit()
+{
+Num=$#
+Num=$[Num-1]
+
+local -a ALL=("$@")
+local -a FDIR=("${ALL[@]:0:$Num}")
+local FNAME=${ALL[$Num]}
+
+LPATH=$(find "${FDIR[@]}" -name $FNAME)
+if [ -z $LPATH ]
+then
+echo "File $FNAME cannot find in ${FDIR[@]}"; echo
+return
+fi
+
+LDIR=$(dirname $LPATH)
+# remove last '/'
+LDIR=$(echo $LDIR | sed -e "s:/$::")
+
+LSLASH=
+NUMSLASH=
+while [ ! -z $LDIR ]
+do
+  if [ -d $LDIR/.git ]
+  then
+  \cd $LDIR; return
+  else
+  LSLASH=$(echo -ne $LDIR | sed -e "s:[^/]*::g")
+  NUMSLASH=$(echo -ne $LSLASH | wc -c)
+  if [ $NUMSLASH -le 0 ]; then
+  break
+  fi
+  LDIR=$(echo -ne $LDIR | cut -d/ -f-$NUMSLASH 2> /dev/null)
+  fi
+done
+echo "Not a git repository contains file $LPATH"
+}
+
+# find ./frameworks/ -name "*.java" | xargs grep -l "StateMachine" | xargs grep "Tethering"
+
+# find /home/richardshi/OnTheWay/ -size +5000k -print0 | xargs -0 ls -lh
+
+# help do cscope and ctags under current dir
+function dotags()
+{
+
+echo "Generate cscope.files"
+find ./ -name "*.c" -o -name "*.h" -o -name "*.m" -o -name "*.mm" -o -name "*.cc" -o -name "*.cpp" -o -name "*.java" -o -name "*.go"> cscope.files
+echo "Do cscope"
+cscope -bqk -F cscope.files
+echo "Do ctags"
+#ctags-exuberant -L cscope.files
+ctags -L cscope.files
+rm cscope.files
+}
+
+function gitcheck()
+{
+echo "##### git status #####"
+git status
+echo "##### git branch #####"
+git branch -vv
+echo "##### git remote #####"
+git remote -v
+echo "##### git tag #####"
+git tag -n # git show specific tag
+echo "##### git stash #####"
+git stash list
+}
+
+function printjson()
+{
+echo $1 | python -m json.tool
+}
+
+function hintgit()
+{
+echo "#####clone by tag#####"
+echo "git clone --depth 1 --branch <tag_name> <repo_url>"
+echo "git remote set-branches --add origin [remote-branch]"
+echo "#####tag#####"
+echo "git tag v1.1.0"
+echo "git push --tags"
+echo "git tag --force v1.10 new-commit"
+echo "git push --force --tags"
+echo "#####stash#####"
+echo "git stash show"
+echo "git diff stash@{0}"
+echo "git diff stash@{0} filename"
+echo "git checkout stash@{0} filename"
+echo "git stash push -m \"stash message\" stash.cc"
+echo "##### git submodule #####"
+echo "update:"
+echo "git submodule update --init --recursive"
+echo "remove:"
+echo "# Remove the submodule entry from .git/config "
+echo "git submodule deinit -f path/to/submodule "
+echo "# Remove the submodule directory from the superproject's .git/modules directory "
+echo "rm -rf .git/modules/path/to/submodule "
+echo "# Remove the entry in .gitmodules and remove the submodule directory located at path/to/submodule "
+echo "git rm -f path/to/submodule "
+echo "# show submodule diff #"
+echo "git diff --submodule=diff"
+echo "##### git diff binary #####"
+echo "git diff aa bb --binary"
+echo "##### git cherry commits  #####"
+echo "git cherry-pick A^..B"
+echo "##### git reslove conflict  #####"
+echo ""git mergetool
+echo "### push new branch ###"
+echo "git push origin newb:newb"
+echo "### git show all action ###"
+echo "git reflog show"
+echo "### git get pr locallly ###"
+echo "git fetch origin pull/ID/head:BRANCH_NAME"
+}
+
+function hintffmpeg()
+{
+echo "###pcm play###"
+echo "ffplay -ar 44100 -ac 1 -f s16le -i test.pcm"
+echo "##raw play###"
+echo "ffplay -f rawvideo -video_size 640x360 -framerate 30 -pix_fmt nv12/yuv420p dump_nv12.yuv"
+echo "###screen record###"
+echo "ffmpeg -video_size 1024x768 -framerate 25 -f x11grab -i :0.0+100,200 -vcodec libx264 output.mp4"
+echo "###resample audio###"
+echo "ffmpeg -i sample2_vbr.mp3 -ac 1 -ar 48000 sample2-48-mono.mp3"
+echo "###dump rtmp###"
+echo "ffmpeg -i "rtmp://pili-rtmp.qnsdk.com/sdk-live/666y" -c copy dump.flv"
+echo "###decode and save pcm###"
+echo "ffmpeg -i resource/yueyunpeng-48-mono.mp3 -f s16le -acodec pcm_s16le output.raw"
+echo "###cut pcm audio###"
+echo "ffmpeg -f s16le -ar 44.1k -ac 1 -i mp4-1c-44100hz.pcm test.wav"
+echo "ffmpeg -ss 100 -i test.wav output.wav"
+echo "ffmpeg -i output.wav -f s16le -acodec pcm_s16le output.pcm"
+echo "###ffmpeg push rtmp###"
+echo "ffmpeg -re -i ~/resource/shangbuqi.mp4 -acodec copy -vcodec copy -f flv rtmp://pili-publish.qnsdk.com/sdk-live/test123"
+echo "###probe frame details###"
+echo "ffprobe -show_frames RaceHorses_832x480_30.hevc"
+echo "###raw video to container###"
+echo "ffmpeg -framerate 30 -i RaceHorses_832x480_30.hevc -c copy output.mp4"
+}
+
+function hintlldb()
+{
+echo "lldb"
+echo "(lldb) platform select remote-android"
+echo "(lldb) platform connect unix-abstract-connect:///data/data/com.example.test/debug.socket"
+echo "(lldb) process attach -p 29898"
+echo "add-dsym libtest.so"
+echo "breakpoint set --file engine.cc --line 211"
+echo "### run source command ###"
+echo "(lldb) command source ~/.lldb/lldb.cmd"
+}
+
+function hinttc()
+{
+echo "sudo tc qdisc add dev enp24s0 root netem loss 10%";
+echo "sudo tc qdisc change dev eth0 root netem delay 100ms loss 25%";
+echo "sudo tc qdisc del dev enp24s0 root netem";
+echo "sudo tc qdisc add dev enx502b73000e92 root tbf rate 800kbit latency 50ms burst 1600"
+echo "sudo tc qdisc show"
+echo "###use iptables###"
+echo "iptables -A INPUT -m statistic --mode random --probability 0.1 -j DROP"
+echo "iptables -A OUTPUT -m statistic --mode random --probability 0.1 -j DROP"
+echo "sudo iptables -nvL --line-number"
+echo "sudo iptables -D INPUT 1"
+}
+
+function hintgradle()
+{
+echo "gradlew tasks"
+echo "gradlew tasks --all"
+}
+
+function easy_root()
+{
+if [ "$1" == "adb" ]
+then
+
+adb root
+adb shell setprop service.user.test 1
+sleep 3
+adb disable-verity
+adb shell getprop service.user.test
+adb shell setenforce 0
+adb shell getenforce
+adb remount
+
+elif [ "$1" == "kdb" ]
+then
+
+kdb root
+kdb shell setprop service.user.test 1
+sleep 3
+kdb disable-verity
+kdb shell getprop service.user.test
+kdb shell setenforce 0
+kdb shell getenforce
+kdb remount
+fi
+}
+
+function akill()
+{
+
+adb shell kill -9 $(adb shell ps | grep "$1" | awk '{print $2}')
+
+}
+
+function aclc()
+{
+
+adb logcat -c
+
+}
+
+function alogs()
+{
+local -a ALL=("$@")
+echo " adb logcat -s "${ALL[@]}" "
+adb logcat -s "${ALL[@]}"
+}
+
+function agrep()
+{
+adb logcat | grep "$1"
+}
+
+function aconn()
+{
+adb connect "$1"
+}
+
+
+function aprogrep()
+{
+
+adb shell getprop | grep "$1"
+
+}
+
+
+function mkboot()
+{
+
+make bootimage -j4
+
+}
+
+function gitgraph()
+{
+
+git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+
+}
+
+function openmd()
+{
+
+open -a Typora "$1"
+}
+
+function base64decode()
+{
+echo "$1" | base64 -D
+echo ""
+}
+
+# second
+function printdate()
+{
+date -r "$1"
+}
+
+function seejar()
+{
+jar tf "$1"
+}
+
+function startlldb()
+{
+echo "$1 pid:"
+adb shell pidof $1
+
+echo "push lldb-server"
+#adb push "/Applications/Android Studio.app/Contents/bin/lldb/android/arm64-v8a/lldb-server" /data/local/tmp/lldb-server
+adb push "/home/shiruiwei/opt/android-studio-3.1.25/plugins/android-ndk/resources/lldb/android/arm64-v8a/lldb-server" /data/local/tmp/lldb-server
+
+echo "cp to $1 private dir and chmod"
+adb shell run-as $1 killall lldb-server
+adb shell run-as $1 cp -F /data/local/tmp/lldb-server /data/data/$1/lldb-server
+adb shell run-as $1 chmod a+x /data/data/$1/lldb-server
+
+echo "start lldb-server with --listen unix-abstract:///data/data/$1/debug.socket"
+adb shell "run-as $1 sh -c '/data/data/$1/lldb-server platform --server --listen unix-abstract:///data/data/$1/debug.socket'"
+}
+
+function hintgtest()
+{
+echo "#####list tests#####"
+echo "unittests --gtest_list_tests"
+echo "#####run some test#####"
+echo "unittests --gtest_filter=FlexfecSenderTest*"
+}
+
+function hintdebugapk()
+{
+echo "./gradlew app:installDebug"
+echo "adb shell am force-stop \"org.appspot.apprtc\""
+echo "adb shell am start -n \"org.appspot.apprtc/org.appspot.apprtc.ConnectActivity\" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER"
+}
+
+function hintwireshark()
+{
+echo "ip.dst==x.x.x.x"
+echo "ip.src==x.x.x.x"
+echo "dns"
+}
+
+function clangformat()
+{
+clang-format -style=google -i $1
+}
+
+function hintterminal()
+{
+echo "below terminal"
+echo ":resize +10"
+}
+
+function printdate()
+{
+  while true; do date; sleep 1; done
+}

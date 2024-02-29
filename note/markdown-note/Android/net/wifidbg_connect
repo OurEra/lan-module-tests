@@ -1,0 +1,1565 @@
+Wi-Fi is enabled
+Stay-awake conditions: 0
+mMulticastEnabled 0
+mMulticastDisabled 0
+mInIdleMode false
+mScanPending false
+WifiController:
+ total records=8
+ rec[0]: time=02-20 13:28:45.130 processed=ApStaDisabledState org=ApStaDisabledState dest=StaEnablingState what=155656(0x26008)
+ rec[1]: time=02-20 13:28:46.195 processed=DefaultState org=StaEnablingState dest=<null> what=155660(0x2600c)
+ rec[2]: time=02-20 13:28:46.266 processed=DefaultState org=StaEnablingState dest=<null> what=155652(0x26004)
+ rec[3]: time=02-20 13:28:46.275 processed=DefaultState org=StaEnablingState dest=<null> what=155652(0x26004)
+ rec[4]: time=02-20 13:28:46.275 processed=StaEnablingState org=StaEnablingState dest=DeviceActiveState what=155667(0x26013)
+ rec[5]: time=02-20 13:28:46.290 processed=DeviceActiveState org=DeviceActiveState dest=<null> what=155660(0x2600c)
+ rec[6]: time=02-20 13:28:49.383 processed=DeviceActiveState org=DeviceActiveState dest=<null> what=155660(0x2600c)
+ rec[7]: time=02-20 13:30:30.604 processed=DefaultState org=DeviceActiveState dest=<null> what=155652(0x26004)
+curState=DeviceActiveState
+mScreenOff false
+mDeviceIdle false
+mPluggedType 0
+mIdleMillis 900000
+mSleepPolicy 2
+mPersistWifiState 1
+mAirplaneModeOn false
+mNotificationEnabled true
+mNotificationRepeatTime 0
+mNotificationShown false
+mNumScansSinceNetworkStateChange 0
+mEnableTrafficStatsPoll true
+mTrafficStatsPollToken 43
+mTxPkts 58
+mRxPkts 49
+mDataActivity 0
+Latest scan results:
+    BSSID              Frequency  RSSI    Age      SSID                                 Flags
+  b4:86:55:1f:2a:cd       2462    -75    0.000                                      [WPA2-PSK-CCMP][ESS]
+  e0:60:66:ff:bd:40       2412    -73    0.000    NexVision-2de7b7                  [WPA2-PSK-CCMP][ESS]
+  00:0a:f5:9e:3e:1c       2437    -77    0.000                                      [WPA-PSK-CCMP+TKIP][ESS]
+  e0:60:66:ff:bd:41       5745    -89    0.000    NexVision-2de7b7                  [WPA2-PSK-CCMP][WPS][ESS]
+  e4:46:da:e1:0b:a9       2412    -29    0.000    红米手机                              [WPA2-PSK-CCMP][ESS]
+  00:c3:b7:ab:0d:a1       2417    -78    0.000    Running                           [WPA2-PSK-CCMP][ESS]
+  dc:da:80:a0:e4:d0       2412    -86    0.000    gengzi-guest                      [WPA2-PSK-CCMP][ESS]
+  dc:da:80:a0:e4:d1       2412    -85    0.000    gengzi-office                     [WPA2-PSK-CCMP][ESS]
+  24:69:68:0a:2b:32       2412    -74    0.000    TP-LINK_2B32                      [ESS]
+  e0:60:66:ff:ab:1c       2437    -77    0.000    meetingroom5f                     [WPA2-PSK-CCMP][ESS]
+  c0:61:18:57:f7:16       2462    -85    0.000    TP-LINK_F716                      [WPS][ESS]
+  00:0a:f5:b1:34:f0       2437    -72    0.000                                      [WPA-PSK-CCMP+TKIP][ESS]
+  16:75:90:69:e4:02       2412    -82    0.000    5F-YDPTKFB-TEST                   [WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]
+  d8:fe:e3:78:be:92       2452    -78    0.000    sunnyhome-2                       [WPA-PSK-CCMP][WPA2-PSK-CCMP][WPS][ESS]
+  88:25:93:93:19:6a       2452    -85    0.000    bwf                               [WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]
+  30:95:e3:12:31:c3       2437    -79    0.000    AndroidAP                         [WPA2-PSK-CCMP][ESS]
+
+Locks held:
+Locks acquired: 0 full, 0 full high perf, 0 scan
+Locks released: 0 full, 0 full high perf, 0 scan
+
+Locks held:
+
+Multicast Locks held:
+
+WifiStateMachine:
+ total records=218
+ rec[0]: time=02-20 13:50:04.789 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1303559/1303559 1000 0 num=1
+ rec[1]: time=02-20 13:50:04.963 processed=ConnectModeState org=DisconnectedState dest=<null> what=151559(0x25007) !SAVE_NETWORK uid=1000  rt=1303733/1303733 0 1 "红米手机"WPA_PSK nid=-1 hasPSK cuid=-1 suid=-1
+ rec[2]: time=02-20 13:50:05.027 processed=ConnectModeState org=DisconnectedState dest=DisconnectedState what=151553(0x25001) !CONNECT_NETWORK uid=1000  rt=1303797/1303797 -1 2 any roam=false
+ rec[3]: time=02-20 13:50:05.033 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1303803/1303803 1000 0 num=2
+ rec[4]: time=02-20 13:50:05.039 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1303809/1303809 1000 0 num=2
+ rec[5]: time=02-20 13:50:05.044 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1303814/1303814 1000 0 num=2
+ rec[6]: time=02-20 13:50:05.061 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1303831/1303831 1000 0 num=2
+ rec[7]: time=02-20 13:50:05.077 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1303847/1303847 1000 0 num=2
+ rec[8]: time=02-20 13:50:05.083 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1303853/1303853 1000 0 num=2
+ rec[9]: time=02-20 13:50:06.944 processed=SupplicantStartedState org=DisconnectedState dest=<null> what=147461(0x24005) !SCAN_RESULTS_EVENT  rt=1305713/1305714 0 0 found=16 known=0 got=16 bcn=0 con=2 untrustedcn=0 last="红米手机"WPA_PSK
+ rec[10]: time=02-20 13:50:06.950 processed=ConnectModeState org=DisconnectedState dest=<null> what=147462(0x24006) !SUPPLICANT_STATE_CHANGE_EVENT  rt=1305720/1305720 78 0 SSID: 红米手机 BSSID: 00:00:00:00:00:00 nid: 1 state: DISCONNECTED
+ rec[11]: time=02-20 13:50:07.045 processed=ConnectModeState org=DisconnectedState dest=<null> what=131215(0x2008f) !CMD_AUTO_CONNECT  rt=1305815/1305815 1 0 "红米手机"WPA_PSK e4:46:da:e1:0b:a9 roam=false
+ rec[12]: time=02-20 13:50:07.045 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1305815/1305815 1000 0 num=2
+ rec[13]: time=02-20 13:50:07.047 processed=ConnectModeState org=DisconnectedState dest=<null> what=147462(0x24006) !SUPPLICANT_STATE_CHANGE_EVENT  rt=1305817/1305817 79 0 SSID: 红米手机 BSSID: 00:00:00:00:00:00 nid: 1 state: SCANNING
+ rec[14]: time=02-20 13:50:07.047 processed=SupplicantStartedState org=DisconnectedState dest=<null> what=131213(0x2008d) !CMD_TARGET_BSSID  rt=1305817/1305817 80 0 Target=e4:46:da:e1:0b:a9 roam=false
+ rec[15]: time=02-20 13:50:07.058 processed=ConnectModeState org=DisconnectedState dest=<null> what=147462(0x24006) !SUPPLICANT_STATE_CHANGE_EVENT  rt=1305828/1305828 81 0 SSID: 红米手机 BSSID: 00:00:00:00:00:00 nid: 1 state: ASSOCIATING
+ rec[16]: time=02-20 13:50:07.071 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1305841/1305841 1000 0 num=2
+ rec[17]: time=02-20 13:50:07.075 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1305845/1305845 1000 0 num=2
+ rec[18]: time=02-20 13:50:07.081 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1305851/1305851 1000 0 num=2
+ rec[19]: time=02-20 13:50:07.086 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1305856/1305856 1000 0 num=2
+ rec[20]: time=02-20 13:50:07.089 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1305859/1305859 1000 0 num=2
+ rec[21]: time=02-20 13:50:07.112 processed=ConnectModeState org=DisconnectedState dest=<null> what=147462(0x24006) !SUPPLICANT_STATE_CHANGE_EVENT  rt=1305882/1305882 82 0 SSID: 红米手机 BSSID: 00:00:00:00:00:00 nid: 1 state: ASSOCIATED
+ rec[22]: time=02-20 13:50:07.112 processed=DefaultState org=DisconnectedState dest=<null> what=131219(0x20093) !(-5)CMD_ASSOCIATED_BSSID  rt=1305882/1305882 83 0 BSSID=e4:46:da:e1:0b:a9 Target=e4:46:da:e1:0b:a9 roam=false
+ rec[23]: time=02-20 13:50:07.117 processed=ConnectModeState org=DisconnectedState dest=<null> what=147462(0x24006) !SUPPLICANT_STATE_CHANGE_EVENT  rt=1305886/1305887 84 0 SSID: 红米手机 BSSID: e4:46:da:e1:0b:a9 nid: 1 state: FOUR_WAY_HANDSHAKE
+ rec[24]: time=02-20 13:50:07.117 processed=ConnectModeState org=DisconnectedState dest=<null> what=317(0x13d) !SUBNET_STATUS_UPDATE_EVENT  rt=1305887/1305887 0 0
+ rec[25]: time=02-20 13:50:07.127 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1305897/1305897 1000 0 num=2
+ rec[26]: time=02-20 13:50:07.128 processed=ConnectModeState org=DisconnectedState dest=<null> what=147462(0x24006) !SUPPLICANT_STATE_CHANGE_EVENT  rt=1305898/1305898 86 0 SSID: 红米手机 BSSID: e4:46:da:e1:0b:a9 nid: 1 state: GROUP_HANDSHAKE
+ rec[27]: time=02-20 13:50:07.136 processed=ConnectModeState org=DisconnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1305906/1305906 1000 0 num=2
+ rec[28]: time=02-20 13:50:07.137 processed=ConnectModeState org=DisconnectedState dest=ObtainingIpState what=147459(0x24003) !NETWORK_CONNECTION_EVENT  rt=1305907/1305907 1 0 e4:46:da:e1:0b:a9 nid=1 "红米手机"WPA_PSK last="红米手机"WPA_PSK
+ rec[29]: time=02-20 13:50:07.172 processed=ConnectModeState org=ObtainingIpState dest=<null> what=147462(0x24006) !SUPPLICANT_STATE_CHANGE_EVENT  rt=1305942/1305942 89 0 SSID: 红米手机 BSSID: e4:46:da:e1:0b:a9 nid: 1 state: COMPLETED
+ rec[30]: time=02-20 13:50:07.188 processed=L2ConnectedState org=ObtainingIpState dest=<null> what=131155(0x20053) !CMD_RSSI_POLL  rt=1305956/1305956 1 0 "红米手机" e4:46:da:e1:0b:a9 rssi=-29 f=2412 sc=60 link=72 tx=0.5, 0.0, 0.0  rx=0.5 bcn=1 [on:12398 tx:3 rx:8 period:2442] from screen [on:33239 period:158613330] gl hn u24 rssi=-24 ag=0 hr ls-=0 [56,56,56,56,61] brc=0 lrc=0 offload-stopped
+ rec[31]: time=02-20 13:50:07.189 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1305959/1305959 1000 0 num=2
+ rec[32]: time=02-20 13:50:07.190 processed=DriverStartedState org=ObtainingIpState dest=<null> what=131276(0x200cc) !CMD_CONFIG_ND_OFFLOAD  rt=1305960/1305960 1 0
+ rec[33]: time=02-20 13:50:07.192 processed=DefaultState org=ObtainingIpState dest=<null> what=131274(0x200ca) !CMD_INSTALL_PACKET_FILTER  rt=1305962/1305962 len=170
+ rec[34]: time=02-20 13:50:07.211 processed=DefaultState org=ObtainingIpState dest=<null> what=131212(0x2008c) !CMD_UPDATE_LINKPROPERTIES  rt=1305981/1305981 0 0 
+ rec[35]: time=02-20 13:50:07.240 processed=L2ConnectedState org=ObtainingIpState dest=<null> what=196611(0x30003) !CMD_PRE_DHCP_ACTION  rt=1306009/1306009 0 0 txpkts=4,0,0
+ rec[36]: time=02-20 13:50:07.240 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306010/1306010 1000 0 num=2
+ rec[37]: time=02-20 13:50:07.256 processed=SupplicantStartedState org=ObtainingIpState dest=<null> what=147461(0x24005) !SCAN_RESULTS_EVENT  rt=1306025/1306026 0 0 found=14 known=0 got=14 bcn=2 con=2 untrustedcn=0 last="红米手机"WPA_PSK
+ rec[38]: time=02-20 13:50:07.256 processed=L2ConnectedState org=ObtainingIpState dest=<null> what=196614(0x30006) !CMD_PRE_DHCP_ACTION_COMPLETE  rt=1306026/1306026 0 0
+ rec[39]: time=02-20 13:50:07.257 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306027/1306027 1000 0 num=2
+ rec[40]: time=02-20 13:50:07.265 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306035/1306035 1000 0 num=2
+ rec[41]: time=02-20 13:50:07.273 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306043/1306043 1000 0 num=2
+ rec[42]: time=02-20 13:50:07.276 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306046/1306046 1000 0 num=2
+ rec[43]: time=02-20 13:50:07.282 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306052/1306052 1000 0 num=2
+ rec[44]: time=02-20 13:50:07.287 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306057/1306057 1000 0 num=2
+ rec[45]: time=02-20 13:50:07.292 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306061/1306061 1000 0 num=2
+ rec[46]: time=02-20 13:50:07.299 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306069/1306069 1000 0 num=2
+ rec[47]: time=02-20 13:50:07.305 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306075/1306075 1000 0 num=2
+ rec[48]: time=02-20 13:50:07.309 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306079/1306079 1000 0 num=2
+ rec[49]: time=02-20 13:50:07.317 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306087/1306087 1000 0 num=2
+ rec[50]: time=02-20 13:50:07.322 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306092/1306092 1000 0 num=2
+ rec[51]: time=02-20 13:50:07.326 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306095/1306096 1000 0 num=2
+ rec[52]: time=02-20 13:50:07.331 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306101/1306101 1000 0 num=2
+ rec[53]: time=02-20 13:50:07.338 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306107/1306108 1000 0 num=2
+ rec[54]: time=02-20 13:50:07.340 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306110/1306110 1000 0 num=2
+ rec[55]: time=02-20 13:50:07.351 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306121/1306121 1000 0 num=2
+ rec[56]: time=02-20 13:50:07.362 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1306132/1306132 1000 0 num=2
+ rec[57]: time=02-20 13:50:09.583 processed=L2ConnectedState org=ObtainingIpState dest=<null> what=196612(0x30004) !CMD_POST_DHCP_ACTION  rt=1308353/1308353 0 0 
+ rec[58]: time=02-20 13:50:09.586 processed=L2ConnectedState org=ObtainingIpState dest=<null> what=131272(0x200c8) !CMD_IPV4_PROVISIONING_SUCCESS  rt=1308356/1308356 0
+ rec[59]: time=02-20 13:50:09.587 processed=DefaultState org=ObtainingIpState dest=<null> what=131212(0x2008c) !CMD_UPDATE_LINKPROPERTIES  rt=1308357/1308357 0 0 v4r
+ rec[60]: time=02-20 13:50:09.597 processed=DefaultState org=ObtainingIpState dest=<null> what=131274(0x200ca) !CMD_INSTALL_PACKET_FILTER  rt=1308367/1308367 len=183
+ rec[61]: time=02-20 13:50:09.601 processed=ConnectModeState org=ObtainingIpState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1308368/1308371 1000 0 num=2
+ rec[62]: time=02-20 13:50:09.608 processed=DefaultState org=ObtainingIpState dest=<null> what=131212(0x2008c) !CMD_UPDATE_LINKPROPERTIES  rt=1308378/1308378 0 0 v4 v4r v4dns
+ rec[63]: time=02-20 13:50:09.644 processed=L2ConnectedState org=ObtainingIpState dest=ConnectedState what=131210(0x2008a) !CMD_IP_CONFIGURATION_SUCCESSFUL  rt=1308414/1308414 0 0
+ rec[64]: time=02-20 13:50:09.647 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1308417/1308417 1000 0 num=2
+ rec[65]: time=02-20 13:50:09.667 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1308437/1308437 1000 0 num=2
+ rec[66]: time=02-20 13:50:09.691 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1308461/1308461 1000 0 num=2
+ rec[67]: time=02-20 13:50:09.708 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1308475/1308478 1000 0 num=2
+ rec[68]: time=02-20 13:50:09.718 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1308488/1308488 1000 0 num=2
+ rec[69]: time=02-20 13:50:09.722 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1308492/1308492 1000 0 num=2
+ rec[70]: time=02-20 13:50:09.734 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1308504/1308504 1000 0 num=2
+ rec[71]: time=02-20 13:50:09.739 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1308509/1308509 1000 0 num=2
+ rec[72]: time=02-20 13:50:09.770 processed=DriverStartedState org=ConnectedState dest=<null> what=131143(0x20047) !(1)CMD_START_SCAN  rt=1308539/1308539 1000 6 ic=0 proc(ms):0 onGoing full rssi=-29 f=2412 sc=60 link=72 tx=1.3, 0.0, 0.0  rx=0.3 [on:62 tx:0 rx:4 period:2584] from screen [on:33301 period:158615914]
+ rec[73]: time=02-20 13:50:10.195 processed=L2ConnectedState org=ConnectedState dest=<null> what=131155(0x20053) !CMD_RSSI_POLL  rt=1308964/1308964 1 0 "红米手机" e4:46:da:e1:0b:a9 rssi=-27 f=2412 sc=60 link=72 tx=3.6, 0.0, 0.0  rx=1.6 bcn=30 [on:2763 tx:9 rx:60 period:425] from screen [on:36064 period:158616339] gl hn u24 rssi=-22 ag=0 hr ls-=0 [56,56,56,56,61] brc=0 lrc=0 offload-stopped
+ rec[74]: time=02-20 13:50:10.944 processed=L2ConnectedState org=ConnectedState dest=<null> what=131235(0x200a3) !CMD_STOP_RSSI_MONITORING_OFFLOAD  rt=1309713/1309713 rssi=-27 thresholds=null
+ rec[75]: time=02-20 13:50:11.036 processed=DefaultState org=ConnectedState dest=<null> what=131133(0x2003d) !CMD_GET_SUPPORTED_FEATURES uid=1000  rt=1309806/1309806 0 0
+ rec[76]: time=02-20 13:50:11.039 processed=SupplicantStartedState org=ConnectedState dest=<null> what=131135(0x2003f) !CMD_GET_LINK_LAYER_STATS uid=1000  rt=1309809/1309809 0 0
+ rec[77]: time=02-20 13:50:11.407 processed=ConnectedState org=ConnectedState dest=<null> what=131220(0x20094) !CMD_NETWORK_STATUS  rt=1310177/1310177 1 0
+ rec[78]: time=02-20 13:50:11.412 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1310182/1310182 1000 0 num=2
+ rec[79]: time=02-20 13:50:13.204 processed=L2ConnectedState org=ConnectedState dest=<null> what=131155(0x20053) !CMD_RSSI_POLL  rt=1311973/1311973 1 0 "红米手机" e4:46:da:e1:0b:a9 rssi=-29 f=2412 sc=60 link=72 tx=17.4, 0.0, 0.0  rx=13.7 bcn=50 [on:2924 tx:20 rx:95 period:3009] from screen [on:38988 period:158619348] gl hn u24 rssi=-24 ag=0 hr ticks 0,0,0 ls-=0 [56,56,60,60,65] brc=0 lrc=0 offload-stopped
+ rec[80]: time=02-20 13:50:14.935 processed=SupplicantStartedState org=ConnectedState dest=<null> what=147461(0x24005) !SCAN_RESULTS_EVENT  rt=1313705/1313705 0 0 found=16 known=0 got=16 bcn=50 con=2 untrustedcn=0 last="红米手机"WPA_PSK
+ rec[81]: time=02-20 13:50:14.940 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1313709/1313709 1000 0 num=2
+ rec[82]: time=02-20 13:50:14.946 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1313716/1313716 1000 0 num=2
+ rec[83]: time=02-20 13:50:16.233 processed=L2ConnectedState org=ConnectedState dest=<null> what=131155(0x20053) !CMD_RSSI_POLL  rt=1315002/1315002 1 0 "红米手机" e4:46:da:e1:0b:a9 rssi=-28 f=2412 sc=60 link=72 tx=18.2, 0.0, 0.0  rx=15.8 bcn=59 [on:1944 tx:10 rx:21 period:3029] from screen [on:40932 period:158622377] gl hn u24 rssi=-23 ag=0 hr ticks 0,0,0 ls-=0 [56,56,60,60,65] brc=0 lrc=0 offload-stopped
+ rec[84]: time=02-20 13:50:19.286 processed=L2ConnectedState org=ConnectedState dest=<null> what=131155(0x20053) !CMD_RSSI_POLL  rt=1318055/1318055 1 0 "红米手机" e4:46:da:e1:0b:a9 rssi=-30 f=2412 sc=60 link=72 tx=10.1, 0.0, 0.0  rx=8.4 bcn=60 [on:62 tx:2 rx:1 period:3052] from screen [on:40994 period:158625429] gl hn rssi=-25 ag=0 hr ticks 0,0,0 ls-=0 [56,56,60,60,65] brc=0 lrc=0 offload-stopped
+ rec[85]: time=02-20 13:50:19.776 processed=DriverStartedState org=ConnectedState dest=<null> what=131143(0x20047) !(1)CMD_START_SCAN  rt=1318545/1318545 1000 7 ic=0 proc(ms):1 onGoing full rssi=-30 f=2412 sc=60 link=72 tx=10.1, 0.0, 0.0  rx=8.4 [on:0 tx:0 rx:0 period:491] from screen [on:40994 period:158625920]
+ rec[86]: time=02-20 13:50:22.302 processed=L2ConnectedState org=ConnectedState dest=<null> what=131155(0x20053) !CMD_RSSI_POLL  rt=1321071/1321071 1 0 "红米手机" e4:46:da:e1:0b:a9 rssi=-34 f=2412 sc=60 link=72 tx=5.1, 0.0, 0.0  rx=4.2 bcn=79 [on:2404 tx:0 rx:33 period:2525] from screen [on:43398 period:158628445] gl hn rssi=-29 ag=0 hr ticks 0,0,0 ls-=0 [56,56,60,60,65] brc=0 lrc=0 offload-stopped
+ rec[87]: time=02-20 13:50:24.799 processed=SupplicantStartedState org=ConnectedState dest=<null> what=147461(0x24005) !SCAN_RESULTS_EVENT  rt=1323569/1323569 0 0 found=16 known=0 got=16 bcn=79 con=2 untrustedcn=0 last="红米手机"WPA_PSK
+ rec[88]: time=02-20 13:50:24.807 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1323577/1323577 1000 0 num=2
+ rec[89]: time=02-20 13:50:24.814 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1323583/1323583 1000 0 num=2
+ rec[90]: time=02-20 13:50:25.310 processed=L2ConnectedState org=ConnectedState dest=<null> what=131155(0x20053) !CMD_RSSI_POLL  rt=1324079/1324079 1 0 "红米手机" e4:46:da:e1:0b:a9 rssi=-28 f=2412 sc=60 link=72 tx=2.5, 0.0, 0.0  rx=2.1 bcn=92 [on:2607 tx:0 rx:22 period:3009] from screen [on:46005 period:158631454] gl hn u24 rssi=-23 ag=0 hr ls-=0 [56,56,56,56,61] brc=0 lrc=0 offload-stopped
+ rec[91]: time=02-20 13:50:28.324 processed=L2ConnectedState org=ConnectedState dest=<null> what=131155(0x20053) !CMD_RSSI_POLL  rt=1327093/1327093 1 0 "红米手机" e4:46:da:e1:0b:a9 rssi=-34 f=2412 sc=60 link=72 tx=1.3, 0.0, 0.0  rx=1.1 bcn=109 [on:2924 tx:0 rx:26 period:3013] from screen [on:48929 period:158634467] gl hn u24 rssi=-29 ag=0 hr ls-=0 [56,56,56,56,61] brc=0 lrc=0 offload-stopped
+ rec[92]: time=02-20 13:50:29.781 processed=DriverStartedState org=ConnectedState dest=<null> what=131143(0x20047) !(1)CMD_START_SCAN  rt=1328550/1328550 1000 8 ic=0 proc(ms):1 onGoing full rssi=-34 f=2412 sc=60 link=72 tx=1.3, 0.0, 0.0  rx=1.1 [on:0 tx:0 rx:0 period:1457] from screen [on:48929 period:158635924]
+ rec[93]: time=02-20 13:50:29.902 processed=SupplicantStartedState org=ConnectedState dest=<null> what=147461(0x24005) !SCAN_RESULTS_EVENT  rt=1328672/1328672 0 0 found=16 known=0 got=16 bcn=109 con=2 untrustedcn=0 last="红米手机"WPA_PSK
+ rec[94]: time=02-20 13:50:29.906 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1328676/1328676 1000 0 num=2
+ rec[95]: time=02-20 13:50:29.911 processed=ConnectModeState org=ConnectedState dest=<null> what=131131(0x2003b) !CMD_GET_CONFIGURED_NETWORKS uid=1000  rt=1328681/1328681 1000 0 num=2
+ rec[96]: time=02-20 13:50:31.239 processed=DefaultState org=ConnectedState dest=<null> what=131133(0x2003d) !CMD_GET_SUPPORTED_FEATURES uid=1000  rt=1330009/1330009 0 0
+ rec[97]: time=02-20 13:50:31.255 processed=SupplicantStartedState org=ConnectedState dest=<null> what=131135(0x2003f) !CMD_GET_LINK_LAYER_STATS uid=1000  rt=1330025/1330025 0 0
+ rec[98]: time=02-20 13:50:31.351 processed=L2ConnectedState org=ConnectedState dest=<null> what=131155(0x20053) !CMD_RSSI_POLL  rt=1330119/1330119 1 0 "红米手机" e4:46:da:e1:0b:a9 rssi=-28 f=2412 sc=60 link=72 tx=0.3, 0.0, 0.0  rx=0.3 bcn=116 [on:1506 tx:0 rx:11 period:1571] from screen [on:50435 period:158637495] gl hn u24 rssi=-23 ag=0 hr ls-=0 [56,56,56,56,61] brc=0 lrc=0 offload-stopped
+ rec[99]: time=02-20 13:50:34.379 processed=L2ConnectedState org=ConnectedState dest=<null> what=131155(0x20053) !CMD_RSSI_POLL  rt=1333148/1333148 1 0 "红米手机" e4:46:da:e1:0b:a9 rssi=-28 f=2412 sc=60 link=72 tx=0.2, 0.0, 0.0  rx=0.1 bcn=116 [on:0 tx:0 rx:0 period:3028] from screen [on:50435 period:158640523] gl hn u24 rssi=-23 ag=0 hr ls-=0 [56,56,56,56,61] brc=0 lrc=0 offload-stopped
+curState=ConnectedState
+SupplicantStateTracker:
+ total records=37
+ rec[0]: time=02-20 13:28:46.170 processed=DefaultState org=UninitializedState dest=UninitializedState what=131183(0x2006f)
+ rec[1]: time=02-20 13:28:46.174 processed=DefaultState org=UninitializedState dest=DisconnectedState what=147462(0x24006)
+ rec[2]: time=02-20 13:28:48.661 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[3]: time=02-20 13:28:50.903 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[4]: time=02-20 13:29:08.645 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[5]: time=02-20 13:29:10.877 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[6]: time=02-20 13:29:48.660 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[7]: time=02-20 13:29:50.939 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[8]: time=02-20 13:31:08.683 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[9]: time=02-20 13:31:10.854 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[10]: time=02-20 13:33:48.692 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[11]: time=02-20 13:33:50.862 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[12]: time=02-20 13:36:28.692 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[13]: time=02-20 13:36:30.796 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[14]: time=02-20 13:39:08.702 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[15]: time=02-20 13:39:10.963 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[16]: time=02-20 13:41:48.699 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[17]: time=02-20 13:41:50.946 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[18]: time=02-20 13:44:28.712 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[19]: time=02-20 13:44:30.888 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[20]: time=02-20 13:48:46.203 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[21]: time=02-20 13:48:48.289 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[22]: time=02-20 13:49:14.691 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[23]: time=02-20 13:49:16.838 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[24]: time=02-20 13:49:24.711 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[25]: time=02-20 13:49:26.876 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[26]: time=02-20 13:49:34.737 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[27]: time=02-20 13:49:36.923 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[28]: time=02-20 13:49:44.746 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[29]: time=02-20 13:49:46.946 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[30]: time=02-20 13:49:54.753 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[31]: time=02-20 13:49:56.943 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[32]: time=02-20 13:50:04.771 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[33]: time=02-20 13:50:06.953 processed=DefaultState org=ScanState dest=DisconnectedState what=147462(0x24006)
+ rec[34]: time=02-20 13:50:07.064 processed=DefaultState org=DisconnectedState dest=ScanState what=147462(0x24006)
+ rec[35]: time=02-20 13:50:07.071 processed=DefaultState org=ScanState dest=HandshakeState what=147462(0x24006)
+ rec[36]: time=02-20 13:50:07.191 processed=DefaultState org=HandshakeState dest=CompletedState what=147462(0x24006)
+curState=CompletedState
+mAuthFailureInSupplicantBroadcast false
+mNetworksDisabledDuringConnect false
+
+mLinkProperties {InterfaceName: wlan0 LinkAddresses: [fe80::203:7fff:fe12:4b4b/64,192.168.43.81/24,]  Routes: [fe80::/64 -> :: wlan0,192.168.43.0/24 -> 0.0.0.0 wlan0,0.0.0.0/0 -> 192.168.43.1 wlan0,] DnsAddresses: [192.168.43.1,] Domains: null MTU: 0 TcpBufferSizes: 524288,1048576,2097152,262144,524288,1048576}
+mWifiInfo SSID: 红米手机, BSSID: e4:46:da:e1:0b:a9, MAC: 00:03:7f:12:4b:4b, Supplicant state: COMPLETED, RSSI: -28, Link speed: 72Mbps, Frequency: 2412MHz, Net ID: 1, Metered hint: true, score: 60
+mDhcpResults IP address 192.168.43.81/24 Gateway 192.168.43.1  DNS servers: [ 192.168.43.1 ] Domains  DHCP server /192.168.43.1 Vendor info ANDROID_METERED lease 3600 seconds
+mNetworkInfo [type: WIFI[], state: CONNECTED/CONNECTED, reason: (unspecified), extra: "红米手机", failover: false, available: true, roaming: false, metered: false]
+mLastSignalLevel 4
+mLastBssid e4:46:da:e1:0b:a9
+mLastNetworkId 1
+mOperationalMode 1
+mUserWantsSuspendOpt true
+mSuspendOptNeedsDisabled 4
+Supplicant status bssid=e4:46:da:e1:0b:a9
+freq=2412
+ssid=\xe7\xba\xa2\xe7\xb1\xb3\xe6\x89\x8b\xe6\x9c\xba
+id=1
+id_str=%7B%22creatorUid%22%3A%221000%22%2C%22configKey%22%3A%22%5C%22%E7%BA%A2%E7%B1%B3%E6%89%8B%E6%9C%BA%5C%22WPA_PSK%22%7D
+mode=station
+pairwise_cipher=CCMP
+group_cipher=CCMP
+key_mgmt=WPA2-PSK
+wpa_state=COMPLETED
+ip_address=192.168.43.81
+p2p_device_address=02:03:7f:94:4b:4b
+address=00:03:7f:12:4b:4b
+uuid=86b697e7-e07a-51f6-a632-110888e94727
+CountryCode was not initialized
+mConnectedModeGScanOffloadStarted false
+mGScanPeriodMilli 0
+mConnectionReqCount 2
+mUntrustedReqCount 0
+Wlan Wake Reasons: totalCmdEventWake 0 totalDriverFwLocalWake 0 totalRxDataWake 0 rxUnicast 0 rxMulticast 0 rxBroadcast 0 icmp 0 icmp6 0 icmp6Ra 0 icmp6Na 0 icmp6Ns 0 ipv4RxMulticast 0 ipv6Multicast 0 otherRxMulticast 0
+
+WifiMetrics:
+WifiMetrics:
+mConnectionEvents:
+startTime=02-20 13:50:05.012, SSID="红米手机", BSSID=e4:46:da:e1:0b:a9, durationMillis=2011, roamType=ROAM_USER_SELECTED, connectionResult=0, level2FailureCode=REDUNDANT_CONNECTION_ATTEMPT, connectivityLevelFailureCode=NONE, signalStrength=0, wifiState=WIFI_DISCONNECTED, screenOn=true. mRouterFingerprint: mConnectionEvent.roamType=0, mChannelInfo=0, mDtim=0, mAuthentication=2, mHidden=false, mRouterTechnology=0, mSupportsIpv6=false
+startTime=02-20 13:50:07.023, SSID="红米手机", BSSID=e4:46:da:e1:0b:a9, durationMillis=2589, roamType=ROAM_USER_SELECTED, connectionResult=1, level2FailureCode=NONE, connectivityLevelFailureCode=NONE, signalStrength=-30, wifiState=WIFI_DISCONNECTED, screenOn=true. mRouterFingerprint: mConnectionEvent.roamType=0, mChannelInfo=2412, mDtim=0, mAuthentication=2, mHidden=false, mRouterTechnology=4, mSupportsIpv6=false
+mWifiLogProto.numSavedNetworks=2
+mWifiLogProto.numOpenNetworks=0
+mWifiLogProto.numPersonalNetworks=2
+mWifiLogProto.numEnterpriseNetworks=0
+mWifiLogProto.numHiddenNetworks=0
+mWifiLogProto.numPasspointNetworks=0
+mWifiLogProto.isLocationEnabled=false
+mWifiLogProto.isScanningAlwaysEnabled=false
+mWifiLogProto.numNetworksAddedByUser=0
+mWifiLogProto.numNetworksAddedByApps=2
+mWifiLogProto.numNonEmptyScanResults=19
+mWifiLogProto.numEmptyScanResults=0
+mWifiLogProto.numOneshotScans=22
+mWifiLogProto.numBackgroundScans=0
+mScanReturnEntries:
+  SCAN_UNKNOWN: 0
+  SCAN_SUCCESS: 22
+  SCAN_FAILURE_INTERRUPTED: 0
+  SCAN_FAILURE_INVALID_CONFIGURATION: 0
+  FAILURE_WIFI_DISABLED: 0
+mSystemStateEntries: <state><screenOn> : <scansInitiated>
+  WIFI_UNKNOWN       ON: 0
+  WIFI_DISABLED      ON: 0
+  WIFI_DISCONNECTED  ON: 18
+  WIFI_ASSOCIATED    ON: 4
+  WIFI_UNKNOWN      OFF: 0
+  WIFI_DISABLED     OFF: 0
+  WIFI_DISCONNECTED OFF: 0
+  WIFI_ASSOCIATED   OFF: 0
+mWifiLogProto.numConnectivityWatchdogPnoGood=0
+mWifiLogProto.numConnectivityWatchdogPnoBad=0
+mWifiLogProto.numConnectivityWatchdogBackgroundGood=0
+mWifiLogProto.numConnectivityWatchdogBackgroundBad=0
+mWifiLogProto.numLastResortWatchdogTriggers=0
+mWifiLogProto.numLastResortWatchdogBadAssociationNetworksTotal=0
+mWifiLogProto.numLastResortWatchdogBadAuthenticationNetworksTotal=0
+mWifiLogProto.numLastResortWatchdogBadDhcpNetworksTotal=0
+mWifiLogProto.numLastResortWatchdogBadOtherNetworksTotal=0
+mWifiLogProto.numLastResortWatchdogAvailableNetworksTotal=0
+mWifiLogProto.numLastResortWatchdogTriggersWithBadAssociation=0
+mWifiLogProto.numLastResortWatchdogTriggersWithBadAuthentication=0
+mWifiLogProto.numLastResortWatchdogTriggersWithBadDhcp=0
+mWifiLogProto.numLastResortWatchdogTriggersWithBadOther=0
+mWifiLogProto.numLastResortWatchdogSuccesses=0
+mWifiLogProto.recordDurationSec=1310
+mWifiLogProto.rssiPollRssiCount: Printing counts for [-127, 0]
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 1 4 4 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+mWifiLogProto.alertReasonCounts=()
+mWifiLogProto.numTotalScanResults=84
+mWifiLogProto.numOpenNetworkScanResults=10
+mWifiLogProto.numPersonalNetworkScanResults=74
+mWifiLogProto.numEnterpriseNetworkScanResults=0
+mWifiLogProto.numHiddenNetworkScanResults=14
+mWifiLogProto.numHotspot2R1NetworkScanResults=0
+mWifiLogProto.numHotspot2R2NetworkScanResults=0
+mWifiLogProto.numScans=19
+mWifiLogProto.WifiScoreCount: [0, 60]
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 10 
+
+Dump of WifiConfigManager
+mLastPriority 6
+Configured networks
+* ID: 1 SSID: "红米手机" PROVIDER-NAME: null BSSID: null FQDN: null PRIO: 6 HIDDEN: false
+ NetworkSelectionStatus NETWORK_SELECTION_ENABLED
+ hasEverConnected: true
+ numAssociation 1
+update time=02-20 13:50:06.980
+creationtime=02-20 13:50:04.905
+ validatedInternetAccess
+ KeyMgmt: WPA_PSK Protocols: WPA RSN
+ AuthAlgorithms:
+ PairwiseCiphers: TKIP CCMP
+ GroupCiphers: TKIP CCMP
+ PSK: *
+ sim_num *
+Enterprise config:
+altsubject_match NULL
+password <removed>
+subject_match NULL
+ca_path NULL
+engine 0
+client_cert NULL
+plmn NULL
+ca_cert NULL
+anonymous_identity NULL
+identity NULL
+key_id NULL
+domain_suffix_match NULL
+engine_id NULL
+IP config:
+IP assignment: DHCP
+Proxy settings: NONE
+ networkSelectionBSSID=any cuid=1000 cname=android.uid.system:1000 luid=1000 lname=android.uid.system:1000 lcuid=1000 userApproved=USER_APPROVED noInternetAccessExpected=false 
+lastConnected: 24sec roamingFailureBlackListTimeMilli: 1000
+triggeredLow: 0 triggeredBad: 0 triggeredNotHigh: 0
+ticksLow: 0 ticksBad: 0 ticksNotHigh: 0
+triggeredJoin: 0
+
+- DSBLE ID: 0 SSID: "Kedacom.lnc" PROVIDER-NAME: null BSSID: null FQDN: null PRIO: 5 HIDDEN: false
+ NetworkSelectionStatus NETWORK_SELECTION_ENABLED
+ hasEverConnected: true
+ numAssociation 1
+update time=02-20 12:48:16.706
+creationtime=02-20 11:06:47.693
+ validatedInternetAccess
+ KeyMgmt: WPA_PSK Protocols: WPA RSN
+ AuthAlgorithms:
+ PairwiseCiphers: TKIP CCMP
+ GroupCiphers: TKIP CCMP
+ PSK: *
+ sim_num *
+Enterprise config:
+altsubject_match NULL
+password <removed>
+ca_path NULL
+subject_match NULL
+engine 0
+client_cert NULL
+ca_cert NULL
+anonymous_identity NULL
+identity NULL
+key_id NULL
+domain_suffix_match NULL
+engine_id NULL
+IP config:
+IP assignment: DHCP
+Proxy settings: NONE
+ networkSelectionBSSID=38:22:d6:af:09:60 cuid=1000 cname=android.uid.system:1000 luid=1000 lname=android.uid.system:1000 lcuid=-1 userApproved=USER_APPROVED noInternetAccessExpected=false roamingFailureBlackListTimeMilli: 1000
+triggeredLow: 0 triggeredBad: 0 triggeredNotHigh: 0
+ticksLow: 0 ticksBad: 0 ticksNotHigh: 0
+triggeredJoin: 0
+
+
+
+Chipset information :-----------------------------------------------
+FW Version is: 1:0:1:392
+Driver Version is: 5.1.0.70V
+Supported Feature set: -1
+--------------------------------------------------------------------
+Bug dump 0
+system time = 02-20 13:50:34.512
+kernel time = 1333.282
+reason = 7
+kernel log: 
+<6>[   25.619735] msm_vidc: info: Closed video instance: 0000000000000000
+<6>[   25.630200] msm_vidc: info: Opening video instance: 0000000000000000, 1
+<6>[   25.643517] msm_vidc: info: Closed video instance: 0000000000000000
+<6>[   25.653613] msm_vidc: info: Opening video instance: 0000000000000000, 1
+<13>[   25.656124] init: Service 'exec 15 (/init.qcom.crashdata.sh)' (pid 2058) exited with status 0
+<14>[   25.656292] Boot completed init: write_file: Unable to open '/sys/block/dm-1/queue/read_ahead_kb': No such file or directory
+<13>[   25.656779] init: Starting service 'qcom-post-boot'...
+<13>[   25.664346] init: Starting service 'qti-testscripts'...
+<6>[   25.665254] msm_vidc: info: Closed video instance: 0000000000000000
+<13>[   25.669229] init: Starting service 'cs-post-boot'...
+<6>[   25.675818] msm_vidc: info: Opening video instance: 0000000000000000, 1
+<6>[   25.687603] msm_vidc: info: Closed video instance: 0000000000000000
+<6>[   25.701857] msm_vidc: info: Opening video instance: 0000000000000000, 1
+<13>[   25.705478] init: Service 'qti-testscripts' (pid 2084) exited with status 0
+<6>[   25.712507] msm_vidc: info: Closed video instance: 0000000000000000
+<6>[   25.722515] msm_vidc: info: Opening video instance: 0000000000000000, 1
+<6>[   25.728595] msm_thermal:store_cc_enabled Core control disabled
+<6>[   25.734631] msm_thermal:store_cc_enabled Core control enabled
+<6>[   25.735909] msm_vidc: info: Closed video instance: 0000000000000000
+<6>[   25.746201] msm_vidc: info: Opening video instance: 0000000000000000, 1
+<6>[   25.763509] msm_vidc: info: Closed video instance: 0000000000000000
+<6>[   25.776869] msm_vidc: info: Opening video instance: 0000000000000000, 1
+<6>[   25.790476] msm_vidc: info: Closed video instance: 0000000000000000
+<6>[   25.806273] msm_vidc: info: Opening video instance: 0000000000000000, 1
+<6>[   25.832372] msm_vidc: info: Closed video instance: 0000000000000000
+<6>[   25.836884] zram0: detected capacity change from 0 to 536870912
+<6>[   25.844732] msm_vidc: info: Opening video instance: 0000000000000000, 1
+<6>[   25.869290] msm_vidc: info: Closed video instance: 0000000000000000
+<6>[   25.890449] Adding 524284k swap on /dev/block/zram0.  Priority:32758 extents:1 across:524284k SS
+<13>[   25.959443] init: Service 'cs-post-boot' (pid 2085) exited with status 0
+<11>[   25.998436] init: cannot find '/system/vendor/bin/hbtp_daemon' (No such file or directory), disabling 'hbtp'
+<3>[   26.225074] kgsl-3d 5000000.qcom,kgsl-3d0: dev_pm_opp_get_opp_count: OPP table not found (-19)
+<3>[   26.225312] devbw soc:qcom,gpubw: dev_pm_opp_get_opp_count: OPP table not found (-19)
+<3>[   26.245940] devbw soc:qcom,cpubw: dev_pm_opp_get_opp_count: OPP table not found (-19)
+<13>[   26.377291] init: Service 'qcom-post-boot' (pid 2083) exited with status 0
+<38>[   27.501723] type=1400 audit(1550640528.706:27): avc: denied { execute } for pid=2485 comm="cnss_diag" name="sh" dev="mmcblk0p14" ino=987 scontext=u:r:wcnss_service:s0 tcontext=u:object_r:shell_exec:s0 tclass=file permissive=1
+<38>[   27.502672] type=1400 audit(1550640528.706:28): avc: denied { read open } for pid=2485 comm="cnss_diag" path="/system/bin/sh" dev="mmcblk0p14" ino=987 scontext=u:r:wcnss_service:s0 tcontext=u:object_r:shell_exec:s0 tclass=file permissive=1
+<38>[   27.502871] type=1400 audit(1550640528.706:29): avc: denied { execute_no_trans } for pid=2485 comm="cnss_diag" path="/system/bin/sh" dev="mmcblk0p14" ino=987 scontext=u:r:wcnss_service:s0 tcontext=u:object_r:shell_exec:s0 tclass=file permissive=1
+<38>[   27.502947] type=1400 audit(1550640528.716:30): avc: denied { getattr } for pid=2485 comm="sh" path="/system/bin/sh" dev="mmcblk0p14" ino=987 scontext=u:r:wcnss_service:s0 tcontext=u:object_r:shell_exec:s0 tclass=file permissive=1
+<38>[   27.512361] type=1400 audit(1550640528.726:31): avc: denied { getattr } for pid=2485 comm="sh" path="/system/bin/toybox" dev="mmcblk0p14" ino=1040 scontext=u:r:wcnss_service:s0 tcontext=u:object_r:toolbox_exec:s0 tclass=file permissive=1
+<38>[   27.512529] type=1400 audit(1550640528.726:32): avc: denied { execute } for pid=2485 comm="sh" name="toybox" dev="mmcblk0p14" ino=1040 scontext=u:r:wcnss_service:s0 tcontext=u:object_r:toolbox_exec:s0 tclass=file permissive=1
+<38>[   27.512873] type=1400 audit(1550640528.726:33): avc: denied { read open } for pid=2485 comm="sh" path="/system/bin/toybox" dev="mmcblk0p14" ino=1040 scontext=u:r:wcnss_service:s0 tcontext=u:object_r:toolbox_exec:s0 tclass=file permissive=1
+<38>[   27.513017] type=1400 audit(1550640528.726:34): avc: denied { execute_no_trans } for pid=2485 comm="sh" path="/system/bin/toybox" dev="mmcblk0p14" ino=1040 scontext=u:r:wcnss_service:s0 tcontext=u:object_r:toolbox_exec:s0 tclass=file permissive=1
+<6>[   27.523926] R0: [soft_irq][702058451] [13:28:48.743221]  wlan: [0:E :SME] sme_8023_multicast_list: Invalid session: 0
+<38>[   29.062061] type=1400 audit(1550640530.276:35): avc: denied { write } for pid=2888 comm="sh" name="control" dev="sysfs" ino=46283 scontext=u:r:rild:s0 tcontext=u:object_r:sysfs:s0 tclass=file permissive=1
+<38>[   45.132221] type=1400 audit(1550640546.336:36): avc: denied { getattr } for pid=1821 comm="m.android.phone" path="/data/data/com.qualcomm.qti.modemtestmode" dev="dm-0" ino=114724 scontext=u:r:radio:s0 tcontext=u:object_r:system_app_data_file:s0 tclass=dir permissive=1
+<13>[   95.757409] init: Service 'atfwd' is being killed...
+<13>[   95.775441] init: Service 'atfwd' (pid 996) killed by signal 9
+<13>[   95.775548] init: Service 'atfwd' (pid 996) killing any children in process group
+<38>[ 1217.656820] type=1400 audit(1550641718.866:37): avc: denied { read } for pid=3430 comm="main" name="name" dev="sysfs" ino=28852 scontext=u:r:shell:s0 tcontext=u:object_r:sysfs:s0 tclass=file permissive=1
+<38>[ 1217.657197] type=1400 audit(1550641718.866:38): avc: denied { open } for pid=3430 comm="main" path="/sys/devices/soc/cce0000.qcom,venus/subsys0/name" dev="sysfs" ino=28852 scontext=u:r:shell:s0 tcontext=u:object_r:sysfs:s0 tclass=file permissive=1
+<6>[ 1220.820624] msm_vidc: info: Opening video instance: 0000000000000000, 0
+<4>[ 1221.155486] use of bytesused == 0 is deprecated and will be removed in the future,
+<4>[ 1221.155540] use VIDIOC_DECODER_CMD(V4L2_DEC_CMD_STOP) instead.
+<3>[ 1227.471408] msm_mi2s_sec_snd_startup: substream = subdevice #0  stream = 0, dai name soc:qcom,msm-dai-mi2s:qcom,msm-, dai ID 1
+<3>[ 1227.471610] sdm660-asoc-snd soc:sound: msm_mi2s_set_sclk: clock rate 256000
+<3>[ 1227.485527] msm_mi2s_sec_snd_startup: Enabling mclk, clk_freq_in_hz = 12288000
+<3>[ 1227.489845] msm_mi2s_sec_rx_be_hw_params_fixup:param fmt=2, 48000 Hz, 2 channel
+<3>[ 1227.497030] msm_mi2s_sec_rx_be_hw_params_fixup:force fmt=2, 48000 Hz, 2 channel
+<3>[ 1227.504224] msm_mi2s_sec_rx_snd_hw_params:snd[1] rx rate 48000, channels 2, bits 16
+<3>[ 1227.510394] sdm660-asoc-snd soc:sound: msm_mi2s_set_sclk: clock rate 1536000
+<7>[ 1227.519400] [AIC3x_KMSG]: dev0 set dai fmt: master=0
+<7>[ 1227.519419] [AIC3x_KMSG]: dev0 set dai sysclk=12288000
+<7>[ 1227.519435] [AIC3x_KMSG]: dev0 Set AD as 48000 Hz, 16 bits, 2 channel
+<7>[ 1227.520945] [AIC3x_KMSG]: dev0 fs=48000 mclk=12288000 bypass_pll=1 Q=2
+<3>[ 1227.527405] afe_get_cal_topology_id: [AFE_TOPOLOGY_CAL] not initialized for this port 4098
+<3>[ 1251.648513] msm_mi2s_sec_snd_startup: substream = subdevice #0  stream = 0, dai name soc:qcom,msm-dai-mi2s:qcom,msm-, dai ID 1
+<3>[ 1251.648595] sdm660-asoc-snd soc:sound: msm_mi2s_set_sclk: clock rate 1536000
+<3>[ 1251.662547] msm_mi2s_sec_snd_startup: Enabling mclk, clk_freq_in_hz = 12288000
+<3>[ 1251.667078] msm_mi2s_sec_rx_be_hw_params_fixup:param fmt=2, 48000 Hz, 2 channel
+<3>[ 1251.673134] msm_mi2s_sec_rx_be_hw_params_fixup:force fmt=2, 48000 Hz, 2 channel
+<7>[ 1251.680293] [AIC3x_KMSG]: dev0 Set AD as 48000 Hz, 16 bits, 2 channel
+<7>[ 1251.681241] [AIC3x_KMSG]: dev0 fs=48000 mclk=12288000 bypass_pll=1 Q=2
+<3>[ 1251.686255] afe_get_cal_topology_id: [AFE_TOPOLOGY_CAL] not initialized for this port 4098
+<3>[ 1297.193796] msm_mi2s_sec_snd_startup: substream = subdevice #0  stream = 0, dai name soc:qcom,msm-dai-mi2s:qcom,msm-, dai ID 1
+<3>[ 1297.193950] sdm660-asoc-snd soc:sound: msm_mi2s_set_sclk: clock rate 1536000
+<3>[ 1297.208468] msm_mi2s_sec_snd_startup: Enabling mclk, clk_freq_in_hz = 12288000
+<3>[ 1297.212838] msm_mi2s_sec_rx_be_hw_params_fixup:param fmt=2, 48000 Hz, 2 channel
+<3>[ 1297.218359] msm_mi2s_sec_rx_be_hw_params_fixup:force fmt=2, 48000 Hz, 2 channel
+<7>[ 1297.225816] [AIC3x_KMSG]: dev0 Set AD as 48000 Hz, 16 bits, 2 channel
+<7>[ 1297.227144] [AIC3x_KMSG]: dev0 fs=48000 mclk=12288000 bypass_pll=1 Q=2
+<3>[ 1297.233282] afe_get_cal_topology_id: [AFE_TOPOLOGY_CAL] not initialized for this port 4098
+<4>[ 1302.834521] perf interrupt took too long (2510 > 2500), lowering kernel.perf_event_max_sample_rate to 50000
+<3>[ 1303.631337] msm_mi2s_sec_snd_startup: substream = subdevice #0  stream = 0, dai name soc:qcom,msm-dai-mi2s:qcom,msm-, dai ID 1
+<3>[ 1303.631388] sdm660-asoc-snd soc:sound: msm_mi2s_set_sclk: clock rate 1536000
+<3>[ 1303.645653] msm_mi2s_sec_snd_startup: Enabling mclk, clk_freq_in_hz = 12288000
+<3>[ 1303.649871] msm_mi2s_sec_rx_be_hw_params_fixup:param fmt=2, 48000 Hz, 2 channel
+<3>[ 1303.656004] msm_mi2s_sec_rx_be_hw_params_fixup:force fmt=2, 48000 Hz, 2 channel
+<7>[ 1303.663564] [AIC3x_KMSG]: dev0 Set AD as 48000 Hz, 16 bits, 2 channel
+<7>[ 1303.667738] [AIC3x_KMSG]: dev0 fs=48000 mclk=12288000 bypass_pll=1 Q=2
+<3>[ 1303.672241] afe_get_cal_topology_id: [AFE_TOPOLOGY_CAL] not initialized for this port 4098
+<6>[ 1305.823223] R0: [wpa_supplicant][25245404800] [13:50:07.042509]  wlan: [1842:E :QDF] cds_current_connections_update: 6481: driver isn't dbs capable, no further action needed
+<6>[ 1305.823576] R0: [wpa_supplicant][25245411626] [13:50:07.042865]  wlan: [1842:E :SME] csr_send_join_req_msg: 14185: Connecting to ssid:红米手机 bssid: e4:46:da:e1:0b:a9 rssi: -30 channel: 1 country_code: US
+<6>[ 1305.832301] R0: [cds_mc_thread][25245579069] [13:50:07.051586]  wlan: [1760:F :WMI] send_vdev_start_cmd_tlv: vdev_id 0 freq 2412 chanmode 5 ch_info: 0x5 is_dfs 0 beacon interval 100 dtim 1 center_chan 2412 center_freq2 0 reg_info_1: 0x160000 reg_info_2: 0x1600, req->max_txpow: 0x16 Tx SS 1, Rx SS 1
+<6>[ 1305.845740] R0: [soft_irq][25245837051] [13:50:07.065023]  wlan: [0:E :QDF] TXRX: ol_tx_inc_pool_ref: pool         pK-error, ref_cnt 1
+<6>[ 1305.850647] R0: [cds_mc_thread][25245931333] [13:50:07.069933]  wlan: [1760:E :WMA] TX MGMT - Type 0, SubType 11 seq_num[2049]
+<6>[ 1305.856402] R0: [cds_mc_thread][25246041742] [13:50:07.075685]  wlan: [1760:E :PE ] lim_handle80211_frames: 945: RX MGMT - Type 0, SubType 11, seq num[100]
+<6>[ 1305.857146] R0: [cds_mc_thread][25246056161] [13:50:07.076434]  wlan: [1760:E :WMA] TX MGMT - Type 0, SubType 0 seq_num[2050]
+<6>[ 1305.871617] R0: [cds_mc_thread][25246333917] [13:50:07.090901]  wlan: [1760:E :PE ] lim_handle80211_frames: 945: RX MGMT - Type 0, SubType 1, seq num[101]
+<6>[ 1305.871742] R0: [cds_mc_thread][25246336449] [13:50:07.091032]  wlan: [1760:E :PE ] lim_update_ric_data: 320: RIC data not present
+<6>[ 1305.873920] R0: [cds_mc_thread][25246378131] [13:50:07.093203]  wlan: [1760:E :WMA] wma_peer_assoc_conf_handler: 2491: Send ADD BSS RSP: opermode 1 update_bss 1 nw_type 2 bssid e4:46:da:e1:0b:a9 staIdx 1 status 0
+<6>[ 1305.874810] R0: [cds_mc_thread][25246395272] [13:50:07.094096]  wlan: [1760:E :WMA] wma_add_sta_req_sta_mode: 4474: statype 0 vdev_id 0 aid 1 bssid e4:46:da:e1:0b:a9 staIdx 1 status 0
+<6>[ 1305.880283] R0: [cds_mc_thread][25246500292] [13:50:07.099566]  wlan: [1760:E :QDF] cds_dump_current_concurrency: 3174: STA Standalone
+<6>[ 1305.880308] wlan: 00:03:7f:12:4b:4b connected to e4:46:da:e1:0b:a9
+<6>[ 1305.884656] R0: [cds_mc_thread][25246584255] [13:50:07.103939]  wlan: [1760:E :HDP] hdr::
+<6>[ 1305.884684] R0: [cds_mc_thread][25246584885] [13:50:07.103972]  wlan: [1760:E :HDP] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03
+<6>[ 1305.884697] R0: [cds_mc_thread][25246585162] [13:50:07.103986]  wlan: [1760:E :HDP] 00000010: 7f aa bb cc 00 03 7f 12 4b 4b 08 00
+<6>[ 1305.884782] R0: [cds_mc_thread][25246586784] [13:50:07.104071]  wlan: [1760:E :HDP] hdr::
+<6>[ 1305.884795] R0: [cds_mc_thread][25246587042] [13:50:07.104084]  wlan: [1760:E :HDP] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03
+<6>[ 1305.885054] R0: [cds_mc_thread][25246587302] [13:50:07.104098]  wlan: [1760:E :HDP] 00000010: 7f aa bb cc 00 03 7f 12 4b 4b 86 dd
+<6>[ 1305.907766] R0: [cds_mc_thread][25247028024] [13:50:07.127052]  wlan: [1760:E :SME] csr_neighbor_roam_info_ctx_init: 1078: Supplicant disabled driver roaming
+<6>[ 1305.911554] R0: [cds_mc_thread][25247100769] [13:50:07.130841]  wlan: [1760:E :SME] sme_ps_enable_auto_ps_timer: 1000: auto_ps_timer disabled in INI, force_trigger 0
+<6>[ 1305.912135] R0: [cds_mc_thread][25247111981] [13:50:07.131425]  wlan: [1760:E :WMI] LFR3:OKC enabled
+<6>[ 1305.912148] R0: [cds_mc_thread][25247112256] [13:50:07.131439]  wlan: [1760:E :WMI] LFR3:PMKSA caching enabled
+<6>[ 1305.921541] R0: [cds_mc_thread][25247292529] [13:50:07.140828]  wlan: [1760:E :SME] sme_ps_enable_auto_ps_timer: 1000: auto_ps_timer disabled in INI, force_trigger 0
+<6>[ 1305.921761] R0: [cds_mc_thread][25247296836] [13:50:07.141053]  wlan: [1760:E :WMA] Unhandled WMA message of type 4209
+<6>[ 1305.927907] R0: [cds_mc_thread][25247414792] [13:50:07.147196]  wlan: [1760:E :WMI] LFR3:OKC enabled
+<6>[ 1305.927919] R0: [cds_mc_thread][25247415063] [13:50:07.147210]  wlan: [1760:E :WMI] LFR3:PMKSA caching enabled
+<6>[ 1305.942147] R0: [wpa_supplicant][25247688199] [13:50:07.161436]  wlan: [1842:E :SME] sme_ps_disable_auto_ps_timer: 1037: Stop auto_ps_enable_timer Timer for session ID:0 
+<6>[ 1305.942213] R0: [wpa_supplicant][25247689513] [13:50:07.161504]  wlan: [1842:E :SME] sme_ps_enable_auto_ps_timer: 1000: auto_ps_timer disabled in INI, force_trigger 0
+<6>[ 1305.942220] R0: [wpa_supplicant][25247689666] [13:50:07.161512]  wlan: [1842:E :HDD] hdd_start_dhcp_ind: 2203: DHCP start indicated through power save
+<6>[ 1306.016829] R0: [wpa_supplicant][25249122049] [13:50:07.236116]  wlan: [1842:E :SME] sme_ps_enable_auto_ps_timer: 1000: auto_ps_timer disabled in INI, force_trigger 0
+<6>[ 1306.016849] R0: [wpa_supplicant][25249122493] [13:50:07.236139]  wlan: [1842:E :HDD] hdd_start_dhcp_ind: 2203: DHCP start indicated through power save
+<6>[ 1308.393277] R0: [cds_mc_thread][25294749781] [13:50:09.612560]  wlan: [1760:E :WMI] LFR3:OKC enabled
+<6>[ 1308.393304] R0: [cds_mc_thread][25294750401] [13:50:09.612592]  wlan: [1760:E :WMI] LFR3:PMKSA caching enabled
+<6>[ 1315.831947] R0: [cds_mc_thread][25437571994] [13:50:17.051217]  wlan: [1760:E :QDF] cds_need_opportunistic_upgrade: 3971: driver isn't dbs capable, no further action needed
+<6>[ 1333.294017] R0: [Binder:1539_C][25772844036] [13:50:34.513303]  wlan: [2332:E :QDF] cds_flush_logs: Triggering bug report: type:0, indicator=1 reason_code=0
+
+system log: 
+--------- beginning of main
+02-20 13:50:24.788  1029  1099 I LOWI-8.1.1.0.h: [LOWIController] processMeasurementResults: Send response for current request id 20
+02-20 13:50:24.788  1029  1099 I LOWI-8.1.1.0.h: [LOWIUtils] responseToOutPostcard - TO: GTP-FDAL, FROM:   LOWI-SERVER, RESP:  LOWI_DISCOVERY_SCAN
+02-20 13:50:24.790  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=3859
+02-20 13:50:24.791  1031  1164 W XTCC-6.1.0.2-g: [LOWIUtils] to_eScanTypeResponse - default case
+02-20 13:50:24.791  1031  1164 W XTCC-6.1.0.2-g: [WifiScanner] WiFi scan result : [8] AP's
+02-20 13:50:24.793  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=1062
+02-20 13:50:24.796  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=1062
+02-20 13:50:24.797  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=0
+02-20 13:50:24.798  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=0
+02-20 13:50:24.801  1539  1624 D WifiQualifiedNetworkSelector:: ==========start qualified Network Selection==========
+02-20 13:50:24.801  1539  1624 D WifiQualifiedNetworkSelector:: Current network is: "红米手机" ,ID is: 1
+02-20 13:50:24.801  1539  1624 D WifiQualifiedNetworkSelector:: Current band dose not match user preference. Start Qualified Network Selection Current band = 2.4GHz bandUserPreference band = 0
+02-20 13:50:24.802  1539  1624 D WifiQualifiedNetworkSelector:: Current network is not qualified
+02-20 13:50:24.802  1539  1624 D WifiQualifiedNetworkSelector:: Last selection is "红米手机" Time to now: 0 minutes
+02-20 13:50:24.803  1539  1624 D WifiQualifiedNetworkSelector:: Saved Network List
+02-20 13:50:24.803  1539  1624 D WifiQualifiedNetworkSelector::     "红米手机":1  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+02-20 13:50:24.803  1539  1624 D WifiQualifiedNetworkSelector::     "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+02-20 13:50:24.805  1539  1624 D WifiQualifiedNetworkSelector::  skipped due to low signal
+02-20 13:50:24.805  1539  1624 D WifiQualifiedNetworkSelector:: NexVision-2de7b7:e0:60:66:ff:bd:40 / Running:00:c3:b7:ab:0d:a1 / TP-LINK_2B32:24:69:68:0a:2b:32 / meetingroom5f:e0:60:66:ff:ab:1c / AndroidAP:30:95:e3:12:31:c3 /  skipped due to not saved
+02-20 13:50:24.805  1539  1624 D WifiQualifiedNetworkSelector::  
+02-20 13:50:24.805  1539  1624 D WifiQualifiedNetworkSelector::  skipped due to not valid SSID
+02-20 13:50:24.806  1539  1624 D WifiQualifiedNetworkSelector::  RSSI score: 100 User selected it last time 0 minutes ago, bonus:480 Same network with current associated. Bonus: 16 Same BSSID with current association. Bonus: 24 Secure network Bonus:80 Score for scanResult: SSID: 红米手机, BSSID: e4:46:da:e1:0b:a9, capabilities: [WPA2-PSK-CCMP][ESS], level: -30, frequency: 2412, timestamp: 1323294008, distance: ?(cm), distanceSd: ?(cm), passpoint: no, ChannelBandwidth: 0, centerFreq0: 0, centerFreq1: 0, 80211mcResponder: is not supported and Network ID: 1 final score:700
+02-20 13:50:24.806  1539  1624 D WifiQualifiedNetworkSelector:: 
+02-20 13:50:24.806  1539  1624 D WifiQualifiedNetworkSelector:: After user choice adjust, the final candidate is:"红米手机":1 : e4:46:da:e1:0b:a9
+02-20 13:50:24.806  1539  1624 D WifiQualifiedNetworkSelector:: "红米手机":1 is already the best choice!
+02-20 13:50:25.042  1842  1842 D wpa_supplicant: wlan0: Control interface command 'SCAN TYPE=ONLY'
+02-20 13:50:25.042  1842  1842 D wpa_supplicant: wlan0: Setting scan request: 0.000000 sec
+02-20 13:50:25.042  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=3
+02-20 13:50:25.043  1842  1842 D wpa_supplicant: wlan0: Starting AP scan for wildcard SSID
+02-20 13:50:25.043  1842  1842 D wpa_supplicant: wlan0: Add radio work 'scan'@0x7faba2e480
+02-20 13:50:25.048  1842  1842 D wpa_supplicant: wlan0: First radio work item in the queue - schedule start immediately
+02-20 13:50:25.048  1842  1842 D wpa_supplicant: wlan0: Starting radio work 'scan'@0x7faba2e480 after 0.000420 second wait
+02-20 13:50:25.048  1842  1842 D wpa_supplicant: wlan0: nl80211: vendor scan request
+02-20 13:50:25.049  1842  1842 D wpa_supplicant: nl80211: Scan SSID - hexdump(len=0): [NULL]
+02-20 13:50:25.049  1842  1842 D wpa_supplicant: nl80211: Scan extra IEs - hexdump(len=7): 7f 05 00 00 0a 02 01
+02-20 13:50:25.056  1539  1839 I WifiHAL : event received NL80211_CMD_VENDOR, vendor_id = 0x1374, subcmd = 0x6a
+02-20 13:50:25.056  1842  1842 D wpa_supplicant: nl80211: Vendor scan requested (ret=0) - scan timeout 30 seconds, scan cookie:0xffffffe2bf2a4400
+02-20 13:50:25.056  1842  1842 D wpa_supplicant: nl80211: Event message available
+02-20 13:50:25.056  1842  1842 D wpa_supplicant: nl80211: Drv Event 103 (NL80211_CMD_VENDOR) received for wlan0
+02-20 13:50:25.056  1842  1842 D wpa_supplicant: nl80211: Vendor event: wiphy=0 vendor_id=0x1374 subcmd=106
+02-20 13:50:25.056  1842  1842 D wpa_supplicant: nl80211: Vendor data - hexdump(len=12): 0c 00 07 00 00 44 2a bf e2 ff ff ff
+02-20 13:50:25.075  1842  1842 D wpa_supplicant: wlan0: Event SCAN_STARTED (47) received
+02-20 13:50:25.076  1842  1842 D wpa_supplicant: wlan0: Own scan request started a scan in 0.019665 seconds
+02-20 13:50:25.076  1842  1842 D wpa_supplicant: CTRL-DEBUG: ctrl_sock-sendmsg: sock=8 sndbuf=212992 outq=0 send_len=24
+02-20 13:50:25.076  1842  1842 D wpa_supplicant: CTRL_IFACE monitor sent successfully to /data/misc/wifi/sockets/wpa_ctrl_900-2\x00
+02-20 13:50:25.076  1842  1842 D wpa_supplicant: CTRL-DEBUG: ctrl_sock-sendmsg: sock=8 sndbuf=212992 outq=768 send_len=24
+02-20 13:50:25.077  1842  1842 D wpa_supplicant: CTRL_IFACE monitor sent successfully to /data/misc/wifi/sockets/wpa_ctrl_1539-2\x00
+02-20 13:50:25.305  1842  1842 D wpa_supplicant: wlan0: Control interface command 'SIGNAL_POLL'
+02-20 13:50:25.308  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=61
+02-20 13:50:26.347  2196  2487 I ===DaemonService===: ############## Rotation : 0
+02-20 13:50:26.347  2196  2487 I ===DaemonService===: ScreenOrientationThread:0 screentOrientation:0
+02-20 13:50:26.348  2196  2484 I ===APKProtocolTransmit===: Ready send su-cmd:275
+02-20 13:50:26.349  2196  2484 I ===APKProtocolTransmit===: Start send su-cmd:275 length[14]
+02-20 13:50:26.349  2196  2484 I ===APKProtocolTransmit===: Will write content:the C socket has not been connected,so dicard the send command:[275]
+02-20 13:50:26.351  2196  2484 I ===APKProtocolTransmit===: End send sb-cmd:275
+02-20 13:50:26.644  2196  2492 I USBService: get mobileagent state 0 and current mobileagent state 0 and usb state of connection false
+02-20 13:50:28.316  1842  1842 D wpa_supplicant: wlan0: Control interface command 'SIGNAL_POLL'
+02-20 13:50:28.322  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=61
+02-20 13:50:29.350  2196  2487 I ===DaemonService===: ############## Rotation : 0
+02-20 13:50:29.350  2196  2487 I ===DaemonService===: ScreenOrientationThread:0 screentOrientation:0
+02-20 13:50:29.351  2196  2493 I ===APKProtocolTransmit===: Ready send su-cmd:275
+02-20 13:50:29.351  2196  2493 I ===APKProtocolTransmit===: Start send su-cmd:275 length[14]
+02-20 13:50:29.351  2196  2493 I ===APKProtocolTransmit===: Will write content:the C socket has not been connected,so dicard the send command:[275]
+02-20 13:50:29.353  2196  2493 I ===APKProtocolTransmit===: End send sb-cmd:275
+02-20 13:50:29.645  2196  2492 I USBService: send udp to check mobileagent state.
+02-20 13:50:29.646  2196  2495 I ===Mrcp===: sending cmd:276
+02-20 13:50:29.853  1842  1842 D wpa_supplicant: nl80211: Event message available
+02-20 13:50:29.853  1842  1842 D wpa_supplicant: nl80211: Drv Event 103 (NL80211_CMD_VENDOR) received for wlan0
+02-20 13:50:29.853  1842  1842 D wpa_supplicant: nl80211: Vendor event: wiphy=0 vendor_id=0x1374 subcmd=107
+02-20 13:50:29.853  1842  1842 D wpa_supplicant: nl80211: Vendor data - hexdump(len=408): 04 00 03 00 74 01 02 00 08 00 00 00 6c 09 00 00 08 00 01 00 71 09 00 00 08 00 02 00 76 09 00 00 ...
+02-20 13:50:29.854  1539  1839 I WifiHAL : event received NL80211_CMD_VENDOR, vendor_id = 0x1374, subcmd = 0x6b
+02-20 13:50:29.862  1842  1842 D wpa_supplicant: nl80211: Scan included frequencies: 2412 2417 2422 2427 2432 2437 2442 2447 2452 2457 2462 5180 5200 5220 5240 5260 5280 5300 5320 5500 5520 5540 5560 5580 5600 5620 5640 5660 5680 5700 5720 5745 5765 5785 5805 5825 5852 5860 5870 5875 5880 5890 5900 5905 5910 5920
+02-20 13:50:29.862  1842  1842 D wpa_supplicant: wlan0: Event SCAN_RESULTS (3) received
+02-20 13:50:29.862  1842  1842 D wpa_supplicant: wlan0: Scan completed in 4.786292 seconds
+02-20 13:50:29.862  1842  1842 D wpa_supplicant: nl80211: Associated on 2412 MHz
+02-20 13:50:29.862  1842  1842 D wpa_supplicant: nl80211: Associated with e4:46:da:e1:0b:a9
+02-20 13:50:29.863  1842  1842 D wpa_supplicant: nl80211: Received scan results (13 BSSes)
+02-20 13:50:29.863  1842  1842 D wpa_supplicant: nl80211: Scan results indicate BSS status with e4:46:da:e1:0b:a9 as associated
+02-20 13:50:29.863  1842  1842 D wpa_supplicant: wlan0: BSS: Start scan result update 20
+02-20 13:50:29.863  1842  1842 D wpa_supplicant: BSS: last_scan_res_used=13/32
+02-20 13:50:29.863  1842  1842 D wpa_supplicant: wlan0: Scan-only results received
+02-20 13:50:29.863  1842  1842 D wpa_supplicant: CTRL-DEBUG: ctrl_sock-sendmsg: sock=8 sndbuf=212992 outq=0 send_len=24
+02-20 13:50:29.865  1029  1835 I LOWI-8.1.1.0.h: [LOWI-Scan] lowi_close_record:Scan completed in 5082ms and Recieved 13 APs scan results
+02-20 13:50:29.867  1029  1099 I LOWI-8.1.1.0.h: [LOWIUtils] responseToOutPostcard - TO: GTP-FDAL, FROM:   LOWI-SERVER, RESP:  LOWI_ASYNC_DISCOVERY_SCAN_RESULTS
+02-20 13:50:29.868  1842  1842 D wpa_supplicant: CTRL_IFACE monitor sent successfully to /data/misc/wifi/sockets/wpa_ctrl_900-2\x00
+02-20 13:50:29.868  1842  1842 D wpa_supplicant: CTRL-DEBUG: ctrl_sock-sendmsg: sock=8 sndbuf=212992 outq=0 send_len=24
+02-20 13:50:29.871  1842  1842 D wpa_supplicant: CTRL_IFACE monitor sent successfully to /data/misc/wifi/sockets/wpa_ctrl_1539-2\x00
+02-20 13:50:29.871  1842  1842 D wpa_supplicant: wlan0: Radio work 'scan'@0x7faba2e480 done in 4.822418 seconds
+02-20 13:50:29.871  1842  1842 D wpa_supplicant: wlan0: radio_work_free('scan'@0x7faba2e480: num_active_works --> 0
+02-20 13:50:29.871  1842  1842 D wpa_supplicant: wlan0: Control interface command 'SCAN_RESULTS'
+02-20 13:50:29.871  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=1202
+02-20 13:50:29.873  1031  1164 W XTCC-6.1.0.2-g: [LOWIUtils] to_eScanTypeResponse - default case
+02-20 13:50:29.873  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=3981
+02-20 13:50:29.874  1029  1099 I LOWI-8.1.1.0.h: [LOWIUtils] inPostcardToRequest - FROM: GTP-FDAL, TO:   LOWI-SERVER, REQ:  LOWI_DISCOVERY_SCAN
+02-20 13:50:29.874  1029  1099 I LOWI-8.1.1.0.h: [LOWIUtils] parseDiscScanParams - Request id = 21 Scan Type(0) REQUEST_MODE(3) BAND(0) BUFFER_CACHE_BIT(0) MEAS_AGE_FILTER(10)
+02-20 13:50:29.877  1029  1835 I LOWI-8.1.1.0.h: [LOWI-Scan] lowi_close_record:Scan completed in 2ms and Recieved 6 APs scan results
+02-20 13:50:29.877  1842  1842 D wpa_supplicant: wlan0: Control interface command 'SCAN_RESULTS'
+02-20 13:50:29.877  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=1202
+02-20 13:50:29.877  1029  1099 I LOWI-8.1.1.0.h: [LOWIController] processMeasurementResults: Send response for current request id 21
+02-20 13:50:29.878  1029  1099 I LOWI-8.1.1.0.h: [LOWIUtils] responseToOutPostcard - TO: GTP-FDAL, FROM:   LOWI-SERVER, RESP:  LOWI_DISCOVERY_SCAN
+02-20 13:50:29.879  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=3859
+02-20 13:50:29.880  1031  1164 W XTCC-6.1.0.2-g: [LOWIUtils] to_eScanTypeResponse - default case
+02-20 13:50:29.880  1031  1164 W XTCC-6.1.0.2-g: [WifiScanner] WiFi scan result : [6] AP's
+02-20 13:50:29.884  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=3981
+02-20 13:50:29.889  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=3859
+02-20 13:50:29.892  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=1062
+02-20 13:50:29.894  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=1062
+02-20 13:50:29.895  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=0
+02-20 13:50:29.897  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=0
+02-20 13:50:29.903  1539  1624 D WifiQualifiedNetworkSelector:: ==========start qualified Network Selection==========
+02-20 13:50:29.904  1539  1624 D WifiQualifiedNetworkSelector:: Too short to last successful Qualified Network Selection Gap is:5098 ms!
+02-20 13:50:29.904  1539  1624 D WifiQualifiedNetworkSelector:: Quit qualified Network Selection since it is not forced and current network is qualified already
+--------- beginning of system
+02-20 13:50:31.258  1539  1568 E KernelCpuSpeedReader: Failed to read cpu-freq: /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state (No such file or directory)
+02-20 13:50:31.259  1539  1568 E KernelCpuSpeedReader: Failed to read cpu-freq: /sys/devices/system/cpu/cpu4/cpufreq/stats/time_in_state (No such file or directory)
+02-20 13:50:31.338  1842  1842 D wpa_supplicant: wlan0: Control interface command 'SIGNAL_POLL'
+02-20 13:50:31.347  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=61
+02-20 13:50:31.646  2196  2492 I USBService: get mobileagent state 0 and current mobileagent state 0 and usb state of connection false
+02-20 13:50:32.355  2196  2487 I ===DaemonService===: ############## Rotation : 0
+02-20 13:50:32.355  2196  2487 I ===DaemonService===: ScreenOrientationThread:0 screentOrientation:0
+02-20 13:50:32.357  2196  2488 I ===APKProtocolTransmit===: Ready send su-cmd:275
+02-20 13:50:32.357  2196  2488 I ===APKProtocolTransmit===: Start send su-cmd:275 length[14]
+02-20 13:50:32.358  2196  2488 I ===APKProtocolTransmit===: Will write content:the C socket has not been connected,so dicard the send command:[275]
+02-20 13:50:32.364  2196  2488 I ===APKProtocolTransmit===: End send sb-cmd:275
+02-20 13:50:34.366  1842  1842 D wpa_supplicant: wlan0: Control interface command 'SIGNAL_POLL'
+02-20 13:50:34.376  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=61
+02-20 13:50:34.504  1842  1842 D wpa_supplicant: EAPOL: EAP Session-Id not available
+02-20 13:50:34.504  1842  1842 D wpa_supplicant: CTRL-DEBUG: global_ctrl_sock-sendto: sock=8 sndbuf=212992 outq=0 send_len=438
+02-20 13:50:34.505  1539  2332 D WifiNative-HAL: getWlanWakeReasonCount 0
+02-20 13:50:34.513   902   902 I CNSS    : EVENT_WLAN_LOG_COMPLETE event received Reason code 0	 indicator = 1	 ring_id = 0
+02-20 13:50:34.513   902   902 I CNSS    : EVENT_WLAN_LOG_COMPLETE event received Reason code 0	 indicator = 1	 ring_id = 1
+02-20 13:50:34.522   902   902 I CNSS    : EVENT_WLAN_LOG_COMPLETE event received Reason code 0	 indicator = 1	 ring_id = 4
+
+ring-buffer = power_events_rb
+
+ring-buffer = pkt_stats_rb
+
+ring-buffer = connectivity_events_rb
+
+ring-buffer = firmware_prints_rb
+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
+JqMxB/f8kmXdThFuLrjS9vz+P0LJeYM=
+
+ring-buffer = driver_prints_rb
+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
+
+--------------------------------------------------------------------
+No fates fetched for "Last failed connection fates"
+--------------------- Latest fates ----------------------
+
+Time usec        Walltime      Direction  Fate                              Protocol      Type                     Result
+---------        --------      ---------  ----                              --------      ----                     ------
+1305837623       13:50:07.067  TX         acked                             802.11 Mgmt   Probe Request            N/A
+1305839227       13:50:07.069  RX         success                           802.11 Mgmt   Probe Response           N/A
+1305842866       13:50:07.072  TX         acked                             802.11 Mgmt   Authentication           N/A
+1305843281       13:50:07.073  RX         success                           802.11 Mgmt   Authentication           0: Success
+1305848647       13:50:07.078  TX         acked                             802.11 Mgmt   Association Request      N/A
+1305859908       13:50:07.089  RX         success                           802.11 Mgmt   Association Response     0: Success
+1305873193       13:50:07.103  RX         success                           EAPOL         Pairwise Key message 1/4  N/A
+1305887688       13:50:07.117  TX         acked                             EAPOL         Pairwise Key message 2/4  N/A
+1305891738       13:50:07.121  RX         success                           EAPOL         Pairwise Key message 3/4  N/A
+1305898578       13:50:07.128  TX         acked                             EAPOL         Pairwise Key message 4/4  N/A
+1305922717       13:50:07.152  RX         success                           802.11 Mgmt   Probe Response           N/A
+1305927619       13:50:07.157  RX         success                           802.11 Mgmt   Probe Response           N/A
+1305941934       13:50:07.171  RX         success                           802.11 Mgmt   Probe Response           N/A
+1305947357       13:50:07.177  RX         success                           802.11 Mgmt   Probe Response           N/A
+1305980653       13:50:07.210  TX         acked                             ICMPv6        Neighbor Solicitation    N/A
+1305980752       13:50:07.210  TX         acked                             ICMPv6        MLDv2 report             N/A
+1306021608       13:50:07.251  TX         acked                             ICMPv6        MLDv2 report             N/A
+1306034646       13:50:07.264  TX         acked                             DHCP          Discover                 N/A
+1306040357       13:50:07.270  RX         success                           DHCP          Discover                 N/A
+1306042768       13:50:07.272  RX         success                           ARP           Request                  N/A
+1306963120       13:50:08.193  TX         acked                             ICMPv6        MLDv2 report             N/A
+1306963158       13:50:08.193  TX         acked                             ICMPv6        Router Solicitation      N/A
+1307038517       13:50:08.268  RX         success                           ARP           Request                  N/A
+1307822723       13:50:09.052  TX         acked                             ICMPv6        MLDv2 report             N/A
+1308039544       13:50:09.269  RX         success                           ARP           Request                  N/A
+1308298504       13:50:09.528  RX         success                           ICMP          Echo Request             N/A
+1308301879       13:50:09.531  RX         success                           DHCP          Offer                    N/A
+1308313187       13:50:09.543  TX         acked                             DHCP          Request                  N/A
+1308317945       13:50:09.547  RX         success                           DHCP          Request                  N/A
+1308342621       13:50:09.572  RX         success                           DHCP          Ack                      N/A
+1308565488       13:50:09.795  RX         success                           802.11 Mgmt   Probe Response           N/A
+1308569574       13:50:09.799  RX         success                           802.11 Mgmt   Probe Response           N/A
+1308594367       13:50:09.824  RX         success                           802.11 Mgmt   Probe Response           N/A
+1309722821       13:50:10.952  TX         acked                             ARP           Request                  N/A
+1309725964       13:50:10.955  RX         success                           ARP           Reply                    N/A
+1309727515       13:50:10.957  TX         acked                             UDP           N/A                      N/A
+1309885349       13:50:11.115  TX         acked                             UDP           N/A                      N/A
+1309892222       13:50:11.122  RX         success                           UDP           N/A                      N/A
+1309894252       13:50:11.124  TX         acked                             UDP           N/A                      N/A
+1309911122       13:50:11.141  TX         acked                             TCP           HTTP                     N/A
+1309924463       13:50:11.154  RX         success                           UDP           N/A                      N/A
+1309925735       13:50:11.155  RX         success                           UDP           N/A                      N/A
+1309929892       13:50:11.159  TX         acked                             TCP           HTTPS                    N/A
+1309932649       13:50:11.162  TX         acked                             TCP           HTTPS                    N/A
+1310002461       13:50:11.232  RX         success                           TCP           N/A                      N/A
+1310003792       13:50:11.233  TX         acked                             TCP           HTTP                     N/A
+1310007976       13:50:11.237  TX         acked                             TCP           HTTP                     N/A
+1310071108       13:50:11.301  RX         success                           TCP           N/A                      N/A
+1310071747       13:50:11.301  TX         acked                             TCP           HTTPS                    N/A
+1310076539       13:50:11.306  TX         acked                             TCP           HTTPS                    N/A
+1310166348       13:50:11.396  RX         success                           TCP           N/A                      N/A
+1310167365       13:50:11.397  RX         success                           TCP           N/A                      N/A
+1310168656       13:50:11.398  TX         acked                             TCP           HTTP                     N/A
+1310181260       13:50:11.411  RX         success                           TCP           N/A                      N/A
+1310192183       13:50:11.422  RX         success                           TCP           N/A                      N/A
+1310198513       13:50:11.428  RX         success                           TCP           N/A                      N/A
+1310199781       13:50:11.429  TX         acked                             TCP           HTTPS                    N/A
+1310205579       13:50:11.435  RX         success                           TCP           N/A                      N/A
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+WifiNative - Log Begin ----
+02-20 13:28:45.935 - startHal stack:  - startHal - processMessage - processMsg - handleMessage - dispatchMessage - loop
+02-20 13:28:46.067 - wlan0: IFNAME=wlan0 connectToSupplicant
+02-20 13:28:46.104 - Event [IFNAME=wlan0 CTRL-EVENT-AVOID-FREQ ranges=]
+02-20 13:28:46.109 - wlan0: IFNAME=wlan0 DRIVER MACADDR -> Macaddr = 00:03:7f:12:4b:4b
+02-20 13:28:46.110 - wlan0: IFNAME=wlan0 SET SETBAND AUTO -> true
+02-20 13:28:46.111 - wlan0: IFNAME=wlan0 SET update_config 1 -> true
+02-20 13:28:46.111 - wlan0: IFNAME=wlan0 LIST_NETWORKS LAST_ID=-1 -> network id / ssid / bssid / flags
+0	Kedacom.lnc	38:22:d6:af:09:60	
+02-20 13:28:46.140 - wlan0: IFNAME=wlan0 LIST_NETWORKS LAST_ID=0 -> network id / ssid / bssid / flags
+02-20 13:28:46.145 - wlan0: IFNAME=wlan0 SET device_name kdm2412mx -> true
+02-20 13:28:46.146 - wlan0: IFNAME=wlan0 SET manufacturer QUALCOMM -> true
+02-20 13:28:46.147 - wlan0: IFNAME=wlan0 SET model_name sdm660 for arm64 -> true
+02-20 13:28:46.147 - wlan0: IFNAME=wlan0 SET model_number sdm660 for arm64 -> true
+02-20 13:28:46.148 - wlan0: IFNAME=wlan0 SET serial_number 3f52da52 -> true
+02-20 13:28:46.148 - wlan0: IFNAME=wlan0 SET config_methods physical_display virtual_push_button -> true
+02-20 13:28:46.148 - wlan0: IFNAME=wlan0 SET device_type 10-0050F204-5 -> true
+02-20 13:28:46.149 - wlan0: IFNAME=wlan0 SET tdls_external_control 1 -> true
+02-20 13:28:46.150 - wlan0: IFNAME=wlan0 SET disable_scan_offload 1 -> true
+02-20 13:28:46.150 - wlan0: IFNAME=wlan0 SET p2p_disabled 1 -> true
+02-20 13:28:46.151 - wlan0: IFNAME=wlan0 SET sched_scan_plans 10:6 60 -> true
+02-20 13:28:46.152 - wlan0: IFNAME=wlan0 SCAN_INTERVAL 15 -> true
+02-20 13:28:46.152 - wlan0: IFNAME=wlan0 SET external_sim 1 -> true
+02-20 13:28:46.154 - wlan0: IFNAME=wlan0 STA_AUTOCONNECT 0 -> true
+02-20 13:28:46.164 - wlan0: IFNAME=wlan0 DRIVER BTCOEXSCAN-STOP -> false
+02-20 13:28:46.165 - wlan0: IFNAME=wlan0 DRIVER RXFILTER-STOP -> false
+02-20 13:28:46.165 - wlan0: IFNAME=wlan0 DRIVER RXFILTER-STOP -> false
+02-20 13:28:46.166 - wlan0: IFNAME=wlan0 STATUS -> wpa_state=DISCONNECTED
+p2p_device_address=02:03:7f:94:4b:4b
+address=00:03:7f:12:4b:4b
+uuid=86b697e7-e07a-51f6-a632-110888e94727
+02-20 13:28:46.166 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:28:46.168 - wlan0: IFNAME=wlan0 SET ps 1 -> true
+02-20 13:28:46.171 - wlan0: IFNAME=wlan0 DRIVER SETSUSPENDMODE 0 -> true
+02-20 13:28:46.175 - p2p0: SET persistent_reconnect 1 -> true
+02-20 13:28:46.178 - p2p0: SET device_name Android_68c7 -> true
+02-20 13:28:46.178 - p2p0: SET p2p_ssid_postfix -Android_68c7 -> true
+02-20 13:28:46.179 - p2p0: SET device_type 10-0050F204-5 -> true
+02-20 13:28:46.179 - p2p0: SET config_methods virtual_push_button physical_display keypad -> true
+02-20 13:28:46.180 - p2p0: P2P_SET conc_pref sta -> true
+02-20 13:28:46.183 - p2p0: P2P_FLUSH -> true
+02-20 13:28:46.184 - p2p0: P2P_SERVICE_FLUSH -> true
+02-20 13:28:46.184 - p2p0: LIST_NETWORKS -> network id / ssid / bssid / flags
+02-20 13:28:46.208 - p2p0: SAVE_CONFIG -> true
+02-20 13:28:48.633 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:28:48.634 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:28:48.635 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:28:50.878 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:28:50.879 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:28:50.880 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:29:08.637 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:29:08.640 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:29:08.642 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:29:10.845 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:29:10.846 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:29:10.847 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:29:48.649 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:29:48.651 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:29:48.655 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:29:50.896 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:29:50.901 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:29:50.904 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:31:08.666 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:31:08.676 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:31:08.681 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:31:10.820 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:31:10.822 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:31:10.823 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:33:48.666 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:33:48.670 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:33:48.677 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:33:50.824 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:33:50.825 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:36:28.671 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:36:28.677 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:36:28.685 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:36:30.760 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:36:30.764 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:39:08.678 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:39:08.683 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:39:08.687 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:39:10.925 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:39:10.931 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:41:48.689 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:41:48.699 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:41:48.704 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:41:50.908 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:41:50.909 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:41:50.912 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:44:28.686 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:44:28.690 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:44:28.700 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:44:30.840 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:44:30.846 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:44:30.848 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:48:46.183 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:48:46.188 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:48:46.189 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:48:48.266 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:48:48.267 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:48:48.267 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:49:14.688 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:49:14.688 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:49:14.689 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:49:16.780 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:49:16.781 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:49:16.782 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:49:24.699 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:49:24.705 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:49:24.715 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:49:26.854 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:49:26.855 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:49:26.859 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:49:34.717 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:49:34.718 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:49:34.734 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:49:36.878 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:49:36.882 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:49:36.884 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:49:44.726 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:49:44.732 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:49:44.741 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:49:46.888 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:49:46.890 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:49:46.891 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:49:54.736 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:49:54.741 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:49:54.753 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:49:56.900 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:49:56.902 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:49:56.903 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=0 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:50:04.749 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=-1 state=3 BSSID=00:00:00:00:00:00 SSID=]
+02-20 13:50:04.755 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:50:04.763 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:50:04.863 - wlan0: IFNAME=wlan0 ADD_NETWORK -> 1
+02-20 13:50:04.866 - wlan0: IFNAME=wlan0 SET_NETWORK 1 ssid e7baa2e7b1b3e6898be69cba -> true
+02-20 13:50:04.867 - wlan0: IFNAME=wlan0 SET_NETWORK 1 id_str "%7B%22creatorUid%22%3A%221000%22%2C%22configKey%22%3A%22%5C%22%E7%BA%A2%E7%B1%B3%E6%89%8B%E6%9C%BA%5C%22WPA_PSK%22%7D" -> true
+02-20 13:50:04.872 - wlan0: IFNAME=wlan0 SET_NETWORK 1 key_mgmt WPA-PSK -> true
+02-20 13:50:04.904 - wlan0: IFNAME=wlan0 SET_NETWORK 1 priority 0 -> true
+02-20 13:50:04.942 - wlan0: IFNAME=wlan0 SAVE_CONFIG -> true
+02-20 13:50:04.957 - wlan0: IFNAME=wlan0 SAVE_CONFIG -> true
+02-20 13:50:04.965 - wlan0: IFNAME=wlan0 SET_NETWORK 1 ssid e7baa2e7b1b3e6898be69cba -> true
+02-20 13:50:04.966 - wlan0: IFNAME=wlan0 SET_NETWORK 1 id_str "%7B%22creatorUid%22%3A%221000%22%2C%22configKey%22%3A%22%5C%22%E7%BA%A2%E7%B1%B3%E6%89%8B%E6%9C%BA%5C%22WPA_PSK%22%7D" -> true
+02-20 13:50:04.967 - wlan0: IFNAME=wlan0 SET_NETWORK 1 key_mgmt WPA-PSK -> true
+02-20 13:50:04.968 - wlan0: IFNAME=wlan0 SET_NETWORK 1 proto WPA RSN -> true
+02-20 13:50:04.968 - wlan0: IFNAME=wlan0 SET_NETWORK 1 pairwise TKIP CCMP -> true
+02-20 13:50:04.969 - wlan0: IFNAME=wlan0 SET_NETWORK 1 group TKIP CCMP -> true
+02-20 13:50:04.971 - wlan0: IFNAME=wlan0 SET_NETWORK 1 sim_num 1 -> true
+02-20 13:50:04.972 - wlan0: IFNAME=wlan0 SET_NETWORK 1 priority 0 -> true
+02-20 13:50:04.998 - wlan0: IFNAME=wlan0 SAVE_CONFIG -> true
+02-20 13:50:05.009 - wlan0: IFNAME=wlan0 SAVE_CONFIG -> true
+02-20 13:50:05.011 - wlan0: IFNAME=wlan0 SET_NETWORK 1 bssid any -> true
+02-20 13:50:05.011 - wlan0: IFNAME=wlan0 SET_NETWORK 1 bssid any -> true
+02-20 13:50:05.014 - wlan0: IFNAME=wlan0 SET_NETWORK 1 priority 6 -> true
+02-20 13:50:05.015 - wlan0: IFNAME=wlan0 SET HS20 0 -> false
+02-20 13:50:05.023 - wlan0: IFNAME=wlan0 SAVE_CONFIG -> true
+02-20 13:50:05.026 - wlan0: IFNAME=wlan0 SELECT_NETWORK 1 -> true
+02-20 13:50:05.027 - wlan0: IFNAME=wlan0 RECONNECT -> true
+02-20 13:50:06.895 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:50:06.896 - Event [IFNAME=wlan0 WPS-AP-AVAILABLE ]
+02-20 13:50:06.897 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=1 state=0 BSSID=00:00:00:00:00:00 SSID=\xe7\xba\xa2\xe7\xb1\xb3\xe6\x89\x8b\xe6\x9c\xba]
+02-20 13:50:06.963 - wlan0: IFNAME=wlan0 SET_NETWORK 1 bssid e4:46:da:e1:0b:a9 -> true
+02-20 13:50:06.966 - wlan0: IFNAME=wlan0 SET_NETWORK 1 ssid e7baa2e7b1b3e6898be69cba -> true
+02-20 13:50:06.968 - wlan0: IFNAME=wlan0 SET_NETWORK 1 id_str "%7B%22creatorUid%22%3A%221000%22%2C%22configKey%22%3A%22%5C%22%E7%BA%A2%E7%B1%B3%E6%89%8B%E6%9C%BA%5C%22WPA_PSK%22%7D" -> true
+02-20 13:50:06.973 - wlan0: IFNAME=wlan0 SET_NETWORK 1 bssid e4:46:da:e1:0b:a9 -> true
+02-20 13:50:06.975 - wlan0: IFNAME=wlan0 SET_NETWORK 1 key_mgmt WPA-PSK -> true
+02-20 13:50:06.976 - wlan0: IFNAME=wlan0 SET_NETWORK 1 proto WPA RSN -> true
+02-20 13:50:06.977 - wlan0: IFNAME=wlan0 SET_NETWORK 1 pairwise TKIP CCMP -> true
+02-20 13:50:06.978 - wlan0: IFNAME=wlan0 SET_NETWORK 1 group TKIP CCMP -> true
+02-20 13:50:06.979 - wlan0: IFNAME=wlan0 SET_NETWORK 1 sim_num 1 -> true
+02-20 13:50:06.980 - wlan0: IFNAME=wlan0 SET_NETWORK 1 priority 6 -> true
+02-20 13:50:07.005 - wlan0: IFNAME=wlan0 SAVE_CONFIG -> true
+02-20 13:50:07.022 - wlan0: IFNAME=wlan0 SAVE_CONFIG -> true
+02-20 13:50:07.024 - wlan0: IFNAME=wlan0 SET HS20 0 -> false
+02-20 13:50:07.028 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=1 state=3 BSSID=00:00:00:00:00:00 SSID=\xe7\xba\xa2\xe7\xb1\xb3\xe6\x89\x8b\xe6\x9c\xba]
+02-20 13:50:07.030 - Event [IFNAME=wlan0 Trying to associate with SSID '\xe7\xba\xa2\xe7\xb1\xb3\xe6\x89\x8b\xe6\x9c\xba']
+02-20 13:50:07.032 - wlan0: IFNAME=wlan0 SELECT_NETWORK 1 -> true
+02-20 13:50:07.033 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=1 state=5 BSSID=00:00:00:00:00:00 SSID=\xe7\xba\xa2\xe7\xb1\xb3\xe6\x89\x8b\xe6\x9c\xba]
+02-20 13:50:07.044 - wlan0: IFNAME=wlan0 RECONNECT -> true
+02-20 13:50:07.111 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=1 state=6 BSSID=00:00:00:00:00:00 SSID=\xe7\xba\xa2\xe7\xb1\xb3\xe6\x89\x8b\xe6\x9c\xba]
+02-20 13:50:07.111 - Event [IFNAME=wlan0 Associated with e4:46:da:e1:0b:a9]
+02-20 13:50:07.112 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=1 state=7 BSSID=e4:46:da:e1:0b:a9 SSID=\xe7\xba\xa2\xe7\xb1\xb3\xe6\x89\x8b\xe6\x9c\xba]
+02-20 13:50:07.115 - Event [IFNAME=wlan0 CTRL-EVENT-SUBNET-STATUS-UPDATE status=0]
+02-20 13:50:07.126 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=1 state=8 BSSID=e4:46:da:e1:0b:a9 SSID=\xe7\xba\xa2\xe7\xb1\xb3\xe6\x89\x8b\xe6\x9c\xba]
+02-20 13:50:07.135 - Event [IFNAME=wlan0 WPA: Key negotiation completed with e4:46:da:e1:0b:a9 [PTK=CCMP GTK=CCMP]]
+02-20 13:50:07.136 - Event [IFNAME=wlan0 CTRL-EVENT-CONNECTED - Connection to e4:46:da:e1:0b:a9 completed [id=1 id_str=%7B%22creatorUid%22%3A%221000%22%2C%22configKey%22%3A%22%5C%22%E7%BA%A2%E7%B1%B3%E6%89%8B%E6%9C%BA%5C%22WPA_PSK%22%7D]]
+02-20 13:50:07.136 - Event [IFNAME=wlan0 CTRL-EVENT-STATE-CHANGE id=1 state=9 BSSID=e4:46:da:e1:0b:a9 SSID=\xe7\xba\xa2\xe7\xb1\xb3\xe6\x89\x8b\xe6\x9c\xba]
+02-20 13:50:07.147 - wlan0: IFNAME=wlan0 SET_NETWORK 1 bssid any -> true
+02-20 13:50:07.148 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:50:07.160 - wlan0: IFNAME=wlan0 SET_NETWORK 1 bssid any -> true
+02-20 13:50:07.161 - wlan0: IFNAME=wlan0 SET ps 0 -> true
+02-20 13:50:07.162 - wlan0: IFNAME=wlan0 SET ps 1 -> true
+02-20 13:50:07.163 - wlan0: IFNAME=wlan0 DRIVER BTCOEXMODE 2 -> true
+02-20 13:50:07.218 - wlan0: IFNAME=wlan0 DRIVER BTCOEXMODE 1 -> true
+02-20 13:50:07.228 - wlan0: IFNAME=wlan0 DRIVER SETSUSPENDMODE 0 -> true
+02-20 13:50:07.230 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:50:07.234 - Event [IFNAME=p2p0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:50:07.235 - Event [IFNAME=p2p0 WPS-AP-AVAILABLE ]
+02-20 13:50:07.236 - wlan0: IFNAME=wlan0 SET ps 0 -> true
+02-20 13:50:09.580 - wlan0: IFNAME=wlan0 SET ps 1 -> true
+02-20 13:50:09.583 - wlan0: IFNAME=wlan0 DRIVER BTCOEXMODE 2 -> true
+02-20 13:50:09.609 - wlan0: IFNAME=wlan0 BLACKLIST clear -> true
+02-20 13:50:09.773 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:50:09.793 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:50:14.900 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:50:19.788 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:50:19.810 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:50:24.772 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+02-20 13:50:25.043 - wlan0: IFNAME=wlan0 SCAN TYPE=ONLY -> true
+02-20 13:50:25.076 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-STARTED ]
+02-20 13:50:29.869 - Event [IFNAME=wlan0 CTRL-EVENT-SCAN-RESULTS ]
+WifiNative - Log End ----
+Dump of WifiQualifiedNetworkSelector
+WifiQualifiedNetworkSelector - Log Begin ----
+02-20 13:28:50.904 - ==========start qualified Network Selection==========
+02-20 13:28:50.905 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:28:50.913 -  skipped due to low signal
+
+02-20 13:28:50.914 - NexVision-2de7b7:e0:60:66:ff:bd:40 / 5F-YDPTKFB-TEST:16:75:90:69:e4:02 / DIRECT-cYDESKTOP-7KSDQIImsSz:f6:8c:50:25:8b:04 / Running:00:c3:b7:ab:0d:a1 / TP-LINK_D4ADF5:88:25:93:d4:ad:f5 /  skipped due to not saved
+ 
+02-20 13:28:50.914 - 00:0a:f5:42:31:d8 /  skipped due to not valid SSID
+
+02-20 13:28:50.914 - 
+02-20 13:28:50.914 - Checking the externalScoreEvaluator for candidates...
+02-20 13:28:50.915 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:28:50.915 - Can not find any suitable candidates
+02-20 13:29:10.878 - ==========start qualified Network Selection==========
+02-20 13:29:10.879 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:29:10.881 -  skipped due to low signal
+
+02-20 13:29:10.881 - NexVision-2de7b7:e0:60:66:ff:bd:40 / DIRECT-cYDESKTOP-7KSDQIImsSz:f6:8c:50:25:8b:04 / HiWiFi_5B4D4C:d4:ee:07:5b:4d:4c / meetingroom5f:e0:60:66:ff:ab:1c /  skipped due to not saved
+ 
+02-20 13:29:10.881 - b4:86:55:1f:2a:d1 /  skipped due to not valid SSID
+
+02-20 13:29:10.881 - 
+02-20 13:29:10.882 - Checking the externalScoreEvaluator for candidates...
+02-20 13:29:10.882 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:29:10.882 - Can not find any suitable candidates
+02-20 13:29:50.935 - ==========start qualified Network Selection==========
+02-20 13:29:50.935 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:29:50.936 -  skipped due to low signal
+
+02-20 13:29:50.936 - NexVision-2de7b7:e0:60:66:ff:bd:40 / TP-LINK_D4ADF5:88:25:93:d4:ad:f5 / sunnyhome-2:d8:fe:e3:78:be:92 / AndroidAP:30:95:e3:12:31:c3 /  skipped due to not saved
+ 
+02-20 13:29:50.937 - b4:86:55:1f:2a:d1 /  skipped due to not valid SSID
+
+02-20 13:29:50.937 - 
+02-20 13:29:50.937 - Checking the externalScoreEvaluator for candidates...
+02-20 13:29:50.937 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:29:50.937 - Can not find any suitable candidates
+02-20 13:31:10.856 - ==========start qualified Network Selection==========
+02-20 13:31:10.857 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:31:10.858 -  skipped due to low signal
+
+02-20 13:31:10.858 - NexVision-2de7b7:e0:60:66:ff:bd:40 /  skipped due to not saved
+ 
+02-20 13:31:10.858 -  skipped due to not valid SSID
+
+02-20 13:31:10.858 - 
+02-20 13:31:10.859 - Checking the externalScoreEvaluator for candidates...
+02-20 13:31:10.859 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:31:10.859 - Can not find any suitable candidates
+02-20 13:33:50.864 - ==========start qualified Network Selection==========
+02-20 13:33:50.864 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:33:50.865 - gengzi-office:dc:da:80:a1:24:71(2.4GHz)-88 /  skipped due to low signal
+
+02-20 13:33:50.865 - gengzi-office:dc:da:80:a1:32:71 / TP-LINK_D4ADF5:88:25:93:d4:ad:f5 /  skipped due to not saved
+ 
+02-20 13:33:50.866 -  skipped due to not valid SSID
+
+02-20 13:33:50.866 - 
+02-20 13:33:50.866 - Checking the externalScoreEvaluator for candidates...
+02-20 13:33:50.866 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:33:50.866 - Can not find any suitable candidates
+02-20 13:36:30.799 - ==========start qualified Network Selection==========
+02-20 13:36:30.799 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:36:30.801 -  skipped due to low signal
+
+02-20 13:36:30.801 - NexVision-2de7b7:e0:60:66:ff:bd:40 / Song:30:95:e3:27:2f:8e /  skipped due to not saved
+ 
+02-20 13:36:30.801 -  skipped due to not valid SSID
+
+02-20 13:36:30.801 - 
+02-20 13:36:30.801 - Checking the externalScoreEvaluator for candidates...
+02-20 13:36:30.802 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:36:30.802 - Can not find any suitable candidates
+02-20 13:39:10.963 - ==========start qualified Network Selection==========
+02-20 13:39:10.964 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:39:10.965 -  skipped due to low signal
+
+02-20 13:39:10.965 - Song:30:95:e3:27:2f:8e / HiWiFi_5B4D4C:d4:ee:07:5b:4d:4c /  skipped due to not saved
+ 
+02-20 13:39:10.965 - b4:86:55:1f:2a:d1 /  skipped due to not valid SSID
+
+02-20 13:39:10.965 - 
+02-20 13:39:10.965 - Checking the externalScoreEvaluator for candidates...
+02-20 13:39:10.966 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:39:10.966 - Can not find any suitable candidates
+02-20 13:41:50.941 - ==========start qualified Network Selection==========
+02-20 13:41:50.941 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:41:50.942 -  skipped due to low signal
+
+02-20 13:41:50.943 - SvrWifi_1_KDC0205201:c8:02:8f:ff:1a:a4 / NexVision-2de7b7:e0:60:66:ff:bd:40 / DIRECT-cYDESKTOP-7KSDQIImsSz:f6:8c:50:25:8b:04 / meetingroom5k:e0:60:66:ff:9b:70 / Running:00:c3:b7:ab:0d:a1 /  skipped due to not saved
+ 
+02-20 13:41:50.943 -  skipped due to not valid SSID
+
+02-20 13:41:50.943 - 
+02-20 13:41:50.943 - Checking the externalScoreEvaluator for candidates...
+02-20 13:41:50.943 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:41:50.943 - Can not find any suitable candidates
+02-20 13:44:30.879 - ==========start qualified Network Selection==========
+02-20 13:44:30.879 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:44:30.886 -  skipped due to low signal
+
+02-20 13:44:30.886 - SvrWifi_1_KDC0205201:c8:02:8f:ff:1a:a4 / Song:30:95:e3:27:2f:8e / gengzi-guest:dc:da:80:a1:32:70 / gengzi-office:dc:da:80:a1:32:71 /  skipped due to not saved
+ 
+02-20 13:44:30.886 -  skipped due to not valid SSID
+
+02-20 13:44:30.887 - 
+02-20 13:44:30.887 - Checking the externalScoreEvaluator for candidates...
+02-20 13:44:30.887 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:44:30.887 - Can not find any suitable candidates
+02-20 13:48:48.292 - ==========start qualified Network Selection==========
+02-20 13:48:48.293 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:48:48.295 - 5F-YDPTKFB-TEST:16:75:90:69:e4:02(2.4GHz)-86 /  skipped due to low signal
+
+02-20 13:48:48.295 - NexVision-2de7b7:e0:60:66:ff:bd:40 / DIRECT-cYDESKTOP-7KSDQIImsSz:f6:8c:50:25:8b:04 / TP-LINK_2B32:24:69:68:0a:2b:32 /  skipped due to not saved
+ 
+02-20 13:48:48.296 - b4:86:55:1f:2a:cd /  skipped due to not valid SSID
+
+02-20 13:48:48.296 - 
+02-20 13:48:48.296 - Checking the externalScoreEvaluator for candidates...
+02-20 13:48:48.297 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:48:48.299 - Can not find any suitable candidates
+02-20 13:49:16.839 - ==========start qualified Network Selection==========
+02-20 13:49:16.841 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:49:16.842 - gengzi-guest:dc:da:80:a1:24:70(2.4GHz)-90 /  skipped due to low signal
+
+02-20 13:49:16.842 - NexVision-2de7b7:e0:60:66:ff:bd:40 / HUAWEI-5FNVR:b4:86:55:1f:2a:cc /  skipped due to not saved
+ 
+02-20 13:49:16.842 - 00:0a:f5:eb:b1:bc /  skipped due to not valid SSID
+
+02-20 13:49:16.842 - 
+02-20 13:49:16.842 - Checking the externalScoreEvaluator for candidates...
+02-20 13:49:16.842 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:49:16.843 - Can not find any suitable candidates
+02-20 13:49:26.877 - ==========start qualified Network Selection==========
+02-20 13:49:26.877 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:49:26.880 -  skipped due to low signal
+
+02-20 13:49:26.880 - NexVision-2de7b7:e0:60:66:ff:bd:40 /  skipped due to not saved
+ 
+02-20 13:49:26.881 - b4:86:55:1f:2a:cd / 00:0a:f5:eb:b1:bc / 00:0a:f5:9e:3e:1c /  skipped due to not valid SSID
+
+02-20 13:49:26.881 - 
+02-20 13:49:26.881 - Checking the externalScoreEvaluator for candidates...
+02-20 13:49:26.882 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:49:26.882 - Can not find any suitable candidates
+02-20 13:49:36.918 - ==========start qualified Network Selection==========
+02-20 13:49:36.919 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:49:36.920 - NexVision-2de7b7:e0:60:66:ff:bd:41(5GHz)-90 / ChinaNet-7WXL:ca:50:e9:9e:4e:51(2.4GHz)-89 / D-Link_DIR-816:1c:5f:2b:5a:81:77(2.4GHz)-89 /  skipped due to low signal
+
+02-20 13:49:36.921 - NexVision-2de7b7:e0:60:66:ff:bd:40 /  skipped due to not saved
+ 
+02-20 13:49:36.921 - 00:0a:f5:eb:b1:bc / 00:0a:f5:9e:3e:1c /  skipped due to not valid SSID
+
+02-20 13:49:36.921 - 
+02-20 13:49:36.921 - Checking the externalScoreEvaluator for candidates...
+02-20 13:49:36.921 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:49:36.922 - Can not find any suitable candidates
+02-20 13:49:46.939 - ==========start qualified Network Selection==========
+02-20 13:49:46.940 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:49:46.942 - NexVision-2de7b7:e0:60:66:ff:bd:41(5GHz)-90 / gengzi-guest:dc:da:80:a0:e4:d0(2.4GHz)-86 / gengzi-office:dc:da:80:a0:e4:d1(2.4GHz)-88 /  skipped due to low signal
+
+02-20 13:49:46.942 - NexVision-2de7b7:e0:60:66:ff:bd:40 / 红米手机:e4:46:da:e1:0b:a9 / Running:00:c3:b7:ab:0d:a1 / TP-LINK_2B32:24:69:68:0a:2b:32 / TP-LINK_D4ADF5:88:25:93:d4:ad:f5 /  skipped due to not saved
+ 
+02-20 13:49:46.942 -  skipped due to not valid SSID
+
+02-20 13:49:46.942 - 
+02-20 13:49:46.943 - Checking the externalScoreEvaluator for candidates...
+02-20 13:49:46.943 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:49:46.943 - Can not find any suitable candidates
+02-20 13:49:56.945 - ==========start qualified Network Selection==========
+02-20 13:49:56.945 - Saved Network List
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:49:56.946 - NexVision-2de7b7:e0:60:66:ff:bd:41(5GHz)-89 /  skipped due to low signal
+
+02-20 13:49:56.947 - 红米手机:e4:46:da:e1:0b:a9 / TP-LINK_2B32:24:69:68:0a:2b:32 / meetingroom5f:e0:60:66:ff:ab:1c / TP-LINK_F716:c0:61:18:57:f7:16 /  skipped due to not saved
+ 
+02-20 13:49:56.947 - b4:86:55:1f:2a:cd /  skipped due to not valid SSID
+
+02-20 13:49:56.947 - 
+02-20 13:49:56.947 - Checking the externalScoreEvaluator for candidates...
+02-20 13:49:56.947 - ExternalScoreEvaluator did not see any good candidates.
+02-20 13:49:56.948 - Can not find any suitable candidates
+02-20 13:50:04.963 - userSelectNetwork:1 persist:true
+02-20 13:50:05.012 - userSelectNetwork:1 persist:true
+02-20 13:50:06.954 - ==========start qualified Network Selection==========
+02-20 13:50:06.955 - Last selection is "红米手机" Time to now: 0 minutes
+02-20 13:50:06.955 - Saved Network List
+    "红米手机":1  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:50:06.957 -  skipped due to low signal
+
+02-20 13:50:06.958 - NexVision-2de7b7:e0:60:66:ff:bd:40 / meetingroom5f:e0:60:66:ff:ab:1c /  skipped due to not saved
+ 
+02-20 13:50:06.958 - 00:0a:f5:9e:3e:1c / 00:0a:f5:b1:34:f0 /  skipped due to not valid SSID
+
+02-20 13:50:06.958 -  RSSI score: 100 User selected it last time 0 minutes ago, bonus:480 Secure network Bonus:80 Score for scanResult: SSID: 红米手机, BSSID: e4:46:da:e1:0b:a9, capabilities: [WPA2-PSK-CCMP][ESS], level: -30, frequency: 2412, timestamp: 1303568444, distance: ?(cm), distanceSd: ?(cm), passpoint: no, ChannelBandwidth: 0, centerFreq0: 0, centerFreq1: 0, 80211mcResponder: is not supported and Network ID: 1 final score:660
+
+
+02-20 13:50:06.959 - After user choice adjust, the final candidate is:"红米手机":1 : e4:46:da:e1:0b:a9
+02-20 13:50:06.959 - reconnect from Disconnected to "红米手机":1
+02-20 13:50:14.938 - ==========start qualified Network Selection==========
+02-20 13:50:14.938 - Too short to last successful Qualified Network Selection Gap is:7979 ms!
+02-20 13:50:14.938 - Quit qualified Network Selection since it is not forced and current network is qualified already
+02-20 13:50:24.801 - ==========start qualified Network Selection==========
+02-20 13:50:24.801 - Current network is: "红米手机" ,ID is: 1
+02-20 13:50:24.801 - Current band dose not match user preference. Start Qualified Network Selection Current band = 2.4GHz bandUserPreference band = 0
+02-20 13:50:24.802 - Current network is not qualified
+02-20 13:50:24.802 - Last selection is "红米手机" Time to now: 0 minutes
+02-20 13:50:24.803 - Saved Network List
+    "红米手机":1  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+    "Kedacom.lnc":0  User Preferred BSSID:null FQDN:null NETWORK_SELECTION_ENABLED Disable account: 0 0 0 0 0 0 0 0 0 0 Connect Choice:null set time:-1
+
+02-20 13:50:24.805 -  skipped due to low signal
+
+02-20 13:50:24.805 - NexVision-2de7b7:e0:60:66:ff:bd:40 / Running:00:c3:b7:ab:0d:a1 / TP-LINK_2B32:24:69:68:0a:2b:32 / meetingroom5f:e0:60:66:ff:ab:1c / AndroidAP:30:95:e3:12:31:c3 /  skipped due to not saved
+ 
+02-20 13:50:24.805 -  skipped due to not valid SSID
+
+02-20 13:50:24.806 -  RSSI score: 100 User selected it last time 0 minutes ago, bonus:480 Same network with current associated. Bonus: 16 Same BSSID with current association. Bonus: 24 Secure network Bonus:80 Score for scanResult: SSID: 红米手机, BSSID: e4:46:da:e1:0b:a9, capabilities: [WPA2-PSK-CCMP][ESS], level: -30, frequency: 2412, timestamp: 1323294008, distance: ?(cm), distanceSd: ?(cm), passpoint: no, ChannelBandwidth: 0, centerFreq0: 0, centerFreq1: 0, 80211mcResponder: is not supported and Network ID: 1 final score:700
+
+
+02-20 13:50:24.806 - After user choice adjust, the final candidate is:"红米手机":1 : e4:46:da:e1:0b:a9
+02-20 13:50:24.806 - "红米手机":1 is already the best choice!
+02-20 13:50:29.903 - ==========start qualified Network Selection==========
+02-20 13:50:29.904 - Too short to last successful Qualified Network Selection Gap is:5098 ms!
+02-20 13:50:29.904 - Quit qualified Network Selection since it is not forced and current network is qualified already
+WifiQualifiedNetworkSelector - Log End ----
+APF dump:
+  Capabilities: ApfCapabilities{version: 2, maxSize: 4096 format: 1}
+  Receive thread: RUNNING
+  Multicast: DROP
+  IPv4 address: 192.168.43.81
+  Program updates: 2
+  Last program length 183, installed 25s ago, lifetime 9223372036854775807s
+  RA filters:
+  Last program:
+    120c84002808066a0ea2a50600010800060412147a0d01829d0268a29306ffffffffffff6a26a28b04c0a82b51728884004a08000a17821c1112149c00151fffab0d2a10820e446a3239a2020600037f124b4b72620a1e52f07a5ce01a1e7e00000051ffffffff7e00000048c0a82bff68a23d06ffffffffffff723c72397c000c86dd68a22a06ffffffffffff72290a147a073a0a267a1fff721c0a368217886a26a20210ff0200000000000000000000000000017201
+
+IpManager.wlan0 StateMachine dump:
+  02-20 13:28:44.573 - CMD_SET_MULTICAST_FILTER wlan0/-1 0 0 true [rcvd_in=StoppedState, proc_in=StoppedState]
+  02-20 13:50:07.164 - CMD_STOP wlan0/-1 0 0 null [rcvd_in=StoppedState, proc_in=StoppedState]
+  02-20 13:50:07.165 - CMD_UPDATE_HTTP_PROXY wlan0/-1 0 0 null [rcvd_in=StoppedState, proc_in=StoppedState]
+  02-20 13:50:07.166 - CMD_UPDATE_TCP_BUFFER_SIZES wlan0/-1 0 0 524288,1048576,2097152,262144,524288,1048576 [rcvd_in=StoppedState, proc_in=StoppedState]
+  02-20 13:50:07.167 - INVOKE setNeighborDiscoveryOffload(true)
+  02-20 13:50:07.169 - CMD_START wlan0/8 0 0 ProvisioningConfiguration{mEnableIPv4: true, mEnableIPv6: true, mUsingIpReachabilityMonitor: true, mRequestedPreDhcpActionMs: 36000, mStaticIpConfig: null, mApfCapabilities: ApfCapabilities{version: 2, maxSize: 4096 format: 1}, mProvisioningTimeoutMs: 36000} [rcvd_in=StoppedState, proc_in=StoppedState]
+  02-20 13:50:07.181 - INVOKE installPacketFilter(byte[170])
+  02-20 13:50:07.210 - CMD_CONFIRM wlan0/8 0 0 null [rcvd_in=RunningState, proc_in=RunningState]
+  02-20 13:50:07.211 - INVOKE onLinkPropertiesChange({{InterfaceName: wlan0 LinkAddresses: [fe80::203:7fff:fe12:4b4b/64,]  Routes: [fe80::/64 -> :: wlan0,] DnsAddresses: [] Domains: null MTU: 0 TcpBufferSizes: 524288,1048576,2097152,262144,524288,1048576}})
+  02-20 13:50:07.211 - INVOKE onPreDhcpAction()
+  02-20 13:50:07.212 - CMD_PRE_DHCP_ACTION wlan0/8 0 0 null [rcvd_in=RunningState, proc_in=RunningState]
+  02-20 13:50:07.256 - EVENT_PRE_DHCP_ACTION_COMPLETE wlan0/8 0 0 null [rcvd_in=RunningState, proc_in=RunningState]
+  02-20 13:50:09.578 - INVOKE onPostDhcpAction()
+  02-20 13:50:09.579 - INVOKE onNewDhcpResults({IP address 192.168.43.81/24 Gateway 192.168.43.1  DNS servers: [ 192.168.43.1 ] Domains  DHCP server /192.168.43.1 Vendor info ANDROID_METERED lease 3600 seconds})
+  02-20 13:50:09.579 - INVOKE onLinkPropertiesChange({{InterfaceName: wlan0 LinkAddresses: [fe80::203:7fff:fe12:4b4b/64,]  Routes: [fe80::/64 -> :: wlan0,192.168.43.0/24 -> 0.0.0.0 wlan0,0.0.0.0/0 -> 192.168.43.1 wlan0,] DnsAddresses: [] Domains: null MTU: 0 TcpBufferSizes: 524288,1048576,2097152,262144,524288,1048576}})
+  02-20 13:50:09.584 - CMD_POST_DHCP_ACTION wlan0/8 1 0 IP address 192.168.43.81/24 Gateway 192.168.43.1  DNS servers: [ 192.168.43.1 ] Domains  DHCP server /192.168.43.1 Vendor info ANDROID_METERED lease 3600 seconds [rcvd_in=RunningState, proc_in=RunningState]
+  02-20 13:50:09.589 - CMD_CONFIGURE_LINKADDRESS wlan0/8 0 0 192.168.43.81/24 [rcvd_in=RunningState, proc_in=RunningState]
+  02-20 13:50:09.595 - INVOKE installPacketFilter(byte[183])
+  02-20 13:50:09.608 - INVOKE onProvisioningSuccess({{InterfaceName: wlan0 LinkAddresses: [fe80::203:7fff:fe12:4b4b/64,192.168.43.81/24,]  Routes: [fe80::/64 -> :: wlan0,192.168.43.0/24 -> 0.0.0.0 wlan0,0.0.0.0/0 -> 192.168.43.1 wlan0,] DnsAddresses: [192.168.43.1,] Domains: null MTU: 0 TcpBufferSizes: 524288,1048576,2097152,262144,524288,1048576}})
+Dump of WifiConnectivityManager
+WifiConnectivityManager - Log Begin ----
+WifiConnectivityManager - Number of connectivity attempts rate limited: 0
+02-20 13:28:46.167 - handleScreenStateChanged: screenOn=true
+02-20 13:28:46.168 - startConnectivityScan: screenOn=true wifiState=0 scanImmediately=false wifiEnabled=false wifiConnectivityManagerEnabled=false
+02-20 13:28:46.169 - handleConnectionStateChanged: state=2
+02-20 13:28:46.169 - startConnectivityScan: screenOn=true wifiState=2 scanImmediately=false wifiEnabled=true wifiConnectivityManagerEnabled=false
+02-20 13:28:46.171 - registerScanListener onSuccess
+02-20 13:28:48.630 - startConnectivityScan: screenOn=true wifiState=2 scanImmediately=true wifiEnabled=true wifiConnectivityManagerEnabled=true
+02-20 13:28:48.658 - SingleScanListener onSuccess
+02-20 13:28:50.903 - AllSingleScanListener onResults: start QNS
+02-20 13:29:08.630 - periodicScanTimerHandler
+02-20 13:29:08.632 - SingleScanListener onSuccess
+02-20 13:29:10.878 - AllSingleScanListener onResults: start QNS
+02-20 13:29:48.638 - periodicScanTimerHandler
+02-20 13:29:48.643 - SingleScanListener onSuccess
+02-20 13:29:50.934 - AllSingleScanListener onResults: start QNS
+02-20 13:31:08.652 - periodicScanTimerHandler
+02-20 13:31:08.656 - SingleScanListener onSuccess
+02-20 13:31:10.856 - AllSingleScanListener onResults: start QNS
+02-20 13:33:48.655 - periodicScanTimerHandler
+02-20 13:33:48.668 - SingleScanListener onSuccess
+02-20 13:33:50.863 - AllSingleScanListener onResults: start QNS
+02-20 13:36:28.661 - periodicScanTimerHandler
+02-20 13:36:28.674 - SingleScanListener onSuccess
+02-20 13:36:30.798 - AllSingleScanListener onResults: start QNS
+02-20 13:39:08.666 - periodicScanTimerHandler
+02-20 13:39:08.679 - SingleScanListener onSuccess
+02-20 13:39:10.963 - AllSingleScanListener onResults: start QNS
+02-20 13:41:48.671 - periodicScanTimerHandler
+02-20 13:41:48.675 - SingleScanListener onSuccess
+02-20 13:41:50.940 - AllSingleScanListener onResults: start QNS
+02-20 13:44:28.676 - periodicScanTimerHandler
+02-20 13:44:28.703 - SingleScanListener onSuccess
+02-20 13:44:30.878 - AllSingleScanListener onResults: start QNS
+02-20 13:48:46.172 - periodicScanTimerHandler
+02-20 13:48:46.192 - watchdogHandler
+02-20 13:48:46.194 - SingleScanListener onSuccess
+02-20 13:48:46.195 - SingleScanListener onSuccess
+02-20 13:48:48.292 - AllSingleScanListener onResults: start QNS
+02-20 13:49:16.839 - AllSingleScanListener onResults: start QNS
+02-20 13:49:26.876 - AllSingleScanListener onResults: start QNS
+02-20 13:49:36.917 - AllSingleScanListener onResults: start QNS
+02-20 13:49:46.939 - AllSingleScanListener onResults: start QNS
+02-20 13:49:56.944 - AllSingleScanListener onResults: start QNS
+02-20 13:50:05.027 - handleConnectionStateChanged: state=3
+02-20 13:50:05.028 - startConnectivityScan: screenOn=true wifiState=3 scanImmediately=false wifiEnabled=true wifiConnectivityManagerEnabled=true
+02-20 13:50:05.028 - handleConnectionStateChanged: state=2
+02-20 13:50:05.031 - startConnectivityScan: screenOn=true wifiState=2 scanImmediately=false wifiEnabled=true wifiConnectivityManagerEnabled=true
+02-20 13:50:05.033 - SingleScanListener onSuccess
+02-20 13:50:06.954 - AllSingleScanListener onResults: start QNS
+02-20 13:50:06.959 - AllSingleScanListener: QNS candidate-"红米手机"
+02-20 13:50:06.960 - connectToNetwork: Reconnect from Disconnected to "红米手机" : e4:46:da:e1:0b:a9
+02-20 13:50:07.137 - handleConnectionStateChanged: state=3
+02-20 13:50:07.137 - startConnectivityScan: screenOn=true wifiState=3 scanImmediately=false wifiEnabled=true wifiConnectivityManagerEnabled=true
+02-20 13:50:09.646 - handleConnectionStateChanged: state=1
+02-20 13:50:09.646 - startConnectivityScan: screenOn=true wifiState=1 scanImmediately=false wifiEnabled=true wifiConnectivityManagerEnabled=true
+02-20 13:50:09.646 - Last periodic single scan started 4615ms ago, defer this new scan request.
+02-20 13:50:14.937 - AllSingleScanListener onResults: start QNS
+02-20 13:50:24.800 - AllSingleScanListener onResults: start QNS
+02-20 13:50:24.807 - AllSingleScanListener: QNS candidate-"红米手机"
+02-20 13:50:24.807 - connectToNetwork: Either already connected or is connecting to "红米手机" : e4:46:da:e1:0b:a9
+02-20 13:50:25.033 - periodicScanTimerHandler
+02-20 13:50:25.036 - SingleScanListener onSuccess
+02-20 13:50:29.903 - AllSingleScanListener onResults: start QNS
+WifiConnectivityManager - Log End ----
+

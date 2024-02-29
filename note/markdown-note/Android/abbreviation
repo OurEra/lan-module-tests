@@ -1,0 +1,67 @@
+QMI 		Qualcomm messaging interface
+
+QCCI		QMI Common Client Interface
+
+QCSI		QMI Common Service Interface
+
+QCSI 		QMI Common Service Interface
+
+QMUX 		QMI Multiplexing Protocol
+
+QXDM 		Qualcomm Extensible Diagnostic Monitor
+
+
+
+PTOR		Peripheral Tiny Overlap Removal
+FBC		Frame Buffer Compression
+smp		shared memory pool
+IGC		Inverse Gamma Correction
+
+
+
+
+
+	modified:   build/java/common.mk
+	modified:   utest/apk/test.conf
+	modified:   utest/apk/testNativeAPI.h
+	modified:   utest/apk/test_capture.cpp
+	modified:   utest/apk/test_capture.h
+	modified:   utest/apk/test_decode.cpp
+	modified:   utest/apk/test_decode.h
+	modified:   utest/apk/test_encode.cpp
+	modified:   utest/apk/test_encode.h
+	modified:   utest/apk/test_jni.cpp
+	modified:   utest/apk/test_jpeg.cpp
+	modified:   utest/apk/test_jpeg.h
+	modified:   utest/apk/test_manager.cpp
+	modified:   utest/apk/test_manager.h
+	modified:   utest/apk/test_module.h
+	modified:   utest/apk/test_render.cpp
+	modified:   utest/apk/test_render.h
+	modified:   video/base/inc/kam_vid_base.h
+	modified:   video/base/src/vid_base.cpp
+	modified:   video/base/src/vid_base_mem_pool.cpp
+	modified:   video/base/src/vid_base_memory.cpp
+	modified:   video/base/src/vid_base_memory.h
+	modified:   video/base/utest/utest_base.cpp
+	modified:   video/capture/inc/kam_vid_capture.h
+	modified:   video/capture/java/make.mk
+	modified:   video/capture/src/vid_external_icap.cpp
+	modified:   video/capture/src/vid_icap.cpp
+	modified:   video/codec/src/jpeg/vid_dec_jpeg_sw.cpp
+	modified:   video/codec/src/kdc/kdc_codec.cpp
+	modified:   video/codec/src/ndk/ndk_codec.cpp
+	modified:   video/codec/src/omx/omx_codec.cpp
+	modified:   video/codec/src/vid_dec_kdc_h264.cpp
+	modified:   video/codec/src/vid_dec_ndk_h264.cpp
+	modified:   video/codec/utest/apk/vidcodec_jni.cpp
+	modified:   video/codec/utest/native/utest_jpege.cpp
+	modified:   video/process/utest/native/utest_converter.cpp
+	modified:   video/process/utest/native/utest_csr.cpp
+	modified:   video/process/utest/native/utest_osder.cpp
+	modified:   video/render/java/make.mk
+	modified:   video/render/src/vid_irender.h
+	modified:   video/render/src/vid_render_java.cpp
+	modified:   video/render/src/vid_render_nwindow_ndk.cpp
+	modified:   video/render/src/vid_render_nwindow_qcom.cpp
+	modified:   video/render/utest/apk/vidrender_jni.cpp

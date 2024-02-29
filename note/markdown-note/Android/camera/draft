@@ -1,0 +1,66 @@
+    sce40跟踪到isp_sub_module_port_event()
+
+		||
+		||
+		
+	需要了解sub module之间的link关系
+	
+	isp_resource_create_link()
+	isp_stream_resource_allocate()
+	遇到isp_session_param_t.num_isp被赋值流程
+	
+	mct_pipeline_process_set() ->
+	MCT_EVENT_CONTROL_SET_PARM in isp_port_process_downstream_ctrl_event() ->
+	isp_util_handle_stream_info() -> 
+	isp_resource_allocate() -> 
+	isp_resource_reserve_isp()
+	
+	
+	iface_sink_port_stream_config() ->
+	iface_create_axi() ->
+	  iface_axi_create_hw()
+	  iface_ops_t.init()
+	iface_axi_init_to_thread() ->
+	iface_thread_proc_cmd() handle IFACE_THREAD_CMD_NOTIFY_OPS_INIT ->
+	iface_axi_init()
+	
+	
+   谁调用isp_sub_module_port_event()
+   
+   		||
+		||
+		
+   isp_handler_sof() ->
+   isp_trigger_thread_handle_sof()->
+     ISP_TRIGGER_THREAD_EVENT_PROCESS_QUEUE		
+   isp_trigger_thread_process_queue() ->	
+   isp_util_trigger_internal_hw_update_event() ->
+   isp_util_forward_event_to_internal_pipeline()
+   
+   
+   关于sof从AXI收到kernel消息后的相关流程
+     
+   VIDIOC_DQEVENT　v4l2_event.type为ISP_EVENT_SOF　->
+   iface_axi_handle_sof_event()　->
+     iface_axi_sof_event.sof_buf_msg.type为MCT_BUS_MSG_ISP_SOF
+   iface_util_axi_notify() ->
+   iface_util_hw_notify_sof() ->
+   iface_util_broadcast_sof_msg_to_modules()
+   mct_module_post_bus_msg()
+   
+   
+   
+   
+   
+   ##############
+   ##############
+   
+msm_sensor_fill_sensor_info()
+msm_sensor_info_t.session_id = msm_sensor_ctrl_t.sensordata.sensor_info.session_id
+
+msm_sensor_driver_probe()
+msm_sensor_ctrl_t *s_ctrl = g_sctrl[camera_id]
+
+
+msm_sensor_get_sub_module_index
+

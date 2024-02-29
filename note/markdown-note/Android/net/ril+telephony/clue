@@ -1,0 +1,76 @@
+03-27 19:30:53.318 D/RILJ    ( 2511): [3656]< GET_SIM_STATUS IccCardState {CARDSTATE_PRESENT,PINSTATE_UNKNOWN,num_apps=2,gsm_id=0{APPTYPE_SIM,APPSTATE_READY},cdma_id=1{APPTYPE_RUIM,APPSTATE_READY},ims_id=8} [SUB0]
+
+03-27 19:30:53.795 D/UiccController( 2511): Notifying IccChangedRegistrants
+
+03-27 19:30:55.748 D/DCT     ( 2511): [0]onUpdateIcc: newIccRecords com.android.internal.telephony.uicc.RuimRecords
+
+
+03-27 19:30:55.028 D/RuimRecords( 2511): [RuimRecords] onRecordLoaded 0 requested: true
+03-27 19:30:55.028 D/RuimRecords( 2511): [RuimRecords] record load complete
+
+
+
+03-27 19:30:55.940 D/DCT     ( 2511): [0]onRecordsLoaded: createAllApnList
+03-27 19:30:55.940 D/CdmaSSM ( 2511): getcdmasubscriptionSource: 0
+03-27 19:30:55.940 D/DCT     ( 2511): [0]getOperatorNumberic - returning from card: null
+
+
+03-27 19:31:29.126 D/DCT     ( 2511): [0]trySetupData for type:default due to dataAttached apnContext={mApnType=default mState=IDLE mWaitingApns={null} mWaitingApnsPermanentFailureCountDown=0 mApnSetting={null} mReason=dataAttached mDataEnabled=true mDependencyMet=true}
+03-27 19:31:29.126 D/DCT     ( 2511): [0]trySetupData with mIsPsRestricted=false
+03-27 19:31:29.127 D/CdmaSSM ( 2511): getcdmasubscriptionSource: 0
+03-27 19:31:29.127 D/SubscriptionController( 2511): [getActiveSubInfoList]+
+03-27 19:31:29.128 D/SubscriptionController( 2511): selection:sim_id>=0 null
+03-27 19:31:29.129 D/CdmaSSM ( 2511): getcdmasubscriptionSource: 0
+03-27 19:31:29.132 D/DCT     ( 2511): [0]isEmergency: result=false
+03-27 19:31:29.132 D/DCT     ( 2511): [0]buildWaitingApns: E requestedApnType=default
+03-27 19:31:29.132 D/CdmaSSM ( 2511): getcdmasubscriptionSource: 0
+03-27 19:31:29.132 D/DCT     ( 2511): [0]getOperatorNumberic - returning from card: null
+
+
+##########################################################################################
+##########################################################################################
+
+03-27 20:48:38.894 D/RILJ    ( 1878): [3656]< GET_SIM_STATUS IccCardState {CARDSTATE_PRESENT,PINSTATE_UNKNOWN,num_apps=2,gsm_id=0{APPTYPE_SIM,APPSTATE_READY},cdma_id=1{APPTYPE_RUIM,APPSTATE_READY},ims_id=8} [SUB0]
+
+03-27 20:48:39.060 D/UiccController( 1878): Notifying IccChangedRegistrants
+
+
+03-27 20:48:41.085 D/DCT     ( 1878): [0]onUpdateIcc: newIccRecords com.android.internal.telephony.uicc.SIMRecords
+
+
+03-27 20:48:40.353 D/SIMRecords( 1878): [SIMRecords] record load complete
+
+
+03-27 20:48:41.327 D/DCT     ( 1878): [0]onRecordsLoaded: createAllApnList
+03-27 20:48:41.328 D/DCT     ( 1878): [0]getOperatorNumberic - returning from card: 46011
+
+
+03-27 20:48:42.904 D/DCT     ( 1878): [0]trySetupData for type:default due to dataEnabled apnContext={mApnType=default mState=IDLE mWaitingApns={null} mWaitingApnsPermanentFailureCountDown=0 mApnSetting={null} mReason=dataEnabled mDataEnabled=true mDependencyMet=true}
+
+##########################################################################################
+##########################################################################################
+
+
+04-02 14:58:37.617 D/IccCardProxy( 1977): Sending intent ACTION_INTERNAL_SIM_STATE_CHANGED for mPhoneId : 0
+
+
+04-02 14:58:37.704 D/QtiGsmDCT( 1977): [0]onRecordsLoaded: createAllApnList
+
+
+04-02 14:58:37.810 D/QtiGsmDCT( 1977): [0]trySetupData for type:default due to simLoaded apnContext={mApnType=default mState=IDLE mWaitingApns={null} mWaitingApnsPermanentFailureCountDown=0 mApnSetting={null} mReason=simLoaded mDataEnabled=true mDependencyMet=true}
+04-02 14:58:37.811 D/QtiGsmDCT( 1977): [0]trySetupData with mIsPsRestricted=false
+04-02 14:58:37.816 D/QtiGsmDCT( 1977): [0]isEmergency: result=false
+04-02 14:58:37.816 D/QtiGsmDCT( 1977): [0]buildWaitingApns: E requestedApnType=default
+04-02 14:58:37.816 D/QtiGsmDCT( 1977): [0]getOperatorNumberic - returning from card: 46011
+
+
+04-02 14:58:38.202 D/SubscriptionController( 1977): [addSubInfoRecord]+ iccId:89861117090215103714 slotId:0
+
+##########################################################################################
+##########################################################################################
+
+DATA_REGISTRATION_STATE 
+RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE
+notifyDataRegStateRilRadioTechnologyChanged
+
+

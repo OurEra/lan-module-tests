@@ -1,0 +1,50 @@
+  gtest source code in AOSP/external/gtest, it compile two static library: libgtest_main libgtest.
+  In AOSP, compile with 'include $(BUILD_NATIVE_TEST)', the build framework will link the two static
+  library.
+
+　　user can define their test unit like:
+　　
+  ############################################
+  class FooTest : public testing::Test {
+    protected:
+     virtual void SetUp() { ... }
+     virtual void TearDown() { ... }
+     ...
+  };
+
+  TEST_F(FooTest, Bar) { ... }
+  TEST_F(FooTest, Baz) { ... }
+  ############################################
+  
+  user define a class that inherit Test explicit, and then use macro TEST_F to define tests that
+  shares the SetUp() and TearDown() implementation.
+  
+  TEST_F macro help define class that inherit 'FooTest', the code in { ... } is the function body 
+  of Test::TestBody(), and the macro(GTEST_TEST_) declare static field TestInfo* test_info_ and init
+  it by calling MakeAndRegisterTestInfo().
+  
+  One parameter of MakeAndRegisterTestInfo() is TestFactoryBase instance, TestFactoryBase implement
+  funtion TestFactoryBase::CreateTest() which new user defined Test class;
+  ############################################
+  template <class TestClass>
+  class TestFactoryImpl : public TestFactoryBase {
+    public:
+      virtual Test* CreateTest() { return new TestClass; }
+  };
+  ############################################
+  MakeAndRegisterTestInfo() do work:
+  1. Instace a TestInfo and pass TestFactoryBase instance as parameter, TestInfo.factory_ hold it;
+  2. Call UnitTestImpl::AddTestInfo(), which invoke UnitTestImpl::GetTestCase(); GetTestCase() try 
+     find a target TestCase and call TestCase::AddTestInfo(), which will add TestInfo to TestCase.
+     test_info_list_, if UnitTestImpl::GetTestCase() find it's a new TestCase, then it will create
+     a new TestCase and push it into UnitTestImpl.test_cases_.
+  
+  The main() symbol is in gtest_main.cc, RUN_ALL_TESTS() will get all UnitTest instance and call
+  UnitTest::Run(), UnitTest hold instance of UnitTestImpl, Run() function then invoke UnitTestImpl
+  ::RunAllTests(). RunAllTests() then filter and find all TestCase in UnitTestImpl.test_cases_,
+  then call TestCase::Run(). TestCase::Run() then get all TestInfo in TestCase.test_info_list_ and
+  call TestInfo::Run().
+ 
+  TestInfo::Run() call TestInfo.factory_->CreateTest() and get Test instance, and call Test::Run();
+  Test::Run() invoke Test::SetUp(), Test::TestBody(), Test::TearDown() in order.
+  

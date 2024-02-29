@@ -1,0 +1,1948 @@
+*****************************************
+
+  BASIC DATA STRUCTURE (SDM660 SDK25)
+
+*****************************************
+
+
+ struct _mct_list {
+   void         *data;
+   mct_list_t   *prev;
+   mct_list_t   **next;   /* array of next(children) */
+   uint32_t next_num; /* number of next(children) */
+ };
+
+
+ typedef struct _mct_queue {
+   mct_list_t   *head;
+   mct_list_t   *tail;
+   uint32_t length;
+ } mct_queue_t;
+
+
+ struct _mct_object {
+   /*
+    * Parents and Children information:
+    *
+    * One Object matches to One Pipeline;
+    * One Pipeline may have multiple children(Streams);
+    * One Stream   may have multiple children(Modules);
+    * One Module   may have multiple children(Ports);
+    * One Port     may have multiple children(Stream and Session
+    *              Indics sets);
+    *
+    * !!!!!!!!! Note !!!!!!!!!
+    *   - Port MUST have ONLY ONE parent(Module);
+    *   - Module MIGHT have MULTIPLE parent(Stream);
+    *   - Stream MUST have ONLY ONLE parent(Pipeline).
+    */
+   mct_list_t       *parent;
+   unsigned int     parentsnum;
+   mct_list_t       *children;
+   unsigned int     childrennum;
+
+   char             *name; /* individual object's name              */
+   /* invidual Object information */
+   int              refcount; /* individual object's reference count   */
+
+   /* Note: For future usage,
+    * object LOCK, should be initialized to PTHREAD_MUTEX_INITIALIZER */
+   pthread_mutex_t  lock;
+   unsigned int     flags;
+   void            *priv;
+ };
+
+
+ struct _mct_bus {
+   unsigned int session_id;
+   /* Queue for holding metadata module bus msgs. */
+   mct_queue_t     *bus_queue;
+   /* Queue for holding msgs needing immediate attention*/
+   mct_queue_t  *priority_queue;
+   /* Mutex for bus_queue */
+   pthread_mutex_t bus_msg_q_lock;
+   /* Mutex for priority_queue */
+   pthread_mutex_t priority_q_lock;
+   /* Bus signalling constructs */
+   pthread_mutex_t *mct_mutex;
+   pthread_cond_t  *mct_cond;
+   post_msg_to_bus_func post_msg_to_bus;
+   /* SOF-monitor thread signalling constructs */
+   pthread_mutex_t bus_sof_msg_lock;
+   pthread_cond_t  bus_sof_msg_cond;
+   pthread_mutex_t bus_sof_init_lock;
+   pthread_cond_t  bus_sof_init_cond;
+   pthread_t       bus_sof_tid;
+   int             thread_run;
+   uint32_t        prev_sof_id;
+   mct_bus_msg_type_t msg_to_send_metadata;
+   uint32_t        thread_wait_time;
+ };
+
+ typedef struct _mct_stream_info_t {
+   unsigned int identity;
+
+   /* stream type*/
+   cam_stream_type_t stream_type;
+
+   /* image format */ /* for sensor, */
+   cam_format_t fmt;
+
+   /* image dimension */ /* for sensor, */
+   cam_dimension_t dim;
+
+   /* buffer plane information, will be calc based on stream_type, fmt,
+      dim, and padding_info(from stream config). Info including:
+      offset_x, offset_y, stride, scanline, plane offset */
+   cam_stream_buf_plane_info_t buf_planes;
+
+
+   /* streaming type */
+   cam_streaming_mode_t streaming_mode;
+
+   /* burst number of snapshot */
+   int num_burst;
+
+   /*num of frames generated
+    * only valid when streaming mode = CAM_STREAMING_MODE_BATCH*/
+   cam_stream_user_buf_info_t user_buf_info;
+
+   /*DS mapped buffer information*/
+   mct_list_t *img_buffer_list;
+
+   /* Stream buffer parameters */
+   cam_stream_parm_buffer_t parm_buf;
+
+   cam_pp_feature_config_t pp_config;
+   cam_stream_reproc_config_t reprocess_config;
+   int num_bufs;
+
+   mct_stream_status_t status;
+
+   mct_stream_t *stream;
+
+   /* Buffer params during aspect ratio mismatch */
+   uint32_t resize;
+   cam_dimension_t original_dim;
+   boolean expect_divert;
+   /*TODO: Add more fileds based on requirements*/
+
+   /* Image Stabilization type */
+   cam_is_type_t is_type;
+   uint8_t dis_enable;
+   cam_stream_secure_t is_secure;
+   cam_perf_mode_t perf_mode;
+   boolean bayerdata;
+
+   /* DT for this stream */
+   uint32_t dt;
+
+   /* VC for this stream */
+   uint32_t vc;
+   cam_sub_format_type_t sub_format;
+
+ } mct_stream_info_t;
+
+
+ struct _mct_stream {
+   /* Stream's parent should be pipeline,
+    * Stream's children should be modules which is arranged from
+    * source module to sink module -
+    * Note: Only Stream's children list can grow into a TREE form */
+   mct_object_t     object;
+
+   uint32_t streamid;
+   mct_stream_info_t  streaminfo;
+
+   /*
+    * Everything is in one thread context, there is no need
+    * to stuck in State. We shall difinitely NOT consider
+    * asynchronous State transition, otherwise things could
+    * end up with much complexity.
+    *
+    * At stream layer, 3 States: LINKED STOP and RUNNING should be
+    * sufficient.
+    */
+   mct_stream_state_t     state;
+   uint32_t               current_frame_id;
+   uint32_t               hw_sleep_frame_id;
+   mct_stream_bufs_t      buffers;
+   void                   *stream_private;
+   int                    buf_mgr_fd;
+   mct_stream_metadata_t  metadata_stream; /*Could be added to stream private?*/
+   mct_list_t             *frame_num_idx_list;
+   boolean                valid_buffer;
+
+   /* virtual functions */
+   mct_stream_add_module_func     add_module;
+   mct_stream_remove_module_func  remove_module;
+   mct_stream_insert_module_func  insert_module;
+   mct_stream_configure_func      configure;
+   mct_stream_send_event_func     send_event;
+   mct_stream_link_modules_func   link;
+   mct_stream_unlink_modules_func unlink;
+   mct_stream_map_buf_func        map_buf;
+   mct_stream_unmap_buf_func      unmap_buf;
+   mct_stream_map_parm_func       map_parm;
+   mct_stream_unmap_parm_func     unmap_parm;
+ };
+ \\---------------------------------------
+   ---------------------------------------
+     || add_module     		     --  mct_stream_add_module
+     || remove_module            --  mct_stream_remove_module
+     || send_event     	         --  mct_stream_send_event
+     || map_buf                  --  mct_stream_map_buf
+     || unmap_buf                --  mct_stream_unmap_buf
+     || map_parm                 --  mct_stream_map_parm
+     || unmap_parm               --  mct_stream_unmap_parm
+     || link                     --  mct_stream_start_link
+     || unlink                   --  mct_stream_start_unlink
+     ||
+
+
+ struct _mct_port {
+   mct_object_t          object;
+   mct_port_caps_t       caps;
+   mct_port_direction_t  direction;
+   mct_port_t           *peer;
+   mct_port_t           *internal_peer[MAX_PORT_CONNECTIONS];
+   mct_inter_peer_entity_t  inter_session_peer[MAX_PORT_CONNECTIONS];
+   void                 *port_private;
+
+   /* virtual functions to be defined by individual ports */
+   mct_port_event_func                event_func;
+   mct_port_intra_event_func          intra_event_func;
+   mct_port_int_link_func             int_link;
+   mct_port_ext_link_func             ext_link;
+   mct_port_intra_link_func           intra_link;
+   mct_port_unlink_func               un_link;
+   mct_port_intra_unlink_func         intra_unlink;
+   mct_port_set_caps_func             set_caps;
+   mct_port_check_caps_reserve_func   check_caps_reserve;
+   mct_port_check_caps_unreserve_func check_caps_unreserve;
+ };
+ \\---------------------------------------
+   ---------------------------------------
+     || event_func               --  port_iface_event_func
+	 || int_link                 --  port_iface_int_link_func
+	 || ext_link                 --  port_iface_ext_link_func
+	 || un_link                  --  port_iface_ext_unlink_func
+	 || set_caps                 --  port_iface_set_caps_func
+	 || check_caps_reserve       --  port_iface_check_caps_reserve_func
+	 || check_caps_unreserve     --  port_iface_check_caps_unreserve_func
+	 ||
+
+  The *_mct_port* virtual functions will be overwrite in different port, above list what's
+  been overwrite in iface port; the port will add to _mct_module.srcports/_mct_module.sinkports
+
+
+ struct _mct_module {
+   mct_object_t      object;
+   mct_list_t        *type_list;
+   mct_list_t        *srcports;
+   unsigned short    numsrcports;
+   mct_list_t        *sinkports;
+   unsigned short    numsinkports;
+   void              *module_private;
+   pthread_mutex_t   type_list_lock;
+
+   /* virtual functions - MUST be implemented by each module */
+   mct_module_process_event_func    process_event;
+   mct_module_set_mod_func          set_mod;
+   mct_module_query_mod_func        query_mod;
+   mct_module_request_port_function request_new_port;
+   mct_module_start_session         start_session;
+   mct_module_stop_session          stop_session;
+   mct_module_set_session_data      set_session_data;
+   mct_module_get_session_data      get_session_data;
+ };
+
+ iface module, the *module* field will be overwrite with specific funcs, other modules will do the same
+ typedef struct {
+   mct_module_t *module;
+   pthread_mutex_t mutex;
+   pthread_mutex_t session_resource_mutex;
+   iface_buf_mgr_t buf_mgr;
+   iface_ispif_data_t ispif_data;
+   iface_isp_axi_data_t isp_axi_data;
+   iface_session_t sessions[IFACE_MAX_SESSIONS];
+   int fd;
+   int num_active_streams;
+   int frame_cnt;
+   int skip_meta;
+   iface_hvx_singleton_t hvx_singleton;
+   uint32_t rdi_used_resource_mask;
+ } iface_t;
+ \\---------------------------------------
+   ---------------------------------------
+     || module->process_event    --  NULL
+     || module->set_mod          --  module_iface_set_mod_func
+     || module->query_mod        --  module_iface_query_mod_func
+     || module->start_session    --  module_iface_start_session
+     || module->stop_session     --  module_iface_stop_session
+     || module->set_session_data --  module_iface_set_session_data
+     || module->module_private   --  iface
+     ||
+
+
+ struct _mct_pipeline {
+   uint32_t                session;
+   mct_module_t            module;
+   /* pipeline's parent is MCT */
+   /* pipeline's child is stream */
+   mct_object_t            object;
+   mct_bus_t               *bus;
+   mct_controller_t        *controller;
+   mct_pipeline_cap_t       query_data;
+   mct_pipeline_session_data_t session_data;
+   mct_pipeline_session_stream_info_t session_stream;
+
+   void                    *config_parm;
+   size_t                   config_parm_size;
+   int                      config_parm_fd;
+
+   void                    *query_buf;
+   size_t                   query_buf_size;
+   int                      query_buf_fd;
+
+   void                    *related_sensors_sync_buf;
+   size_t                   related_sensors_sync_buf_size;
+   int                      related_sensors_sync_buf_fd;
+
+   mct_list_t              *modules;
+   mct_module_hw_state_t    module_hw_state;
+   mct_module_hw_state_t    updated_hw_state;
+   uint32_t                 wakeup_bit_mask;
+   mct_frame_request_mode_t wake_mode;
+   cam_dual_camera_perf_control_t lpm_mode;
+
+   uint16_t                 parm_buf_count;
+   uint16_t                 valid_parm_index_tbl[CAM_INTF_PARM_MAX];
+   int8_t                   stream_on_cnt;
+   mct_list_t              *frame_num_idx_list;
+   mct_queue_t             *super_param_queue;
+   uint32_t                 delay_dequeue_count;
+   void                    *pipeline_private;
+   int32_t                  is_zsl_mode;
+   pthread_mutex_t          super_param_q_lock;
+
+   mct_queue_t             *param_queue;
+   pthread_mutex_t          param_q_lock;
+
+   cam_hal_version_t        hal_version;
+
+   mct_offline_metadata_t   offline_meta;
+   uint32_t                 set_param_cnt;
+   uint32_t                 sleep_duration;
+   boolean                  state_change;
+   boolean aux_cam;
+
+   uint32_t                 int_streamoff;
+   uint32_t                 max_ack_id;
+   uint32_t                 start_int_streamoff_on;
+   mct_queue_t              *defer_queue;
+   pthread_mutex_t          defer_q_lock;
+   cam_dual_camera_defer_cmd_t deferred_state;
+
+
+   mct_pipeline_add_stream_func    add_stream;
+   mct_pipeline_remove_stream_func remove_stream;
+   mct_pipeline_event_func         send_event;
+   mct_pipeline_set_bus_func       set_bus;
+   mct_pipeline_get_bus_func       get_bus;
+   mct_pipeline_map_buf_func       map_buf;
+   mct_pipeline_unmap_buf_func     unmap_buf;
+   mct_pipeline_map_parm_func      map_parm;
+   mct_pipeline_unmap_parm_func     unmap_parm;
+   mct_pipeline_proc_msg_func      process_serv_msg;
+   mct_pipeline_proc_msg_func      process_bus_msg;
+   mct_pipeline_thread_data_t      thread_data;
+ };
+ \\---------------------------------------
+   ---------------------------------------
+     || add_stream				 --  mct_pipeline_add_stream
+     || remove_stream            --  mct_pipeline_remove_stream
+     || send_event               --  mct_pipeline_send_event
+     || set_bus					 --  mct_pipeline_set_bus
+     || get_bus                  --  mct_pipeline_get_bus
+     || hal_version              --  CAM_HAL_V1
+     ||
+
+
+ struct _mct_controller {
+  /* MCT's child is pipeline */
+   mct_object_t  object;
+   mct_queue_t   *serv_cmd_q;
+   mct_queue_t   *bus_cmd_q;
+   pthread_mutex_t  serv_msg_q_lock;
+   pthread_mutex_t  server_lock;
+
+   /* Server result Q */
+   mct_queue_t   *serv_res_q;
+
+   /* Result Q signal variable and its lock */
+   pthread_cond_t serv_res_cond;
+   pthread_condattr_t serv_res_condattr;
+   pthread_mutex_t serv_res_cond_lock;
+
+   pthread_cond_t mctl_thread_started_cond;
+   pthread_mutex_t mctl_thread_started_mutex;
+
+   /* 1. Server communicates with Media Controller through signal(servSignal);
+    * 2. Media Controller communicate with Server through Pipe(servFd) */
+   int         serv_fd;
+   int         config_fd;
+
+   pthread_t   mct_tid;             /* Thread ID of mct main thread */
+   pthread_t   mct_bus_handle_tid;  /* Thread ID of mct bus_handler thread */
+
+   pthread_cond_t mctl_cond;
+   pthread_mutex_t mctl_mutex;
+   pthread_cond_t mctl_bus_handle_cond;
+   pthread_mutex_t mctl_bus_handle_mutex;
+
+   mct_thread_state_type bus_thread_state;
+   pthread_mutex_t mctl_state_mutex;
+   pthread_cond_t mctl_state_cond;
+
+   /* HAL message queue counter */
+   unsigned int serv_cmd_q_counter;
+
+   mct_pipeline_t *pipeline;
+   /* HAL callback */
+   void *event_cb;
+
+   boolean timedout_status;
+ };
+
+
+*****************************************
+
+  函数细节
+
+*****************************************
+
+mct_list_t* mct_list_append(
+    mct_list_t *mct_list, void *data, void *appendto,
+    mct_list_find_func list_find)
+
+1 正常情况, 'appendto'和'list_find'为空:
+  1.1 调用mct_list_new()，把'data'放到mct_list_t.data
+  1.2  ‘mct_list’为空,返回新的mct_list_t
+  1.3  'mct_list'非空,遍历拿mct_list_t.next[0],即拿到list
+       最后一个元素, 然后把新的mct_list_t放到最后一个元素
+       的mct_list_t.next[0], 同时新mct_list_t.prev为最后一个元素
+  
+
+2 当stream连接module时,有可能最后两个参数非空,如函数:
+　mct_stream_add_branch_module(
+  mct_stream_t *stream,
+  mct_module_t *module,
+  mct_module_t *branchto)
+
+
+  传参
+  MCT_OBJECT_CAST(module),
+  MCT_OBJECT_CAST(stream),
+  MCT_OBJECT_CAST(branchto)  
+  调用
+  mct_object_set_branch_parent(
+    mct_object_t *object,
+    mct_object_t *parent,
+    mct_object_t *branchto)
+
+  传参
+  MCT_OBJECT_CHILDREN(parent),
+  object,
+  branchto,
+  mct_objects_compare
+  调用
+  mct_list_append(
+    mct_list_t *mct_list,
+    void *data,
+    void *appendto,
+    mct_list_find_func list_find)
+
+  此时第一个参数为mct_stream_t.object.children;
+  第二个参数为mct_module_t.object
+  第三个参数为依附的mct_module_t.object
+  第四个函数指针为对比mct_object_t.name相等
+
+  2.1 'mct_list'为空,调用mct_list_new()把
+　　　‘appendto’放到mct_list_t.data, 同时
+　　　给该mct_list_t.next分配空间
+
+      然后mct_list_new()再把'data'放到mct_list_t.data
+      
+      最后把'data'对应的mct_list_t放到'appendto'对应 
+      mct_list_t.next[0], 'data'的mct_list_t.prev则保存
+      'appendto'的list 
+   2.2 用list_find对比'appendto'和'mct_list'的data:
+       如果不相等,则拿到'mct_list'的next[],依次拿出
+　　　 mct_list_t递归调用mct_list_append(); 这里就是
+       在stream对应的object的children中,找到'appendto'
+       对应的list，因为在stream branch link的语境中,
+       'appendto'的module肯定是添加到stream中过的
+
+       如果相等,先调用mct_list_new()把'data'放到list中,
+       判断当前相等的mct_list_t.next为空:
+       mct_list_t.next分配空间,并在next[0]保存new list,
+       new list的prev设为mct_list_t
+
+       如果非空:
+       mct_list_t.next分配空间,并在next[num]总保存new list
+       new list的prev设为mct_list_t
+
+#########################################
+  INIT阶段
+#########################################
+
+
+当在BoardConfigVendor.mk中定义CAMERA_DAEMON_NOT_PRESENT时,mct
+将运行在cameraserver进程中
+
+mct_shimlayer_process_module_init()
+1 调用mct_shimlayer_module_sensor_init(), 在modules_list中
+　调用第一个元素的mct_module_init_name_t.init_mod,即:
+  module_sensor_init()
+2 调用mct_shimlayer_module_init(), 对数组modules_list:
+  static mct_module_init_name_t modules_list[] = {
+    {"sensor", module_sensor_init,    module_sensor_deinit, NULL},
+    {"iface",  module_iface_init,     module_iface_deinit, NULL},
+    {"isp",    module_isp_init,       module_isp_deinit, NULL},
+    {"stats",  stats_module_init,     stats_module_deinit, NULL},
+    {"pproc",  pproc_module_init,     pproc_module_deinit, NULL},
+    {"imglib", module_imglib_init,    module_imglib_deinit, NULL},
+  };
+  从索引1开始, 分别调用其init_mod
+
+3 打开节点"/dev/video0"并发出MSM_CAM_V4L2_IOCTL_DAEMON_DISABLED
+4 填写出参mm_camera_shim_ops_t.mm_camera_shim_open_session/
+  mm_camera_shim_close_session/mm_camera_shim_send_cmd:
+  mct_shimlayer_start_session() 
+  mct_shimlayer_stop_session()
+  mct_shimlayer_process_event()
+
+
+mct_shimlayer_process_event()
+1 如果cam_shim_packet_t.cmd_type为CAM_SHIM_SET_PARM/
+  CAM_SHIM_GET_PARM调用mct_shimlayer_handle_parm(),
+  传入cam_shim_packet_t.cmd_type,session_id,cmd_data
+2 当cam_shim_packet_t.cmd_type为CAM_SHIM_REG_BUF,
+  调用mct_shimlayer_reg_buffer()
+
+mct_shimlayer_handle_parm()
+1 准备结构mct_serv_msg_t ,成员:
+   msg_type为SERV_MSG_HAL
+   u.hal_msg.u.data为msm_v4l2_event_data*
+   u.hal_msg.id为MSM_CAMERA_GET_PARM/SET
+2 调用mct_controller_proc_serv_msg(),传入mct_serv_msg_t 
+
+mct_shimlayer_reg_buffer()
+1 准备结构mct_serv_msg_t,成员:
+   msg_type为SERV_MSG_DS
+   u.ds_msg.num_bufs 
+   u.ds_msg.ds_buf[0].buffer 
+2 调用mct_controller_proc_serv_msg(),传入mct_serv_msg_t 
+
+
+mct_controller_proc_serv_msg()
+1 在全局list mct_list_t *mcts中找到对应的mct_controller_t 
+2 复制mct_serv_msg_t,然后调用mct_queue_push_tail()放到
+  mct_controller_t.serv_cmd_q, 并给mct_controller_t.mctl_cond
+  发信号
+3 从mct_controller_t.serv_res_q获取返回消息,或是在条件变量
+  mct_controller_t.serv_res_cond上等待返回消息后返回调用
+　
+
+///////////////////////
+  sensor module
+///////////////////////
+
+module_sensor_init()
+1 调用mct_module_create()创建mct_module_t
+2 赋值mct_module_t.set_mod.start_session.set_session_data
+  等函数指针,如:
+  module_sensor_set_session_data()
+3 创建module_sensor_ctrl_t至mct_module_t.module_private
+4 调用eebin_interface_init()创建eebin_hdl_t到module_sensor_ctrl_t.
+  eebin_hdl
+5 调用eebin_interface_control(),然后在eebin_get_bin_data()中尝试
+　找到media_entity_desc.group_id为MSM_CAMERA_SUBDEV_EEPROM的设备
+　并读取信息
+６调用sensor_init_probe():
+  遍历"/dev/mediaX"最终找到media_entity_desc.
+  .group_id为MSM_CAMERA_SUBDEV_SENSOR_INIT的sub节点("/dev/v4l-subdev8")并打开
+  调用sensor_init_eebin_probe()
+  调用sensor_init_xml_probe()
+7 调用module_sensor_find_other_subdev()
+8 调用module_sensors_subinit()
+9 调用port_sensor_create()
+10 调用module_sensor_init_eeprom()
+11 调用module_sensor_init_chromatix()
+
+sensor_init_eebin_probe()
+1 通过module_sensor_ctrl_t.eebin_hdl调用eebin_interface_control()
+  发起EEPROM_BIN_GET_NUM_DEV来向eeprom获取设备数目
+2 如果获取成功,再调用eebin_interface_control()发起EEPROM_BIN_GET_DEV_DATA
+  获取设备信息后,调用sensor_probe()
+
+sensor_init_xml_probe()
+1 打开sensor配置文件,如/system/etc/camera/camera_config.xml
+2 解析文件信息,通过"CameraModuleConfig"来统计sensor数目,然后
+　遍历sensor信息并调用sensor_probe()
+
+sensor_probe()
+1 创建结构sensor_lib_params_t
+2 调用sensor_load_library():
+  根据sensor名称组合"libmmcamera_X.so"并dlopen库文件
+
+  如果打开成功,dlsym拿到符号"sensor_open_lib"地址,调用
+　函数返回sensor_lib_t到sensor_lib_params_t.sensor_lib_ptr 
+3 将拿到的sensor_lib_ptr中的一些sensor上下电信息通过ioctl
+  VIDIOC_MSM_SENSOR_INIT_CFG传给kernel,同时获取kernel填充的
+　sensor_init_cfg_data.probed_info
+4 调用sensor_create_sbundle():
+  创建并填充module_sensor_bundle_info_t,保存至
+  module_sensor_ctrl_t.sensor_bundle 
+
+
+module_sensor_find_other_subdev()
+1 遍历打开"/dev/mediaX",通过MEDIA_IOC_DEVICE_INFO
+  找到media_device_info.model为"msm_config"的节点
+2 然后通过MEDIA_IOC_ENUM_ENTITIES,找到打开media_entity_desc.
+  group_id为MSM_CAMERA_SUBDEV_ACTUATOR/MSM_CAMERA_SUBDEV_FLASH/
+  MSM_CAMERA_SUBDEV_IR_CUT等等的子节点:
+  对打开的sub节点发起VIDIOC_MSM_SENSOR_GET_SUBDEV_ID,并填充该id和
+  名称到module_sensor_match_id_params_t,并调用module_sensor_set_sub_module_id()
+
+module_sensor_set_sub_module_id()
+1 对比module_sensor_bundle_info_t.sensor_info.subdev_id[]
+  索引module_sensor_match_id_params_t.sub_module的值和
+  module_sensor_match_id_params_t.subdev_id相同, 则把match id的
+　subdev_name成员copy给module_sensor_bundle_info_t.sensor_sd_name[]
+
+  同时调用module_sensor_fill_sub_module_info(),主要填充值到
+  module_sensor_bundle_info_t.subdev_info[].intf_inf[]
+2 对比module_sensor_bundle_info_t.sensor_info.subdev_intf[]和
+  match id的subdev_id成员,如果相同最后入参赋SUBDEV_INTF_SECONDARY
+  调用函数module_sensor_fill_sub_module_info()
+　
+
+module_sensors_subinit()
+1 按最大SUB_MODULE_MAX遍历然后创建module_sensor_bundle_info_t.
+  module_sensor_params[]结构,如果对应module_sensor_bundle_info_t.
+  sensor_info.subdev_id[]值有效, 则调用sub_module_init[]对应函数,
+  入参为module_sensor_bundle_info_t.module_sensor_params[].func_tbl
+
+  然后赋值module_sensor_bundle_info_t.subdev_info[].sub_mod_open_flag
+2 调用module_sensor_update_settings_size()
+
+sub_module_init[]()
+1 该结构为一个函数指针数组
+  static int32_t (*sub_module_init[SUB_MODULE_MAX])(sensor_func_tbl_t *) = {
+    [SUB_MODULE_SENSOR]       = sensor_sub_module_init,
+    [SUB_MODULE_CHROMATIX]    = chromatix_sub_module_init,
+    [SUB_MODULE_ACTUATOR]     = actuator_sub_module_init,
+    [SUB_MODULE_EEPROM]       = eeprom_sub_module_init,
+    [SUB_MODULE_LED_FLASH]    = led_flash_sub_module_init,
+    [SUB_MODULE_CSIPHY]       = csiphy_sub_module_init,
+    [SUB_MODULE_CSIPHY_3D]    = csiphy_sub_module_init,
+    [SUB_MODULE_CSID]         = csid_sub_module_init,
+    [SUB_MODULE_CSID_3D]      = csid_sub_module_init,
+    [SUB_MODULE_OIS]          = ois_sub_module_init,
+    [SUB_MODULE_EXT]          = external_sub_module_init,
+    [SUB_MODULE_IR_LED]       = ir_led_sub_module_init,
+    [SUB_MODULE_IR_CUT]       = ir_cut_sub_module_init
+  };
+
+2 当调用对应sub dev的函数时,将对应模块的初始化函数填充到入参sensor_func_tbl_t,
+  如:
+  sensor_func_tbl_t.open    = sensor_open
+  sensor_func_tbl_t.process = sensor_process
+  sensor_func_tbl_t.close   = sensor_close
+
+
+port_sensor_create()
+1 拿到module_sensor_bundle_info_t.module_sensor_params[]
+  中索引为SUB_MODULE_SENSOR和SUB_MODULE_CSID
+2 分别调用csid对应module_sensor_params_t.func_tbl中的
+　open/process/close,其中process传入CSID_GET_VERSION
+3 调用sensor对应的module_sensor_params_t.func_tbl中的
+  process,传入SENSOR_GET_SENSOR_PORT_INFO,调用后获取
+  sensor_stream_info_array_t  
+4 然后遍历sensor_stream_info_array_t结构:
+    将索引值和sensor name组合起来调用mct_port_create()
+    分配并填充结构sensor_src_port_cap_t
+    赋值mct_port_t.check_caps_reserve/ext_link等函数指针,如:
+    port_sensor_caps_reserve()
+    把结构sensor_src_port_cap_t地址保存到mct_port_t.caps.u.data
+    调用mct_module_add_port()添加到mct_module_t.srcports
+
+
+///////////////////////
+  iface module
+///////////////////////
+module_iface_init()
+1 调用mct_module_create()创建mct_module_t *
+2 创建iface_t结构,调用iface_init()
+3 调用port_iface_create_ports()
+4 设置mct_module_t.start_session/set_mod等函数指针,如:
+  module_iface_start_session()
+5 保存mct_module_t *至iface_t.module; iface_t*至mct_module_t.module_private
+  
+iface_init()
+1 调用iface_discover_subdev_nodes():
+2 调用iface_init_buf_mgr()
+
+iface_discover_subdev_nodes()
+1 遍历并打开节点"/dev/mediaX", 发起MEDIA_IOC_DEVICE_INFO
+  找到media_device_info.model为"msm_config"节点
+2 然后发起MEDIA_IOC_ENUM_ENTITIES,找到media_entity_desc.group_id 
+  为MSM_CAMERA_SUBDEV_ISPIF后,将media_entity_desc.name拷贝到
+  iface_t.ispif_data.subdev_name
+
+  当media_entity_desc.group_id为MSM_CAMERA_SUBDEV_VFE, 将media_entity_desc.name
+  拷贝到iface_t.isp_axi_data.isp_subdev[].subdev_name
+
+port_iface_create_ports()
+1 调用port_iface_add_ports()两次,分别创建sink/src的port
+
+port_iface_add_ports()
+根据传入的需要创建port数目,依次:
+1 分配iface_port_t结构 
+2 调用mct_port_create()创建mct_port_t,名称为"iface_sinkX"/"iface_srcX"
+  mct_port_t*保存到iface_port_t.port
+3 调用mct_module_add_port()添加mct_port_t,赋值mct_port_t.caps
+4 调用iface_overwrite_port_funcs()赋值mct_port_t.event_func/
+  check_caps_reserve等函数指针,如:
+  port_iface_event_func()
+
+  同时将iface_port_t*保存到mct_port_t.port_private 
+5 在iface_port_t.iface中保存iface_t *地址
+
+ 
+///////////////////////
+ isp module
+///////////////////////
+
+module_isp_init()
+1 调用mct_module_create()创建mct_module_t 
+2 创建isp_t并调用isp_resource_init(), 传入isp_t.isp_resource,
+  然后保存isp_t*到mct_module_t.object.priv
+3 调用isp_port_create()
+4 调用isp_module_overwrite_funcs(),赋值mct_module_t.set_mod/
+  start_session等函数指针,如:
+  isp_module_start_session()
+
+isp_port_create()
+1 调用isp_port_create_port()创建多个
+　MCT_PORT_SINK MCT_PORT_CAPS_FRAME
+
+isp_port_create_port()
+1 创建isp_port_data_t, 赋值isp_port_data_t.hw_stream 
+  为isp_hw_streamid_t; isp_port_data_t.hw_id为isp_hw_id_t 
+2 调用mct_port_create()创建mct_port_t
+3 调用mct_module_add_port()将mct_port_t*添加到mct_module_t.srcports/
+  sinkports  
+4 赋值mct_port_t.caps.port_caps_type为mct_port_caps_type_t, 调用
+  isp_port_overwrite_funcs()赋值mct_port_t.event_func/check_caps_reserve 
+  等函数指针,如:
+  isp_port_check_caps_reserve()
+
+  然后把isp_port_data_t *保存于mct_port_t.object.priv
+
+
+isp_resource_init()
+1 调用isp_resource_gen_hws_caps()
+
+
+isp_resource_gen_hws_caps()
+1 调用isp_resource_discover_subdev_nodes()获取VFE节点名称和数目
+2 遍历VFE依次调用:
+  2.1 isp_resource_get_isp_id():
+      打开isp_resource_subdev_names_t.subdev_name对应的节点,
+      发起VIDIOC_MSM_VFE_REG_CFG/GET_ISP_ID
+  2.2 根据获取的isp_id索引isp_resource_t.isp_resource_info[]
+      调用isp_resource_get_isp_hw_limit():
+      打开节点发起VIDIOC_MSM_VFE_REG_CFG/GET_VFE_HW_LIMIT
+
+      根据拿到的hw_limit填写isp_resource_t.isp_hw_limt结构
+  2.3 isp_resource_query_caps():
+      打开subdev发起VIDIOC_MSM_VFE_REG_CFG/VFE_READ获取
+　　　版本(0x80000003), 然后调用isp_pipeline48_open()返回
+      isp_pipeline_t*至isp_resource_t.isp_resource_info[].isp_pipeline 
+
+      发起VIDIOC_MSM_VFE_REG_CFG/GET_CLK_RATES获取normal和turbo
+      的时钟到isp_pipeline_t.max_turbo_pix_clk/max_nominal_pix_clk 
+      (576000000/480000000)
+　　　
+  2.4 isp_resource_init_sub_mods()
+
+
+isp_pipeline48_open()
+1 当版本为ISP_SDM660时, 将isp_pipeline_t isp_pipeline_v3
+  拷贝到出参,这里面包括:
+
+  isp_pipeline_t.common_hw_params
+    static isp_hw_params_t common_hw_params_v3 = {
+    .hw_info_table = common_hw_v3,
+    .num_hw = ARRAY_SIZE(common_hw_v3),
+    };
+
+    static isp_hw_info_t common_hw_v3[] = {
+      {{"black_level48"}, ISP_MOD_BLS, MSM_ISP_STATS_MAX},
+      {{"linearization40"}, ISP_MOD_LINEARIZATION, MSM_ISP_STATS_MAX},
+      {{"pdaf48"}, ISP_MOD_PDAF, MSM_ISP_STATS_MAX},
+      {{"demux48"}, ISP_MOD_DEMUX, MSM_ISP_STATS_MAX},
+      {{"hdr48"}, ISP_MOD_HDR, MSM_ISP_STATS_MAX},
+      {{"bpc48"}, ISP_MOD_BPC, MSM_ISP_STATS_MAX},
+      {{"abf48"}, ISP_MOD_ABF, MSM_ISP_STATS_MAX},
+      {{"mesh_rolloff44"}, ISP_MOD_ROLLOFF, MSM_ISP_STATS_MAX},
+      {{"gic48"}, ISP_MOD_GIC, MSM_ISP_STATS_MAX},
+      {{"demosaic48"}, ISP_MOD_DEMOSAIC, MSM_ISP_STATS_MAX},
+      {{"bf_stats47"}, ISP_MOD_BF_STATS, MSM_ISP_STATS_BF},
+      {{"bg_stats46"}, ISP_MOD_BG_STATS, MSM_ISP_STATS_BG},
+      {{"aec_bg_stats47"}, ISP_MOD_AEC_BG_STATS, MSM_ISP_STATS_HDR_BE}, /* HDR_BE is for AEC */
+      {{"hdr_be_stats46"}, ISP_MOD_HDR_BE_STATS, MSM_ISP_STATS_AEC_BG}, /* AEC BG tapped before rolloff for tintless */
+      {{"hdr_bhist_stats44"}, ISP_MOD_HDR_BHIST_STATS, MSM_ISP_STATS_HDR_BHIST},
+      {{"rs_stats46"}, ISP_MOD_RS_STATS, MSM_ISP_STATS_RS},
+      {{"cs_stats46"}, ISP_MOD_CS_STATS, MSM_ISP_STATS_CS},
+      {{"ihist_stats46"}, ISP_MOD_IHIST_STATS, MSM_ISP_STATS_IHIST},
+      {{"bhist_stats44"}, ISP_MOD_SKIN_BHIST_STATS, MSM_ISP_STATS_BHIST},
+      {{"color_correct46"}, ISP_MOD_COLOR_CORRECT, MSM_ISP_STATS_MAX},
+      {{"gtm46"}, ISP_MOD_GTM, MSM_ISP_STATS_MAX},
+      {{"gamma44"}, ISP_MOD_GAMMA, MSM_ISP_STATS_MAX},
+      {{"ltm47"}, ISP_MOD_LTM, MSM_ISP_STATS_MAX},
+      {{"chroma_enhan40"}, ISP_MOD_CHROMA_ENHANCE, MSM_ISP_STATS_MAX},
+      {{"chroma_suppress40"}, ISP_MOD_CHROMA_SUPPRESS, MSM_ISP_STATS_MAX},
+      {{"mce40"}, ISP_MOD_MCE, MSM_ISP_STATS_MAX},
+      {{"sce40"}, ISP_MOD_SCE, MSM_ISP_STATS_MAX},
+    };
+
+    
+  isp_pipeline_t.stream_hw_params[ISP_HW_STREAM_VIEWFINDER]
+
+    static isp_hw_params_t stream_hw_params[] = {
+    {
+       .hw_info_table = viewfinder_stream_hw,
+       .num_hw = ARRAY_SIZE(viewfinder_stream_hw),
+    },
+
+    static isp_hw_info_t viewfinder_stream_hw[] = {
+      {{"color_xform_viewfinder46"}, ISP_MOD_COLOR_XFORM_VIEWFINDER, MSM_ISP_STATS_MAX},
+      {{"scaler_viewfinder46"}, ISP_MOD_SCALER_VIEWFINDER, MSM_ISP_STATS_MAX},
+      {{"fovcrop_viewfinder46"}, ISP_MOD_FOV_VIEWFINDER, MSM_ISP_STATS_MAX},
+      {{"clamp_viewfinder40"}, ISP_MOD_CLAMP_VIEWFINDER, MSM_ISP_STATS_MAX},
+    };   
+   
+  isp_pipeline_t.stream_hw_params[ISP_HW_STREAM_ENCODER]
+
+    static isp_hw_params_t stream_hw_params[] = {
+    {
+      .hw_info_table = encoder_stream_hw,
+      .num_hw = ARRAY_SIZE(encoder_stream_hw),
+    },
+
+    static isp_hw_info_t encoder_stream_hw[] = {
+      {{"color_xform_encoder46"}, ISP_MOD_COLOR_XFORM_ENCODER, MSM_ISP_STATS_MAX},
+      {{"scaler_encoder46"}, ISP_MOD_SCALER_ENCODER, MSM_ISP_STATS_MAX},
+      {{"fovcrop_encoder46"}, ISP_MOD_FOV_ENCODER, MSM_ISP_STATS_MAX},
+      {{"clamp_encoder40"}, ISP_MOD_CLAMP_ENCODER, MSM_ISP_STATS_MAX},
+    };
+
+
+  isp_pipeline_t.stream_hw_params[ISP_HW_STREAM_VIDEO]
+
+    static isp_hw_params_t stream_hw_params[] = {
+    {
+      .hw_info_table = video_stream_hw,
+      .num_hw = ARRAY_SIZE(video_stream_hw),
+    },
+
+    static isp_hw_info_t video_stream_hw[] = {
+      {{"color_xform_video46"}, ISP_MOD_COLOR_XFORM_VIDEO, MSM_ISP_STATS_MAX},
+      {{"scaler_video46"}, ISP_MOD_SCALER_VIDEO, MSM_ISP_STATS_MAX},
+      {{"fovcrop_video46"}, ISP_MOD_FOV_VIDEO, MSM_ISP_STATS_MAX},
+      {{"clamp_video40"}, ISP_MOD_CLAMP_VIDEO, MSM_ISP_STATS_MAX},
+    };
+
+  isp_pipeline_t.func_table 
+
+    static isp_pipeline_stats_func_table_t func_table = {
+      .pipeline_fill_stats_info = isp_pipeline48_parser_fill_stats_info,
+      .pipeline_stats_parse[MSM_ISP_STATS_BF] = isp_pipeline48_parser_bf_stats,
+      .pipeline_stats_parse[MSM_ISP_STATS_BG] = isp_pipeline48_parser_bg_stats,
+      .pipeline_stats_parse[MSM_ISP_STATS_AEC_BG] = isp_pipeline48_parser_aec_bg_stats,
+      .pipeline_stats_parse[MSM_ISP_STATS_RS] = isp_pipeline48_parser_rs_stats,
+      .pipeline_stats_parse[MSM_ISP_STATS_CS] = isp_pipeline48_parser_cs_stats,
+      .pipeline_stats_parse[MSM_ISP_STATS_IHIST] =
+        isp_pipeline48_parser_ihist_stats,
+      .pipeline_stats_parse[MSM_ISP_STATS_BHIST] =
+        isp_pipeline48_parser_bhist_stats,
+      .pipeline_stats_parse[MSM_ISP_STATS_HDR_BE] = isp_pipeline48_parser_hdr_be_stats,
+      .pipeline_stats_parse[MSM_ISP_STATS_HDR_BHIST] =
+        isp_pipeline48_parser_hdr_bhist_stats,
+      .pipeline_calculate_roi_map = isp_pipeline48_calculate_roi_map,
+      .pipeline_update_module_cfg = isp_pipeline48_update_module_cfg,
+      .adrc_hw_module_id_mask = adrc_hw_module_mask,
+      .pipeline_map_stats_mask_to_hw = isp_pipeline48_map_stats_mask_to_hw,
+      .pipeline_update_stats_mask_for_mono_sensor =
+        isp_pipeline48_pipeline_update_stats_mask_for_mono_sensor,
+    };
+ 
+
+2 然后设置出参isp_pipeline_t.num_hw_streams/max_width/max_height/
+  hw_stream_info[].max_width/max_height等成员
+
+
+isp_resource_init_sub_mods()
+1 拿出isp_pipeline_t.common_hw_params, 创建isp_resource_info_t.common_hw_info
+  然后调用isp_resource_init_sub_mod_table()
+2 依次拿出isp_pipeline_t.stream_hw_params[],创建对应的isp_resource_info_t.stream_hw_info[]
+  然后调用isp_resource_init_sub_mod_table()
+      
+
+isp_resource_init_sub_mod_table()
+1 遍历isp_hw_params_t.hw_info_table[]:
+  1.1 组合名称"libmmcamera_isp_X.so" X: isp_hw_info_t.hw_name
+      并dlopen保存handle到isp_submod_info_t.lib_handle 
+
+  1.2 在lib_handle中dlsym符号”module_open“, 找到后调用该函数
+　　　返回值存于isp_submod_info_t.isp_submode_init_table
+
+  1.3 调用isp_submode_init_table.module_init函数返回mct_module_t *
+      到isp_submod_info_t.isp_submod 
+
+
+isp_resource_discover_subdev_nodes()
+1 遍历并打开"/dev/mediaX"节点
+2 发起MEDIA_IOC_DEVICE_INFO后,确认media_device_info.model
+  为“msm_config”后:
+  循环发起MEDIA_IOC_ENUM_ENTITIES获取media_entity_desc,
+  当media_entity_desc.group_id为MSM_CAMERA_SUBDEV_VFE时
+　存放media_entity_desc.name到出参isp_resource_subdev_names_t.
+  subdev_name中("/dev/v4l-subdev10")
+  
+
+module_sce40_init()
+1 调用isp_sub_module_init()返回mct_module_t*, 传入参数
+  isp_sub_module_private_func_t *为:
+  static isp_sub_module_private_func_t sce40_private_func = {
+    .isp_sub_module_init_data              = module_sce40_init_data,
+    .isp_sub_module_destroy                = module_sce40_destroy,
+  
+    .control_event_handler = {
+      [ISP_CONTROL_EVENT_STREAMON]         = isp_sub_module_port_streamon,
+      [ISP_CONTROL_EVENT_STREAMOFF]        = module_sce40_streamoff,
+      [ISP_CONTROL_EVENT_SET_PARM]         = isp_sub_module_port_set_param,
+    },
+  
+    .module_event_handler = {
+      [ISP_MODULE_EVENT_SET_CHROMATIX_PTR] =
+        module_sce40_set_chromatix_ptr,
+      [ISP_MODULE_EVENT_STATS_AEC_UPDATE]  =
+        module_sce40_stats_aec_update,
+      [ISP_MODULE_EVENT_STATS_AWB_UPDATE]  =
+        module_sce40_stats_awb_update,
+      [ISP_MODULE_EVENT_MANUAL_AWB_UPDATE] =
+        module_sce40_stats_awb_update,
+      [ISP_MODULE_EVENT_STATS_ASD_UPDATE] =
+        module_sce40_stats_asd_update,
+      [ISP_MODULE_EVENT_ISP_PRIVATE_EVENT] =
+        isp_sub_module_port_isp_private_event,
+      [ISP_MODULE_EVENT_ISP_DISABLE_MODULE] =
+        isp_sub_module_port_disable_module,
+    },
+  
+    .isp_private_event_handler = {
+      [ISP_PRIVATE_SET_MOD_ENABLE] = isp_sub_module_port_enable,
+      [ISP_PRIVATE_SET_TRIGGER_ENABLE] = isp_sub_module_port_trigger_enable,
+      [ISP_PRIVATE_SET_TRIGGER_UPDATE] = module_sce40_trigger_update,
+    },
+  
+    .set_param_handler = {
+      [ISP_SET_PARM_SET_VFE_COMMAND] = isp_sub_module_port_set_vfe_command,
+      [ISP_SET_META_TONEMAP_MODE]    = isp_sub_module_set_manual_controls,
+      [ISP_SET_PARM_SCE_FACTOR]      = module_sce40_set_sce_factor,
+      [ISP_SET_PARM_UPDATE_DEBUG_LEVEL]   = isp_sub_module_port_set_log_level,
+    },
+  };
+
+
+isp_sub_module_init()
+1 调用mct_module_create()创建mct_module_t
+2 调用isp_sub_module_port_create()创建mct_port_t
+3 调用isp_sub_module_overwrite_funcs()赋值mct_module_t.set_mod
+  /query_mod函数指针,如:
+  isp_sub_module_set_mod()
+4 创建设置结构isp_sub_module_priv_t,保存至mct_module_t.object.priv,
+  其中isp_sub_module_priv_t.private_func即为isp_sub_module_private_func_t 
+
+
+isp_sub_module_port_create()
+1 根据入参调用isp_sub_module_port_create_port()创建
+  多个MCT_PORT_SRC/MCT_PORT_SINK port
+
+isp_sub_module_port_create_port()
+1 调用mct_port_create()创建mct_port_t
+2 调用mct_module_add_port()将mct_port_t*添加到mct_module_t.srcports/
+  sinkports  
+3 调用isp_sub_module_port_overwrite_funcs()设置mct_port_t.event_func/
+  ext_link等函数指针,如: 
+  isp_sub_module_port_event()
+
+  并创建isp_sub_module_port_data_t保存到mct_port_t.object.priv
+
+
+///////////////////////
+  pproc module
+///////////////////////
+pproc_module_init()
+1 调用mct_module_create()创建mct_module_t
+2 创建pproc_module_private_t以及其成员sub_mods数组
+3 遍历静态数组:
+  static mct_module_init_name_t pproc_modules_list[] = {
+  {"cpp", cpp_module_init, cpp_module_deinit, NULL},
+  {"vpe", vpe_module_init, vpe_module_deinit, NULL},
+  {"c2d", c2d_module_init, c2d_module_deinit, NULL},
+  {"ppeiscore", module_ppeiscore_init, module_ppeiscore_deinit, NULL},
+  {"vpu", vpu_module_init, vpu_module_deinit, NULL},
+  {"tmod", base_module_init, base_module_deinit, NULL},
+  {"tmod2", base_module_init, base_module_deinit, NULL},
+  {"paaf", module_paaf_init, module_paaf_deinit, NULL},
+  {"ezt", eztune_module_init, eztune_module_deinit, NULL},
+  {"llvd", module_llvd_init, module_llvd_deinit, NULL},
+  {"sw_tnr", module_sw_tnr_init, module_sw_tnr_deinit, NULL},
+  {"sample", module_sample_init, module_imgbase_deinit, NULL},
+  {"cac", module_cac_init, module_cac_deinit, NULL},
+  {"wnr", module_wnr_init, module_wnr_deinit, NULL},
+  {"quadracfa", module_quadracfa_init, module_imgbase_deinit, NULL},
+  {"bayer_proc_svhdr", module_svhdr_init, module_svhdr_deinit, NULL},
+  {"sat", module_qdc_common_init, module_qdc_common_deinit, NULL},
+  {"bayer_proc_bincorr", module_bincorr_init, module_bincorr_deinit, NULL},
+  {"sac", module_qdc_common_init, module_qdc_common_deinit, NULL},
+  {"rtbdm", module_qdc_common_init, module_qdc_common_deinit, NULL},
+  {"rtb", module_qdc_common_init, module_qdc_common_deinit, NULL},
+  };
+
+  分别调用其init_mod实现,返回至pproc_module_private_t.sub_mods[]
+  然后将pproc_module_private_t*保存到mct_module_t.object.priv
+4 调用pproc_module_create_default_ports()
+5 设置mct_module_t.set_mod/start_session/process_event等函数指针,如:
+  pproc_module_process_event() 
+
+pproc_module_create_default_ports()
+循环两次创建port "pproc_sink_X"和"pproc_source_X",依次调用
+1 调用pproc_port_init()
+2 调用mct_module_add_port(),添加mct_port_t到mct_module_t.srcports/sinkports
+
+pproc_port_init()
+1 调用mct_port_create()创建mct_port_t
+2 创建pproc_port_private_t结构,初始其pproc_port_private_t.
+  streams[].state为PPROC_PORT_STATE_UNRESERVED, 然后把该结构
+  指针保存到mct_port_t.object.priv
+3 填充mct_port_caps_t.port_caps_type为MCT_PORT_CAPS_FRAME
+  mct_port_caps_t.u.frame.format_flag为MCT_PORT_CAP_FORMAT_YCBCR
+  mct_port_caps_t.u.frame.size_flag为MCT_PORT_CAP_SIZE_20MB
+4 设置mct_port_t.set_caps/ext_link/int_link/event_func等函数指针,如:
+  pproc_port_int_link()
+  pproc_port_source_event()
+  pproc_port_sink_event()
+5 调用mct_port_t.set_caps实现,将mct_port_caps_t赋值给
+  mct_port_t.caps
+
+
+cpp_module_init()
+1 调用mct_module_create()创建mct_module_t
+2 调用cpp_module_create_cpp_ctrl()创建cpp_module_ctrl_t,
+  然后该结构指针保存到mct_module_t.object.priv,同时
+  cpp_module_ctrl_t.p_module也保存module的指针
+3 设置mct_module_t.set_mod/start_session等指针,如:
+  cpp_module_start_session()
+4 调用cpp_port_create()创建CPP_NUM_SOURCE_PORTS和
+  CPP_NUM_SINK_PORTS个src和sink的port
+  
+   
+cpp_module_create_cpp_ctrl()
+1 创建cpp_module_ctrl_t结构
+2 初始化cpp_module_ctrl_t.realtime_queue/partial_frame_queue/
+  offline_queue等, 以及创建pipe到cpp_module_ctrl_t.pfd
+3 调用cpp_hardware_create()至cpp_module_ctrl_t.cpphw
+4 调用cpp_hardware_open_subdev() 
+5 调用cpp_hardware_process_command()发送CPP_HW_CMD_LOAD_FIRMWARE
+6 调用cpp_module_set_clock_dcvs_params()赋值cpp_module_ctrl_t中的
+　clock_dcvs/turbo_caps等
+7 调用cpp_hardware_close_subdev(),关闭cpp_hardware_t.subdev_fd
+
+cpp_hardware_create()
+1 创建cpp_hardware_t结构
+2 调用cpp_hardware_find_subdev():
+  遍历打开"/dev/mediaX",找到media_device_info.model为"msm_config"
+  后, 再通过MEDIA_IOC_ENUM_ENTITIES找到media_entity_desc.group_id 
+  为MSM_CAMERA_SUBDEV_CPP,找到后将media_entity_desc.revision存至
+  cpp_hardware_t.subdev_ids[]
+3 初始化cpp_hardware_t.subdev_opened/status等状态, 同时初始化
+  stream_status[]数组
+  
+cpp_hardware_open_subdev()
+1 拿到cpp_hardware_t.subdev_ids[0]并打开"/dev/v4l-subdevX",
+  fd保存到cpp_hardware_t.subdev_fd 
+2 发出VIDIOC_MSM_CPP_GET_INST_INFO,拿到inst id至cpp_hardware_t.inst_id 
+
+cpp_hardware_process_command()
+1 如果处理CPP_HW_CMD_LOAD_FIRMWARE调用cpp_hardware_load_firmware():
+  对cpp_hardware_t.subdev_fd发出VIDIOC_MSM_CPP_GET_HW_INFO,拿到hw info
+  并更新cpp_hardware_t.hwinfo.version/hwinfo.caps/hwinfo.freq_tbl_count
+ 
+  调用cpp_hardware_select_fw_version()根据hwinfo.versionn拿到firmware文件名
+
+  发出VIDIOC_MSM_CPP_LOAD_FIRMWARE,成功更新cpp_hardware_t.status为
+  CPP_HW_STATUS_FW_LOADED
+  
+
+cpp_port_create()
+1 调用mct_port_create()创建mct_port_t 
+2 赋值mct_port_t.check_caps_reserve/event_func等函数指针,如:
+  cpp_port_ext_link_func() 
+3 创建cpp_port_data_t结构,初始cpp_port_data_t.stream_data[]
+  数组状态, 然后保存cpp_port_data_t*到mct_port_t.object.priv
+
+pproc_port_create_stream_topology()
+
+
+///////////////////////
+  imglib module
+///////////////////////
+module_imglib_init()
+1 调用mct_module_create()创建mct_module_t 
+2 创建module_imglib_t结构,保存至mct_module_t.module_private 
+3 赋值mct_module_t.start_session/process_event/request_new_port 
+  等函数指针,如:
+  module_imglib_request_new_port()
+4 调用module_imglib_create_port()创建MODULE_IMGLIB_STATIC_PORTS
+  个sink port
+5 调用module_imglib_create_topology()
+
+
+module_imglib_create_port()
+1 调用mct_port_create()创建mct_port_t
+2 创建imglib_port_data_t结构,保存至mct_port_t.port_private
+3 设置mct_port_t.caps.port_caps_type为MCT_PORT_CAPS_FRAME
+  mct_port_t.caps.u.frame.format_flag为MCT_PORT_CAP_FORMAT_YCBCR
+4 赋值mct_port_t.check_caps_reserve/ext_link等函数指针，如:
+  module_imglib_port_check_caps_reserve()  
+5 根据入参创建多个mirror的mct_port_t:
+  5.1 调用mct_port_create(),创建mct_port_t
+  5.2 创建imglib_mirror_port_data_t结构,保存到mct_port_t.port_private
+  5.3 复制主mct_port_t.caps到mirrot的caps中
+  5.4 赋值mct_port_t.ext_link/event_func等函数指针,如:
+      module_imglib_port_mirror_event_func()
+  5.5 添加对应mct_module_t*到mct_port_t.object.parent
+      将mirrot的port保存到imglib_port_data_t.mirror_port[]
+6 更新imglib_port_data_t.num_mirror_ports,调用
+  mct_module_add_port()添加port到mct_module_t.sinkports/srcports
+
+
+module_imglib_create_topology()
+1 遍历数组:
+    MOD_IMGLIB_TOPOLOGY_REGISTER(mod_imglib_topology);
+
+    #define MOD_IMGLIB_TOPOLOGY_REGISTER(t) \
+    static module_imglib_topology_t (t)[] = { \
+    { .stream_type = CAM_STREAM_TYPE_CALLBACK, \
+      .port_events_mask = MODULE_IMGLIB_PORT_PARSE_SUPER_PARAMS, \
+      .modules[0] = {MOD_IMGLIB_FACEPROC}, \
+      .session_params = {CAM_INTF_PARM_FD, CAM_INTF_PARM_MAX}, \
+    }, \
+    { .stream_type = CAM_STREAM_TYPE_PREVIEW, \
+      .port_events_mask = MODULE_IMGLIB_PORT_PARSE_SUPER_PARAMS, \
+      .modules[0] = {MOD_IMGLIB_FACEPROC}, \
+      .session_params = {CAM_INTF_PARM_FD, CAM_INTF_PARM_MAX}, \
+    }, \
+    { .stream_type = CAM_STREAM_TYPE_PARM, \
+      .port_events_mask = MODULE_IMGLIB_PORT_PARSE_SUPER_PARAMS, \
+      .modules[0] = {MOD_IMGLIB_FACEPROC}, \
+      .modules[1] = {MOD_IMGLIB_DCRF}, \
+      .session_params = {CAM_INTF_PARM_FD, CAM_INTF_PARM_DCRF, CAM_INTF_PARM_MAX}, \
+    }, \
+    { .stream_type = CAM_STREAM_TYPE_PARM, \
+      .port_events_mask = MODULE_IMGLIB_PORT_PARSE_SUPER_PARAMS, \
+      .modules[0] = {MOD_IMGLIB_FACEPROC}, \
+      .session_params = {CAM_INTF_PARM_FD, CAM_INTF_PARM_MAX}, \
+    }, \
+    ...
+   } \
+
+   其中
+   #define MOD_IMGLIB_FACEPROC { \
+  .name = "imglib_faceproc", \
+  .init_mod = module_faceproc_init, \
+  .deinit_mod = module_faceproc_deinit, } \
+
+  拿到module_imglib_topology_t后,再遍历其modules二维数组,
+  拿到mct_module_init_name_t, 调用init_mod实现拿到mct_module_t,
+  如果返回成功:
+  添加到module_imglib_t.imglib_modules list中
+  添加到module_imglib_t.topology[].topo_list[]
+  
+
+///////////////////////
+  stats module
+///////////////////////
+stats_module_init()
+1 调用mct_module_create()创建mct_module_t
+2 遍历静态数组:
+  static mct_module_init_name_t stats_mods_list[] = {
+  { "q3a",  q3a_module_init,  q3a_module_deinit,  NULL},
+  { "afd",  afd_module_init,  afd_module_deinit,  NULL},
+  { "asd",  asd_module_init,  asd_module_deinit,  NULL},
+  #ifndef DISABLE_IS_MODULE
+  { "is",   is_module_init,   is_module_deinit,  NULL},
+  #endif
+  #ifndef DISABLE_GYRO_MODULE
+  { "gyro", gyro_module_init, gyro_module_deinit,  NULL},
+  #endif
+  };
+
+  依次调用各个module的init_mod接口, 返回的mct_module_t添加到一个
+　mct_list_t,完成后将list保存至mct_module_t.module_private
+3 赋值mct_module_t.start_session/set_mod等函数指针,如:
+  stats_module_set_mod()
+ 
+
+no port create ?
+mct-debug stream 0x3000f module:isp -- stats, link port:isp_src14 -- stats_sink
+
+#########################################
+  START阶段
+#########################################
+
+mct_shimlayer_start_session()
+1 调用mct_controller_new()
+
+mct_controller_new()
+1 创建mct_controller_t结构,调用mct_pipeline_new()
+  返回mct_pipeline_t*至mct_controller_t.pipeline 
+2 创建线程tid:  mct_controller_t.mct_tid 
+          run:  mct_controller_thread_run()
+          arg:  mct_controller_t*
+          name: "CAM_MctServ_X"
+3 创建线程tid:  mct_controller_t.mct_bus_handle_tid 
+          run:  mct_bus_handler_thread_run()
+          arg:  mct_controller_t*
+          name: "CAM_MctBus_X"
+4 调用mct_pipeline_start_session()
+
+
+mct_pipeline_new()
+1 创建mct_pipeline_t结构,调用mct_bus_create()
+  返回mct_bus_t *至mct_pipeline_t.bus, 其中
+  mct_bus_t.post_msg_to_bus赋值:
+    mct_bus_post_msg() 
+2 赋值mct_pipeline_t.map_buf/map_parm/process_serv_msg/
+  process_bus_msg/add_stream/send_event等函数指针，如:
+  mct_pipeline_send_event() 
+
+
+mct_controller_thread_run()
+1 调用mct_queue_pop_head()从mct_controller_t.serv_cmd_q
+  拿出一个mct_serv_msg_t
+2 调用mct_controller_proc_serv_msg_internal()处理消息
+3 处理完成后向mct_controller_t.serv_res_q放一个mct_process_ret_t,
+  然后触发条件变量mct_controller_t.serv_res_cond
+
+
+mct_controller_proc_serv_msg_internal()
+1 当mct_serv_msg_t.msg_type为SERV_MSG_HAL时,
+  调用mct_controller_t.pipeline.process_serv_msg()实现,
+  传入mct_serv_msg_t.u.hal_msg
+2 当mct_serv_msg_t.msg_type为SERV_MSG_DS时,
+  调用mct_controller_t.pipeline.map_buf()实现,
+  传入mct_serv_msg_t.u.ds_msg
+  
+mct_pipeline_map_buf()
+1 更新HAL层传过来的buf至mct_pipeline_t.config_parm 
+
+mct_pipeline_process_serv_msg()
+1 当传入的v4l2_event.id为MSM_CAMERA_SET_PARM
+  调用mct_pipeline_process_set(),传入v4l2_event.u.data,
+  即msm_v4l2_event_data 
+2 当传入的v4l2_event.id为MSM_CAMERA_GET_PARM
+  调用mct_pipeline_process_get()
+
+mct_pipeline_process_set()
+1 判断msm_v4l2_event_data.command,根据情况用msm_v4l2_event_data.
+  stream_id或MCT_SESSION_STREAM_ID来从mct_pipeline_t.object.children
+  拿到对应的mct_stream_t 
+2 再次判断msm_v4l2_event_data.command,调用mct_stream_t中的对应接口,如:
+  2.1 当command为CAM_PRIV_PARM时
+
+      调用mct_pipeline_send_ctrl_events()
+      1 遍历mct_pipeline_t.config_parm,即parm_buffer_t的is_valid[]
+      2 根据入参'send_immediately'为false,则分配mct_event_super_control_parm_t
+      3 遍历第一步中的'valid'的index
+
+        准备
+        mct_event_control_parm_t.type为判断is_valid[]的index,详见HAL中metadata_data_t
+                                .parm_data为根据index拿到parm_buffer_t中的数据地址
+      4 当'send_immediately'为真,或上一步的type为CAM_INTF_META_STREAM_INFO等,则
+
+        准备mct_event_control_t.type为MCT_EVENT_CONTROL_SET_PARM
+                               .control_event_data为mct_event_control_parm_t地址
+        使用mct_pipeline_pack_event()准备
+        mct_event_t.type为MCT_EVENT_CONTROL_CMD
+                   .identity为mct_stream_t.streaminfo.identity
+                   .direction为MCT_EVENT_DOWNSTREAM
+                   .u.ctrl_event为第一步填充的control结构
+
+         
+        然后调用mct_pipeline_t.send_event()实现,传入mct_event_t
+
+      5 如果不立即发送, 则把当前对应的参数对应拷贝到mct_event_super_control_parm_t.parm_events[]
+        最后把super event添加到mct_pipeline_t.super_param_queue
+
+  2.2 当command为CAM_PRIV_STREAM_PARM时
+
+    准备
+    mct_event_control_t.type为MCT_EVENT_CONTROL_PARM_STREAM_BUF
+                       .control_event_data为mct_stream_t.streaminfo.parm_buf
+    使用mct_pipeline_pack_event()准备
+    mct_event_t.type为MCT_EVENT_CONTROL_CMD
+               .identity为pack_identity()
+               .direction为MCT_EVENT_DOWNSTREAM
+               .u.ctrl_event为第一步填充的control结构
+
+    然后调用mct_pipeline_t.send_event()实现,传入mct_event_t
+
+  2.3 当command为CAM_PRIV_PREPARE_SNAPSHOT时
+
+    准备
+    mct_event_control_t.type为MCT_EVENT_CONTROL_PREPARE_SNAPSHOT
+                       .control_event_data为msm_v4l2_event_data.arg_value
+    使用mct_pipeline_pack_event()准备
+    mct_event_t.type为MCT_EVENT_CONTROL_CMD
+               .identity为pack_identity()
+               .direction为MCT_EVENT_DOWNSTREAM
+               .u.ctrl_event为第一步填充的control结构
+
+    然后调用mct_pipeline_t.send_event()实现,传入mct_event_t
+    如果不用即时发送,则把mct_event_t先放到mct_pipeline_t.param_queue
+
+mct_pipeline_send_event()
+1 调用对应stream的mct_stream_t.send_event()实现:
+  mct_stream_send_event()
+
+mct_stream_send_event()
+1 当mct_stream_t.streaminfo.stream_type为CAM_STREAM_TYPE_METADATA
+  时,调用mct_stream_metadata_ctrl_event()
+2 其他情况下:
+  2.1 先从mct_stream_t.object.children中拿出第一个mct_module_t
+  2.2 调用mct_module_find_type()来从第一个mct_module_t.type_list
+      匹配mct_event_t.identity,如果成功则调用mct_module_t.process_event()
+  2.3 如果上一步失败, 则遍历mct_module_t.sinkports, 遍历每一个mct_port_t.
+      object.children匹配mct_event_t.identity,如果成功就调用对应port的
+      event_func实现
+
+
+mct_bus_handler_thread_run()
+1 从mct_controller_t.pipeline.bus.priority_queue中依次拿出
+　mct_bus_msg_t,否则在mct_controller_t.mctl_bus_handle_cond
+  上等待
+2 调用mct_controller_proc_bus_msg_internal()处理mct_bus_msg_t
+
+
+mct_controller_proc_bus_msg_internal()
+根据mct_bus_msg_t.type做不同处理,如:
+1 MCT_BUS_MSG_ISP_SOF, 调用mct_controller_handle_SOF_proc()
+
+mct_controller_handle_SOF_proc()
+1 mct_controller_send_superparam()
+
+mct_controller_send_superparam()
+1 mct_stream_send_super_event()
+
+mct_stream_send_super_event()
+mct_event_control_t.type  MCT_EVENT_CONTROL_SET_SUPER_PARM
+mct_event_t.type  MCT_EVENT_CONTROL_CMD
+
+mct_pipeline_start_session()
+1 遍历mct_pipeline_t.modules并调用mct_pipeline_get_module_num():
+    更新mct_pipeline_t.thread_data.modules_num
+2 遍历mct_pipeline_t.modules并调用mct_pipeline_modules_start():
+    创建"CAM_startX"线程在mct_pipeline_start_session_thread()中
+　　调用mct_module_t.start_session实现,如:
+    module_sensor_start_session()
+3 调用mct_pipeline_start_stream_internal()
+
+
+mct_pipeline_start_stream_internal()
+1 调用mct_pipeline_t.add_stream实现,即mct_pipeline_add_stream(),
+  入参stream_id为MCT_SESSION_STREAM_ID
+2 创建mct_pipeline_t.session_stream.session_stream_info结构,然后
+　调用mct_pipeline_t.map_parm实现,即mct_pipeline_map_parm(),该
+　函数又调用mct_stream_t.map_parm实现,即mct_stream_map_parm(),
+  最后把该结构赋值给mct_stream_t.buffers.stream_info并初始化,其中
+  cam_stream_info_t.stream_type赋值为CAM_STREAM_TYPE_PARM
+3 调用mct_pipeline_get_stream()从mct_pipeline_t中找到mct_stream_t * 
+  然后调用mct_stream_t.link实现,即mct_stream_start_link()
+
+mct_pipeline_add_stream()
+1 调用mct_stream_new()返回mct_stream_t *
+2 调用mct_object_set_parent()将mct_pipeline_t.object设为
+  mct_stream_t.object的parent
+
+mct_stream_new()
+1 创建mct_stream_t结构并初始化
+2 赋值mct_stream_t.add_module/send_event/map_buf/link等函数指针,如:
+  mct_stream_add_module()
+  mct_stream_send_event()
+  mct_stream_start_link() 
+
+mct_stream_start_link()
+1 将mct_stream_t.buffers.stream_info取出并赋值到
+　mct_stream_t.streaminfo,其中streaminfo.identity
+  赋值为pack_identity(sessionid, stream->streamid)
+2 根据mct_stream_t.streaminfo.stream_type来选择不同
+  的module名称的二维数组,如:
+  CAM_STREAM_TYPE_PREVIEW
+  char *preview_secure_mod[][MAX_STREAM_MODULES] = {
+  {"sensor","iface","isp","pproc"},
+  { "isp", "stats"},
+  {},
+  };
+  然后调用mct_stream_link_module_array()
+
+
+mct_stream_link_module_array()
+1 按行遍历入参module名称的二维数组, 找到对应的mct_module_t
+  结构
+2 处理该行的每一个元素, 如果为第一行第一个元素
+  MCT_MODULE_FLAG_SOURCE
+  如果该行最后一个元素
+  MCT_MODULE_FLAG_SINK
+  其他情况
+  MCT_MODULE_FLAG_INDEXABLE
+  然后将该类型通过mct_module_t.set_mod()元素设置下去
+
+  module_iface_set_mod_func()
+  isp_module_set_mod()等
+  会调用mct_module_add_type()
+
+3 再次遍历该行元素,从第一个到倒数第一个,如果当前为第一行
+　调用mct_stream_link_modules()传入当前遍历元素和前一个元素,
+  如果当前行不是第一行,调用mct_stream_link_branch_modules()
+
+mct_module_add_type()
+1 分配mct_module_type_identity_t结构,赋值其
+   type和identity 
+2 将该结构添加到mct_module_t.type_list
+
+
+mct_stream_link_modules()
+1 调用mct_module_link(), 传入mct_stream_t.streaminfo和两个
+  mct_module_t
+2 如果上一步成功,调用mct_stream_add_module()两次,分别传入两个
+　mct_module_t
+
+
+mct_stream_link_branch_modules()
+1 调用mct_module_link(), 传入mct_stream_t.streaminfo和两个
+  mct_module_t
+2 如果上一步成功,调用mct_stream_add_branch_module()两次,入参
+　为两个mct_module_t,其中两次为参数填入不同顺序
+　
+
+mct_module_link()
+1 拿到mct_module_t.srcports通过mct_list_find_custom()
+  来依次遍历mct_port_t并调用mct_get_compatible_src_port(),
+  入参mct_module_custom_t,返回mct_list_t *(mct_list_t.data
+  为找到的src port; mct_module_custom_t.port为找到的dest port)
+2 拿到匹配的src和sink的mct_port_t后调用mct_port_establish_link(),
+  传入src和sink的mct_port_t以及stream的identity 
+
+
+mct_get_compatible_src_port()
+1 调用当前src port的check_caps_reserve()实现
+2 如果上一步成功, 则拿到dest module的sinkports
+  遍历并调用mct_get_compatible_dest_port()
+
+
+mct_get_compatible_dest_port()
+1 调用mct_port_check_link()做src和sink的类型和非空确认,
+  同时mct_port_t.peer如果已经非空,且不是当前配对的port
+  则返回失败
+2 调用dest port的check_caps_reserve()实现,传入src port的
+  caps
+3 如果上步成功,当dest的mct_port_t.caps.port_caps_type为:
+  MCT_PORT_CAPS_STATS
+  确认src和dest的mct_port_t.caps.u.stats.flag相与非零
+
+  MCT_PORT_CAPS_FRAME
+  确认src和dest的mct_port_t.caps.u.frame.format_flag相与非零
+  且src的caps.u.frame.size_flag要不大于dest的值
+
+  其他情况不做其他判断
+
+
+mct_port_establish_link()
+1 分别调用src和sink的mct_port_t.ext_link实现,如:
+  port_sensor_ext_link_func()
+  port_iface_ext_link_func()
+
+  一般实现,把对方mct_port_t放到mct_port_t.peer,
+  如果已经有其他peer存在则失败
+2 分别传入src和sink, 调用两次mct_port_add_child():
+  将identity放到一个mct_list_t.data中,然后添加到对应
+  mct_port_t.object.children
+
+
+mct_stream_add_module()
+1 调用mct_object_check_uniqueness()确认添加的
+  mct_module_t没有在mct_stream_t.object.children中
+2 调用mct_object_set_parent():
+  将mct_stream_t.object添加到mct_module_t.object.parent
+  将mct_module_t.object添加到mct_stream_t.object.children
+
+
+mct_stream_add_branch_module()
+1 调用mct_object_check_uniqueness()确认添加的
+  mct_module_t没有在mct_stream_t.object.children中
+2 调用mct_object_set_branch_parent():
+  将mct_stream_t.object添加到mct_module_t.object.parent
+
+  如果mct_module_t已经在mct_stream_t.object.children中,
+  则将mct_module_t.object添加到branch的mct_module_t.object.next[]
+
+
+///////////////////////
+  sensor module
+///////////////////////
+
+module_sensor_start_session()
+
+
+
+
+
+///////////////////////
+  iface module
+///////////////////////
+
+module_iface_start_session()
+1 调用iface_start_session()
+
+iface_start_session()
+1 遍历iface_t.sessions[]找到第一个为占用的index
+2 调用iface_session_sem_thread_start()创建线程
+    tid:  iface_t.sessions[].session_thread.pid
+    run:  iface_session_sem_thread_main()
+    arg:  iface_t.sessions[].session_thread
+    name: "CAM_iface_ses"
+3 初始化对应的iface_session_t结构其他成员
+
+
+port_iface_check_caps_reserve_func()
+1 当port的sink时调用iface_reserve_sink_port()
+
+
+iface_reserve_sink_port()
+1 通过session id拿到iface_t.sessions[]中对应的
+  iface_session_t 
+2 通过session id和stream id，先从iface_t.module.sinkports
+  找到mct_port_t, 然后从iface_port_t.u.sink_port.streams[]
+  中找iface_stream_t, 如果找到iface_stream_t, 则表示stream
+  已经存在于iface中并返回失败
+3 如果iface_t.module.sinkports中没有mct_port_t.port_private
+  即结构iface_port_t中session_id和传入相等, 则使用传入的
+  iface_port_t, 并更新iface_port_t.session_id以及state为
+  IFACE_PORT_STATE_RESERVED 
+4 调用iface_util_add_stream_to_sink_port() 
+
+iface_util_add_stream_to_sink_port()
+1 遍历iface_port_t.u.sink_port.streams[]中第一个
+　未用的index
+2 更新iface_stream_t.stream_id等成员
+
+
+port_iface_event_func()
+1 当收到mct_event_t.type为MCT_EVENT_CONTROL_CMD
+  调用port_iface_proc_mct_ctrl_cmd()
+2 当type为MCT_EVENT_MODULE_EVENT调用
+  port_iface_proc_module_event()
+
+port_iface_proc_mct_ctrl_cmd()
+1 根据mct_event_t.u.ctrl_event.type做不同处理,如:
+  MCT_EVENT_CONTROL_STREAMON
+
+  调用
+  iface_sink_port_stream_config()
+  iface_streamon_to_thread()
+  
+
+iface_sink_port_stream_config()
+1 确认根据入参的session id和stream id找到有效的
+　iface_stream_t
+2 调用iface_util_set_hw_stream_cfg()
+3 遍历iface_session_t.hw_streams[], 调用iface_util_send_hw_stream_output_dim_downstream_int()
+  把iface_session_t.hw_streams[]中的信息填充到对应的iface_t.module.sinkports.port_private.
+  u.sink_port.streams[], 通过mct_event_t为MCT_EVENT_MODULE_ISP_OUTPUT_DIM发送给peer port
+4 根据iface_session_t.session_resource.isp_id_mask调用iface_create_axi()传入VFE0/VFE1
+5 调用iface_util_config_axi()
+
+
+iface_util_set_hw_stream_cfg()
+1 调用iface_util_set_hw_stream_config_pix()
+2 填充mct_event_t.type为MCT_EVENT_MODULE_EVENT
+                 .u.module_event.type为MCT_EVENTS_MODULE_PDAF_ISP_INFO
+  发送给iface port的peer port(sensor port)
+
+
+iface_util_set_hw_stream_config_pix()
+1 调用iface_util_request_isp_output_resource()
+　传入iface_resource_request_t:
+    向mct_port_t.peer,即isp port发送mct_event_t.u.module_event.type
+    为MCT_EVENT_MODULE_IFACE_REQUEST_OUTPUT_RESOURCE事件,结构
+    iface_resource_request_t在isp_resource_iface_request_output_resource()
+    中被填充
+2 调用iface_util_reserve_pix_resource(), 将iface_resource_request_t
+  中一些值复制到iface_session_t.session_resource
+3 从第一步填充的iface_resource_request_t依次拿出其成员'isp_pix_output[]',
+  同时从iface_session_t.hw_streams[]找到一个未用的iface_hw_stream_t,
+  调用iface_util_fill_hw_stream_info_pix()将'isp_pix_output[]'复制给
+  iface_hw_stream_t
+
+iface_create_axi()
+1 调用iface_axi_create_hw(), 传入iface_t.isp_axi_data.isp_subdev[].subdev_name,
+  返回iface_ops_t*至iface_t.isp_axi_data.axi_data[].axi_hw_ops
+2 拿到位于iface_t.isp_axi_data.axi_data[].axi_hw_ops.ctrl的iface_axi_hw_t*,
+  然后保存iface_axi_hw_t.fd到iface_t.isp_axi_data.axi_data[].fd, 并对该fd发起
+  ioctl VIDIOC_MSM_ISP_SMMU_ATTACH
+3 填充准备iface_axi_init_params_t, 赋值iface_t.isp_axi_data.axi_data[].notify_ops.notify 
+  为iface_util_axi_notify(), 调用iface_t.isp_axi_data.axi_data[].axi_hw_ops.init即
+  iface_axi_init_to_thread()
+  
+
+iface_axi_create_hw()
+1 创建iface_axi_hw_t结构, 将iface_axi_hw_t *地址保存至
+  iface_axi_hw_t.hw_ops.ctrl
+2 赋值 iface_axi_hw_t.hw_ops.init/set_params/action等函数指针为
+  iface_axi_init_to_thread()
+  iface_axi_set_params_to_thread()
+  iface_axi_action_to_thread()
+3 调用iface_axi_open(), 传入iface_axi_hw_t*
+
+  调用open()打开dev节点至iface_axi_hw_t.fd
+
+  调用iface_thread_start()创建线程tid:  iface_axi_hw_t.thread_poll.pid
+                                  run:  iface_thread_main_loop
+                                  arg:  iface_axi_hw_t.thread_poll
+                                  name: "CAM_iface_poll"
+  其中, iface_axi_hw_t.thread_poll.poll_fds[0].fd为iface_axi_hw_t.thread_poll.pipe_fds[0]
+        iface_axi_hw_t.thread_poll.poll_fds[1].fd为iface_axi_hw_t.fd
+
+  调用iface_sem_thread_start()创建线程tid:  iface_axi_hw_t.thread_stream.pid
+                                      run:  iface_sem_thread_main
+                                      arg:  iface_axi_hw_t.thread_stream
+                                      name: "CAM_iface_hw"
+  其中, iface_sem_thread_main()将等待iface_axi_hw_t.thread_stream.thread_wait_sem被唤醒,
+  并在iface_thread_proc_cmd()中处理细节
+
+
+iface_axi_init_to_thread()
+1 设置iface_axi_hw_t.thread_stream.init_cmd为准备的iface_axi_notify_ops_init_t,
+  iface_axi_hw_t.thread_stream.cmd_id为IFACE_THREAD_CMD_NOTIFY_OPS_INIT, 然后由
+  线程"CAM_iface_hw"异步处理
+
+iface_util_config_axi()
+
+///////////////////////
+  isp module
+///////////////////////
+
+isp_module_start_session()
+1 调用isp_resource_start_session()
+2 创建isp_session_param_t并初始化,同时对isp_session_param_t.
+  hw_update_params.hw_update_list_params[]初始化
+3 调用isp_trigger_thread_create()
+4 调用isp_hw_update_thread_create()
+5 调用isp_parser_thread_create()
+6 添加isp_session_param_t到isp_t.l_session_params
+
+
+isp_resource_start_session()
+根据ISP索引isp_resource_t.isp_resource_info[]调用:
+1 拿出isp_resource_info_t.common_hw_info[]遍历每一个
+  isp_submod_info_t.isp_submod如果对应的mct_module_t.
+  start_session不为空, 则调用该函数
+２依次拿出isp_resource_info_t.stream_hw_info[],遍历每一个
+  isp_submod_info_t.isp_submod如果对应的mct_module_t.
+  start_session不为空, 则调用该函数
+
+
+isp_trigger_thread_create()
+1 拿到isp_session_param_t.trigger_update_params然后创建pipe到
+　isp_trigger_update_params_t.pipe_fd
+2 创建线程tid:  isp_trigger_update_params_t.trigger_update_thread
+          run:  isp_trigger_thread_func()
+          arg:  isp_trigger_thread_priv_t
+          name: "CAM_isp_trigger"
+          
+
+isp_hw_update_thread_create()
+1 拿到isp_session_param_t.hw_update_params然后创建pipe到
+  isp_hw_update_params_t.pipe_fd
+2 创建线程tid:  isp_hw_update_params_t.hw_update_thread
+          run:  isp_hw_update_thread_func()
+          arg:  isp_hw_update_thread_data_t 
+          name: "CAM_hw_update"
+
+
+isp_parser_thread_create()
+1 拿到isp_session_param_t.parser_params然后创建pipe到
+  isp_parser_params_t.pipe_fd
+2 初始化isp_parser_params_t.in_stats_queue, 然后创建
+　线程tid:  isp_parser_params_t.parser_thread
+      run:  isp_parser_thread_func()
+      arg:  isp_parser_thread_priv_t
+      name: "CAM_isp_parser"
+
+
+isp_port_event()
+1 如果mct_event_t.direction为MCT_EVENT_DOWNSTREAM则调用
+　isp_port_process_downstream_event()
+1 如果mct_event_t.direction为MCT_EVENT_UPSTREAM则调用
+　isp_port_process_upstream_event()
+
+
+isp_port_process_downstream_event()
+1 根据mct_event_t.type为
+  MCT_EVENT_CONTROL_CMD
+  调用
+  isp_port_process_downstream_ctrl_event()
+
+  MCT_EVENT_MODULE_EVENT 
+  调用
+  isp_port_process_downstream_module_event()
+
+isp_port_process_downstream_ctrl_event()
+1 根据mct_event_t.u.ctrl_event.type调用不同函数,如:
+
+  MCT_EVENT_CONTROL_SET_PARM
+  先调用isp_handler_event()
+  然后调用isp_handler_handle_hal_param()
+
+
+isp_handler_handle_hal_param()
+1 根据mct_event_t.u.ctrl_event.control_event_data即
+  mct_event_control_parm_t.type做不同处理,如: 
+
+  CAM_INTF_META_STREAM_INFO
+  调用isp_util_handle_stream_info()
+
+
+isp_util_handle_stream_info()
+1 更新isp_session_param_t中的成员,如:
+  stream_port_map.num_streams
+  rdi_only 
+2 调用isp_resource_allocate(), 传入
+  isp_session_param_t.num_isp地址和hw_id[]
+3 调用isp_util_decide_stream_mapping()
+4 调用isp_util_link_session_stream()
+5 调用isp_util_update_internal_pipeline()
+
+
+isp_resource_allocate()
+1 如果入参'offline'为false,调用isp_resource_reserve_isp(),
+  反之调用isp_resource_reserve_offline_isp()
+2 上一步返回成功,则打开isp_resource_t.isp_resource_info[].subdev_name
+  保存fd至isp_session_param_t.hw_update_params.hw_update_list_params[].fd
+
+isp_resource_reserve_isp()
+1 拿出isp_session_param_t.sensor_output_info信息
+  (isp_handler_sensor_output_dim()设置该字段)
+2 根据sensor_set_dim_t.dim_output/full_res/op_pixel_clk
+  来和isp_resource_t.isp_resource_info[].isp_pipeline.max_width/
+  max_height/max_nominal_pix_clk/max_turbo_pix_clk做多次比较:
+
+  来判断在不同clk下是否每个VFE都满足(dim out width / 2 + 20%); 
+  或者在不同clk下是否有一个VFE满足'dim_output'和'full_res'
+
+  满足则更新
+  isp_resource_t.isp_resource_info[].resource_alloc
+  state为ISP_RESOURCE_RESERVED
+  session_id为isp_session_param_t.session_id
+
+  同时保存对应isp_resource_t.isp_resource_info[]的index
+  至isp_session_param_t.hw_id[],以isp_session_param_t.num_isp
+  为索引并自加num_isp
+
+
+isp_util_decide_stream_mapping()
+1 调用isp_resource_get_hw_limitations():
+  遍历对应isp_resource_t.isp_resource_info[].isp_pipeline.hw_stream_info[]
+  将相关成员拷贝到isp_session_param_t.isp_hw_limit.hw_limit[]
+2 根据isp_session_param_t.hal_version不同调用
+  isp_util_map_streams_to_hw_hal1()/isp_util_map_streams_to_hw_hal3()
+
+
+isp_util_map_streams_to_hw_hal1()
+1 遍历HAL填充的cam_stream_size_info_t.type[],如果
+
+  type为CAM_STREAM_TYPE_ANALYSIS且isp_submod_hw_limit_t.num_hw_streams大于2
+  typee为CAM_STREAM_TYPE_SNAPSHOT且无CAM_STREAM_TYPE_VIDEO存在
+
+  则把临时变量isp_preferred_streams.streams[].stream_mask的相应type位置1
+2 调用isp_util_merge_non_prioirty_streams():
+  遍历isp_session_param_t.preferred_mapping.streams[]:
+
+  如果
+  cam_stream_size_info_t.type[]中存在一个不在session
+  的'preferred_mapping'也不在第一步中的'isp_preferred_streams'
+  且
+  对应cam_stream_size_info_t.postprocess_mask[]为真
+  则
+  isp_session_param_t.preferred_mapping.streams[].stream_mask相应type位置1
+3 调用isp_util_merge_stream_preferrences(),把
+  isp_session_param_t.preferred_mapping.streams[]中不同的type添加到
+  函数内变量'isp_preferred_streams.streams[]'
+4 调用isp_util_map_streams(),传入'isp_preferred_streams'
+  
+
+isp_util_map_streams()
+1 调用isp_util_sort_isp_outputs()把isp_session_param_t.isp_hw_limit.hw_limit[]
+  从大到小排序
+2 调用isp_util_sort_streams(), 将cam_stream_size_info_t中的信息
+  拷贝到临时数组'isp_util_stream_desc sorted_streams[]',然后
+
+  把type为CAM_STREAM_TYPE_RAW/CAM_STREAM_TYPE_OFFLINE_PROC放到数组后面
+
+  参考isp_session_param_t.sensor_output_info.dim_output对比sorted_streams[].norm_dim
+  保证各个type的宽高比和sensor的保持一致
+
+  最后将"sorted_streams[]"从大到小排序
+3 调用isp_util_check_hw_limitation()来检查"sorted_streams[]"中的
+  大小有无超过isp_session_param_t.isp_hw_limit.hw_limit[]
+4 开始将之前的'priority_streams'以及'sorted_streams'转换到
+  isp_session_param_t.stream_port_map.streams[]:
+
+  'priority_streams'
+  首先遍历'priority_streams', 根据priority_streams.streams[].stream_mask
+  来找到对应sorted_streams[], 然后找到一个未使用的isp_submod_hw_limit_t.hw_limit[]
+  填充
+  isp_session_param_t.stream_port_map.streams[].hw_stream 
+                                               .stream_type 
+                                               .stream_sizes 
+                                               ...
+  'sorted_streams[]'未处理成员
+   找到一个未使用的isp_submod_hw_limit_t.hw_limit[]
+   然后类似步骤填充isp_session_param_t.stream_port_map.streams[]
+  
+
+isp_util_link_session_stream()
+1 从isp_session_param_t.l_stream_params找到CAM_STREAM_TYPE_PARM
+  的isp_stream_param_t
+2 调用isp_resource_create_link()
+
+
+isp_resource_create_link()
+1 从isp_t.l_session_params和isp_session_param_t.l_stream_params中
+　拿到isp_session_param_t*和isp_stream_param_t*,然后调用
+  isp_stream_resource_allocate()
+2 遍历isp_resource_t.isp_resource_info[], 匹配isp_resource_alloc_t.session_id
+  和入参stream的session id:
+    调用mct_stream_new()创建新的mct_stream_t
+    调用isp_resource_link_modules()
+    保存新的mct_stream_t*至isp_stream_param_t.int_stream[], 以
+    isp_session_param_t.hw_id[]为索引
+
+
+isp_stream_resource_allocate()
+根据isp_session_param_t.num_isp来循环:
+1 拿出isp_session_param_t.hw_id[]中的id值并对应取出
+  isp_resource_t.isp_resource_info[id].resource_alloc
+2 当isp_stream_param_t.stream_info.stream_type为
+  CAM_STREAM_TYPE_PARM:
+
+  将所有isp_session_param_t.stream_port_map.streams[].hw_stream
+  记录到函数内数组'hw_stream_id'
+
+3 当type为其他类型时(不包括CAM_STREAM_TYPE_RAW):
+
+  遍历isp_session_param_t.stream_port_map.streams[] 
+  找到和入参isp_stream_param_t.stream_info匹配的一个
+    记录streams[].hw_stream到'hw_stream_id'
+    把streams[]中的size等信息更新到入参'mct_stream_info_t *stream_info'
+4 遍历'hw_stream_id', 把mct_stream_info_t.identity添加到
+  isp_resource_alloc_t.l_identity[]以遍历的id为索引的位置,
+  更新isp_resource_alloc_t.num_streams
+5 保存'hw_stream_id'中的值到isp_stream_param_t.hw_stream[],
+  以isp_stream_param_t.num_hw_stream为索引
+
+
+isp_resource_link_modules()
+1 遍历isp_resource_info_t.common_hw_info数组, 找到第一个
+  非空的isp_submod_info_t.isp_submod
+2 调用找到的第一个mct_module_t.set_mod()实现,传入identity
+3 调用isp_resource_reserve_port():
+  从第一个mct_module_t.sinkports中匹配和入参'port'在
+  mct_stream_t.streaminfo下可以连接的mct_port_t 
+4 调用上一步mct_port_t.ext_link(), 连接mct_module_t中的
+  port和入参port
+5 保存mct_port_t*到isp_session_param_t.isp_ports.isp_submod_ports[]
+  添加当前identity到mct_port_t.object.children
+  设置入参mct_stream_t.object.children和mct_module_t.object.parent
+6 继续遍历isp_resource_info_t.common_hw_info余下的isp_submod_info_t,
+  并调用mct_stream_link_modules()依次连接各个mct_module_t的对应port
+7 依次遍历isp_resource_info_t.stream_hw_info[]数组中的isp_submod_info_t 
+  数组, 同样调用mct_stream_link_modules()来连接port, 第一个module为上一步
+  中的最后一个
+
+
+isp_util_update_internal_pipeline()
+1 调用isp_handler_set_sensor_dim()把isp_session_param_t.
+  sensor_output_info信息通过isp_util_forward_event_to_internal_pipeline()
+  , 来调用isp_session_param_t.isp_ports.isp_submod_ports[].event_func()发送出去
+2 调用isp_util_send_hw_limit_to_internal_pipeline()把isp_session_param_t.
+  isp_hw_limit.hw_limits[]通过上步一样的方式发送出去
+
+
+isp_port_check_caps_reserve()
+1 调用isp_handler_create_stream_param()
+2 如果当前为sink port调用isp_handler_create_internal_link():
+  调用isp_resource_create_link()
+
+
+isp_handler_create_stream_param()
+1 拿到isp_t.l_session_params, 然后从isp_session_param_t.
+  l_stream_params拿到对应的isp_stream_param_t 
+2 如果isp_stream_param_t已经存在就返回,否则创建一个结构
+　并初始化后添加到isp_session_param_t.l_stream_params
+
+##############################################
+##############################################
+FAQ
+1 HAL事件怎样到达isp sub module
+
+2 preview/video时有几路pixel frame
+
+3 HAL的setPreviewSize是否影响sensor输出大小，还是影响VFE模块缩放大小
+
+4 HAL的parameter怎样影响各个模块
+
+##############################################
+##############################################
+TODO:
+1. sce40的update流程
+
+  isp_sub_module_private_func_t.module_event_handler[ISP_MODULE_EVENT_ISP_PRIVATE_EVENT]
+    isp_sub_module_port_isp_private_event()
+
+  isp_sub_module_private_func_t.isp_private_event_handler[ISP_PRIVATE_SET_TRIGGER_UPDATE]
+    module_sce40_trigger_update()
+  
+  sce40_trigger_update()
+  
+  sce40_select_table()
+
+2  preview和video区别

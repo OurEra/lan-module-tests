@@ -1,0 +1,21 @@
+总计 26
+-rwxrwxrwx 1 root root 5748 11-16 15:15 pipe_fork
+-rwxrwxrwx 1 root root  967 11-16 15:16 pipe_fork.c
+-rwxrwxrwx 1 root root 5427 11-16 15:02 pipetest
+-rwxrwxrwx 1 root root  871 11-16 15:26 pipetest2.c
+-rwxrwxrwx 1 root root  655 11-16 15:33 pipetest3.c
+-rwxrwxrwx 1 root root  716 11-16 15:36 pipetest4.c
+-rwxrwxrwx 1 root root  683 11-16 15:42 pipetest5.c
+-rwxrwxrwx 1 root root  673 11-16 15:41 pipetest5.c~
+-rwxrwxrwx 1 root root  783 11-16 15:44 pipetest6.c
+-rwxrwxrwx 1 root root 5558 11-16 15:48 pipetest7
+-rwxrwxrwx 1 root root  990 11-16 15:49 pipetest7.c
+-rwxrwxrwx 1 root root 5670 11-16 16:08 pipetest8
+-rwxrwxrwx 1 root root 1034 11-16 16:09 pipetest8.c
+-rwxrwxrwx 1 root root  725 11-16 15:05 pipetest.c
+-rwxrwxrwx 1 root root 5727 11-16 16:25 popen_read
+-rwxrwxrwx 1 root root  683 11-16 16:21 popen_read.c
+-rwxrwxrwx 1 root root  532 11-16 16:18 popen_read.c~
+-rwxrwxrwx 1 root root 5884 11-16 16:26 popen_write
+-rwxrwxrwx 1 root root  767 11-16 16:28 popen_write.c
+-rwxrwxrwx 1 root root  762 11-

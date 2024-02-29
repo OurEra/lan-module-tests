@@ -1,0 +1,162 @@
+  Display hardware API defined in hwc_composer_device_1(struct hwc_composer_device_1):
+
+       int (*prepare)(struct hwc_composer_device_1 *dev,
+                     size_t numDisplays, hwc_display_contents_1_t** displays);
+
+       int (*set)(struct hwc_composer_device_1 *dev,
+                 size_t numDisplays, hwc_display_contents_1_t** displays);
+
+       void (*registerProcs)(struct hwc_composer_device_1* dev,
+                             hwc_procs_t const* procs);
+       ....
+
+  numDisplays is the index of display device:
+
+      HWC_DISPLAY_PRIMARY     = 0,
+      HWC_DISPLAY_EXTERNAL    = 1,    // HDMI, DP, etc.
+      HWC_DISPLAY_TERTIARY    = 2,
+      HWC_DISPLAY_VIRTUAL     = 3,
+
+  hwc_display_contents_1_t(struct hwc_display_contents_1) describe all the display
+  layers info:
+
+      hwc_display_contents_1_t.numHwLayers
+      hwc_display_contents_1_t.hwLayers[0]
+      ....
+
+  every layer described by hwc_layer_1_t(struct hwc_layer_1):
+      hwc_layer_1.compositionType
+      hwc_layer_1.handle
+      ....
+
+  handle is the diplay content buffer, compositionType can have values like:
+      HWC_FRAMEBUFFER = 0,
+      HWC_OVERLAY = 1,
+      HWC_BACKGROUND = 2,
+      HWC_FRAMEBUFFER_TARGET = 3,
+      HWC_SIDEBAND = 4,
+      HWC_CURSOR_OVERLAY =  5
+
+  API registerProcs() allow register callback hwc_procs_t(struct hwc_procs):
+      void (*invalidate)(const struct hwc_procs* procs);
+      void (*vsync)(const struct hwc_procs* procs, int disp, int64_t timestamp);
+      void (*hotplug)(const struct hwc_procs* procs, int disp, int connected);
+
+  platform callback vsync() to notify SurfaceFlinger the time to display which can avoid display tear
+
+  The Qcom implementation is in hwc_session.cpp(MSM8953_M_LA1.0), when call hwc_open_1() will trigger
+  HWCSession::Init(). Generally init stage do work:
+
+      % HWCSession.buffer_allocator_ init by a instance of HWCBufferAllocator, which is wrapper to
+        libgralloc
+      % HWCSession.hwc_display_[HWC_DISPLAY_PRIMARY] init by a instance of HWCDisplayPrimary
+      % create thread which runtime function is HWCSession::HWCUeventThreadHandler(), when external
+        diaplay device plug in, it callback through HWCSession.hwc_procs_.hotplug()
+
+  The whole sdm version display software organized by several interface layer, which are:
+
+  HWCDisplay       || API:      Init()
+                   ||           Prepare(hwc_display_contents_1_t *content_list)
+                   ||           Commit(hwc_display_contents_1_t *content_list)
+                   ||           SetPanelBrightness(int level)
+                   ||           ....
+                   ||
+                   ||
+                   || IMPL:     class HWCDisplayPrimary  : public HWCDisplay
+                   ||           class HWCDisplayExternal : public HWCDisplay
+                   ||           class HWCDisplayVirtual  : public HWCDisplay
+                   ||
+                   ||           RESOURCE:      CoreInterface *core_intf_
+                   ||                          hwc_procs_t const **hwc_procs_
+                   ||                          BlitEngine *blit_engine_
+                   ||                          ....
+                   ||
+                   ||
+                   ||
+
+  CoreInterface    || API:      CreateCore(DebugHandler *debug_handler, BufferAllocator *buffer_allocator,
+                   ||                       BufferSyncHandler *buffer_sync_handler, CoreInterface **interface,
+                   ||                       uint32_t version = SDM_VERSION_TAG)
+                   ||           CreateDisplay(DisplayType type, DisplayEventHandler *event_handler,
+                   ||   			           DisplayInterface **interface)
+                   ||           DestroyDisplay(DisplayInterface *interface)
+                   ||           ....
+                   ||
+                   ||
+                   || IMPL:     class CoreImpl : public CoreInterface
+                   ||
+                   ||
+                   ||           RESOURCE:      ExtensionInterface *extension_intf_
+                   ||                          CompManager comp_mgr_
+                   ||                          HWInfoInterface *hw_info_intf_
+                   ||                          RotatorInterface *rotator_intf_
+                   ||                          ....
+                   ||
+
+  ExtensionInterface define APIs that use to access functions provide by file libsdmextension.so:
+
+
+    CreateStrategyExtn(DisplayType type, HWDisplayMode mode,
+                       HWS3DMode s3d_mode, StrategyInterface **interface)
+    CreateResourceExtn(const HWResourceInfo &hw_resource_info,
+                       ResourceInterface **interface,
+                       BufferSyncHandler *buffer_sync_handler)
+    CreateRotator(const HWRotatorInfo &hw_rot_info,
+                  BufferAllocator *buffer_allocator,
+                  BufferSyncHandler *buffer_sync_handler,
+                  RotatorInterface **intf)
+
+  CreateRotator() return a handle of RotatorInterface *, hold by CoreImpl.rotator_intf_;
+
+  CreateResourceExtn() return a handle of ResourceInterface *, hold by CompManager.resource_intf_,
+  CompManager wrapper ResourceInterface's API and provide to others;
+
+  CreateStrategyExtn() return a handle of StrategyInterface *, hold by Strategy.strategy_intf_,
+  Strategy wrapper StrategyInterface's API and provide to others;
+
+  HWInfoInterface is a internal interface that provide HWResourceInfo to others, IMPL are class
+  HWInfo, it cat sys nodes and get infos, like /sys/devices/virtual/graphics/fb0/mdp/caps;
+
+  DisplayInterface || API:      Prepare(LayerStack *layer_stack)
+                   ||           Commit(LayerStack *layer_stack)
+                   ||           SetDisplayState(DisplayState state)
+                   ||           SetMaxMixerStages(uint32_t max_mixer_stages)
+                   ||           ....
+                   ||
+                   || IMPL:     class DisplayPrimary : public DisplayBase -- class DisplayBase : public DisplayInterface
+                   ||           class DisplayHDMI    : public DisplayBase
+                   ||           class DisplayVirtual : public DisplayBase
+                   ||
+                   ||
+                   ||           RESOURCE:      HWInterface *hw_intf_
+                   ||
+                   ||
+                   ||                          ....
+                   ||
+                   ||
+                   ||
+                   ||
+                   ||
+
+  HWInterface      || API:      PowerOn()
+                   ||           PowerOff()
+                   ||           Validate(HWLayers *hw_layers)
+                   ||           Commit(HWLayers *hw_layers)
+                   ||           SetCursorPosition(HWLayers *hw_layers, int x, int y)
+                   ||           ....
+                   ||
+                   || IMPL:     class HWPrimary : public HWDevice  -- class HWDevice : public HWInterface
+                   ||           class HWVirtual : public HWDevice
+                   ||           class HWHDMI    : public HWDevice
+                   ||
+                   ||
+                   ||           RESOURCE:      int device_fd_
+                   ||                          mdp_output_layer mdp_out_layer_
+                   ||                          ....
+                   ||
+                   ||
+                   ||
+
+  Basically, the calling sequence are the classes list above, which formed the main framework of
+  sdm display implementation.
+

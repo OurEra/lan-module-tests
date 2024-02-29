@@ -1,0 +1,171 @@
+ OMXPluginBase
+   ||
+   ||  virtual OMX_ERRORTYPE makeComponentInstance(
+   ||         const char *name,
+   ||         const OMX_CALLBACKTYPE *callbacks,
+   ||         OMX_PTR appData,
+   ||         OMX_COMPONENTTYPE **component)
+   ||
+   ||  virtual OMX_ERRORTYPE destroyComponentInstance(
+   ||         OMX_COMPONENTTYPE *component)
+   ||
+   ||  virtual OMX_ERRORTYPE enumerateComponents(
+   ||         OMX_STRING name,
+   ||         size_t size,
+   ||         OMX_U32 index)
+   ||
+   ||  virtual OMX_ERRORTYPE getRolesOfComponent(
+   ||         const char *name,
+   ||         Vector<String8> *roles)
+   ||
+   ||
+   ||
+   ||
+
+  Android provide OMXPluginBase to connect with platfroms codec implementation;
+
+ QComOMXPlugin : public OMXPluginBase
+   ||
+   || mLibHandle                 --  void * (libOmxCore.so)
+   || mInit                      --  InitFunc (OMX_Init)
+   || mDeinit                    --  DeinitFunc (OMX_Deinit)
+   || mComponentNameEnum         --  ComponentNameEnumFunc (OMX_ComponentNameEnum)
+   || mGetHandle                 --  GetHandleFunc (OMX_GetHandle)
+   || mFreeHandle                --  FreeHandleFunc (OMX_FreeHandle)
+   || mGetRolesOfComponentHandle --  GetRolesOfComponentFunc (OMX_GetRolesOfComponent)
+   ||
+   ||
+
+  The implemetns must in library libstagefrighthw.so; qcom implement this in class QComOMXPlugin;
+  On one hand, QComOMXPlugin implement the APIs in OMXPluginBase, on the other hand it connect with
+  libOmxCore.so, which through dlsym() symbols like OMX_Init, OMX_GetHandle, etc;
+
+
+  omx_core_cb_type
+    ||
+    || name           --  char*
+    || fn_ptr         --  create_qc_omx_component
+    || inst           --  void* [OMX_COMP_MAX_INST]
+    || so_lib_handle  --  void*
+    || so_lib_name    --  char*
+    || roles          --  char* [OMX_CORE_MAX_CMP_ROLES]
+    ||
+    ||
+
+  omx_core_cb_type core[] =
+  {
+    {
+      "OMX.qcom.video.decoder.avc",
+      NULL, // Create instance function
+      // Unique instance handle
+      {
+        NULL
+      },
+      NULL,   // Shared object library handle
+      "libOmxVdec.so",
+      {
+        "video_decoder.avc"
+      }
+    },
+    ...
+    ...
+     {
+      "OMX.qcom.video.encoder.avc",
+      NULL, // Create instance function
+      // Unique instance handle
+      {
+        NULL
+      },
+      NULL,   // Shared object library handle
+      "libOmxVenc.so",
+      {
+        "video_encoder.avc"
+      }
+    },
+    ...
+    ...
+  }
+
+  libOmxCore.so implement OMX_Init(), OMX_GetHandle(), etc in qc_omx_core.c, which manage different
+  codec through a global omx_core_cb_type array; every type of codec, have a item in this array;
+
+  Codec components implementation are in different library, by design the have a construct symbol
+  get_omx_component_factory_fn(), after dlsym() it will save in omx_core_cb_type.fn_ptr; by calling
+  the construct function, corresponding codec component will return a instance of the internal base
+  class qc_omx_component;
+
+  In OMX_GetHandle() omx_core_cmp.cpp will hook qc_omx_component APIs with APIs in OMX_COMPONENTTYPE
+  and return to upper layer;
+
+  qc_omx_component
+    ||
+    || m_cmp    --  OMX_COMPONENTTYPE
+    ||
+    || OMX_ERRORTYPE component_init(OMX_IN OMX_STRING componentName)
+    ||
+    || OMX_ERRORTYPE  send_command(OMX_HANDLETYPE cmp_handle,
+    ||                             OMX_COMMANDTYPE       cmd,
+    ||                             OMX_U32            param1,
+    ||                             OMX_PTR          cmd_data)
+    ||
+    || OMX_ERRORTYPE  get_parameter(OMX_HANDLETYPE     cmp_handle,
+    ||                              OMX_INDEXTYPE     param_index,
+    ||                              OMX_PTR            param_data)
+    ||
+    || OMX_ERRORTYPE  get_config(OMX_HANDLETYPE      cmp_handle,
+    ||                           OMX_INDEXTYPE     config_index,
+    ||                           OMX_PTR            config_data)
+    ||
+    || OMX_ERRORTYPE  get_state(OMX_HANDLETYPE  cmp_handle,
+    ||                          OMX_STATETYPE*       state)
+    ||
+    || OMX_ERRORTYPE  empty_this_buffer(OMX_HANDLETYPE         cmp_handle,
+    ||                                  OMX_BUFFERHEADERTYPE*      buffer)
+    ||
+    || OMX_ERRORTYPE  fill_this_buffer(OMX_HANDLETYPE         cmp_handle,
+    ||                                 OMX_BUFFERHEADERTYPE*      buffer)
+    ||
+    ||
+
+  omx_venc : public omx_video
+    || omx_video : public qc_omx_component
+    ||   ||
+    ||   || m_pCallbacks    --  OMX_CALLBACKTYPE
+    ||   || m_pipe_in       --  int
+    ||   || m_pipe_out      --  int
+    ||   || msg_thread_id   --  pthread_t
+    ||   || async_thread_id --  pthread_t
+    ||   ||
+    ||   || void* message_thread_enc(void *)
+    ||   || void process_event_cb(void *ctxt,unsigned char id)
+    ||   ||
+    ||
+    || handle    --  venc_dev *
+    ||
+    || int async_message_process (void *context, void* message)
+    ||
+    ||
+
+  The encoder component is implement in class omx_venc, in source file omx_video_encoder.cpp; it
+  inherit a video base class omx_video, in source file omx_video_base.cpp.
+
+  omx_venc hold a instance of venc_dev, corresponding codec ops will handle by venc_dev::venc_*xxx
+  functions.
+
+  venc_dev
+    ||
+    || m_nDriver_fd         --  OMX_U32
+    ||
+    || void* async_venc_message_thread (void *)
+    || bool venc_set_param(void *,OMX_INDEXTYPE)
+    || bool venc_empty_buf(void *, void *,unsigned,unsigned)
+    || ...
+    || ...
+    ||
+
+  The codec hardware interactive is through v4l2 APIs, in source file video_encoder_device_v4l2.cpp;
+
+  The runtime function async_venc_message_thread() poll events from codec device m_nDriver_fd, then
+  process the details in func async_message_process(); all messages are aync post to msg_thread_id,
+  thread runtime is message_thread_enc(), function process_event_cb() then handle the details.
+

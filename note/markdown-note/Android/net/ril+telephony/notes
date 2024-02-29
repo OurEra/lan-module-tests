@@ -1,0 +1,222 @@
+SIP:
+https://tools.ietf.org/html/rfc3261
+
+LCE:
+Link Capacity Estimate
+
+MVNO:
+Mobile virtual network operator
+
+Paired Spectrum:
+http://www.telecomabc.com/p/paired-spectrum.html
+
+CDMAOne CDMA2000:
+http://conningtech.blogspot.com/2010/07/mobile-network-evolution-cdmaone-to.html
+
+TDD FDD:
+http://www.radio-electronics.com/info/cellulartelecomms/lte-long-term-evolution/lte-fdd-tdd-duplex.php
+
+DSDS:
+Dual SIM dual standy 即双卡双待
+DSDA:
+Dual SIM dual active 即双卡双通
+
+blogs about QMI:
+https://sigquit.wordpress.com/author/drehbahn/
+
+APN Type:
+https://tamingthedroid.com/apn-type
+
+retry:
+https://blog.csdn.net/lcr006/article/details/53884249
+https://www.smwenku.com/a/5b7c42b12b71770a43da1ffc/zh-cn/
+
+1. D/QtiGsmDCT( 1929): [0]onDataStallAlarm: tag=27595 do recovery action=1
+2. D RILJ    : [UNSL]< UNSOL_DATA_CALL_LIST_CHANGED [DataCallResponse: {version=11 status=4101 retry=-1 cid=0 active=0
+
+###############################################################
+###############################################################
+
+ PhoneFactory.makeDefaultPhone() will new a Phone object according to TelephonyManager.getPhoneType,
+ this Phone reference will hold in PhoneProxy.mActivePhone;
+
+ For example, first instance QtiCDMALTEPhone when phone type is PHONE_TYPE_CDMA, then corresponding
+ CDMAPhone.mSST is instance in CDMALTEPhone.initSstIcc() with CdmaLteServiceStateTracker; PhoneBase.
+ mDcTracker is instance in CDMALTEPhone's constructor with QtiDcTracker;
+
+ when PhoneProxy receive a EVENT_REQUEST_VOICE_RADIO_TECH_DONE message, will possible invoke it's
+ phoneObjectUpdater(), then new Phone object will be create in deleteAndCreatePhone() through func
+ PhoneFactory.getGsmPhone() or PhoneFactory.getCdmaPhone;
+
+ PhoneFactory.getGsmPhone():
+ QtiGSMPhone;
+  GSMPhone.mSST will be instance in GSMPhone() with QtiGsmServiceStateTracker;
+  PhoneBase.mDcTracker will be instance in GSMPhone() with QtiDcTracker;
+
+ PhoneFactory.getCdmaPhone:
+ QtiCDMALTEPhone;
+  CDMAPhone.mSST is instance in CDMALTEPhone.initSstIcc() with CdmaLteServiceStateTracker
+  PhoneBase.mDcTracker is instance in CDMALTEPhone's constructor with QtiDcTracker
+
+###############################################################
+###############################################################
+
+ After connect with rild, RIL will receive a RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED message, then
+ all register through registerForAvailable() will be notify:
+
+ 1. DcTracker
+    onRadioAvailable() will handle the detail
+
+ 2. UiccController
+    send EVENT_ICC_STATUS_CHANGED to self handler -> getIccCardStatus() from RIL
+    send EVENT_GET_ICC_STATUS_DONE to self handler -> onGetIccCardStatusDone()
+
+ 3. PhoneProxy
+    EVENT_RADIO_AVAILABLE in self handler will be receive -> getVoiceRadioTechnology() from RIL
+    EVENT_REQUEST_VOICE_RADIO_TECH_DONE in self handler will be receive -> phoneObjectUpdater()
+
+ 4. CDMALTEPhone
+    EVENT_RADIO_AVAILABLE in CDMAPhone handler will be receive ->
+                                                                  getBasebandVersion() from RIL
+                                                                  getDeviceIdentity() from RIL
+                                                                  getRadioCapability() from RIL
+ 5. GSMPhone
+    EVENT_RADIO_AVAILABLE in self handler will be receive ->
+                                                            getBasebandVersion() from RIL
+                                                            getIMEI() from RIL
+                                                            getIMEISV() from RIL
+                                                            getRadioCapability() from RIL
+
+###############################################################
+###############################################################
+
+ UiccController.onGetIccCardStatusDone() will get IccCardStatus from RIL about card application nums
+ and their index; first will instance or update UiccController.mUiccCards, UiccCard will instance or
+ update it's mUiccApplications, mGsmUmtsSubscriptionAppIndex, mCdmaSubscriptionAppIndex field; then
+ UiccController will notity who register through registerForIccChanged()
+ 1. EVENT_ICC_CHANGED in DcTrackerBase handler will be receive ->  QtiDcTracker.onUpdateIcc()
+
+    1.1 invoke QtiDcTracker.updateSimRecords();
+        Qti overwrite this func to force get UiccController.APP_FAM_3GPP type IccRecords, that is
+        UiccCard.mUiccApplications[mGsmUmtsSubscriptionAppIndex].mIccRecords; hold it's reference in
+        QtiDcTracker.mSimRecords and call IccRecords.registerForRecordsLoaded() with it's own handler
+        QtiDcTracker.mSimRecordsLoadedHandler;
+
+    1.2 invoke DcTracker.onUpdateIcc();
+        DcTracker also get a IccRecords but with type that get from current radio technology; hold
+        by DcTrackerBase.mIccRecords field, it also call IccRecords.registerForRecordsLoaded() with
+        DcTracker's handler;
+
+ 2. EVENT_ICC_CHANGED in IccCardProxy handler will be receive -> updateIccAvailability()
+
+
+    IccCardProxy broadcast, SubscriptionInfoUpdater will receive it ->
+
+    SubscriptionManager.addSubscriptionInfoRecord() update content resolver  ...
+
+
+###############################################################
+###############################################################
+
+
+ QtiDctController registerForDataConnectionAttached() and registerForDataRegStateOrRatChanged() to
+ corresponding state stacker, and handle it in DctController.mRspHandler:
+ 1. EVENT_DATA_ATTACHED
+    DctController.mDcSwitchAsyncChannel[].notifyDataAttached()
+
+    cause in DctController connect corresponding mDcSwitchAsyncChannel and mDcSwitchStateMachine, so
+    async channel will send message to state machine and trigger it's state;
+
+ 2. EVENT_DATA_RAT_CHANGED
+    DctController.mDcSwitchAsyncChannel[].notifyDataRatChange()
+
+ On some certain condition, QtiDctController and DctController will invoke mDcSwitchAsyncChannel[].
+ connect(), this function will send REQ_CONNECT to corresponding mDcSwitchStateMachine; when state
+ is in AttachingState, will eventually invoke DctController.onExecuteRequest():
+
+    DcTrackerBase.incApnRefCount()
+
+ DcTrackerBase.incApnRefCount() override in DcTracker, it will invoke ApnContext.incRefCount(), when
+ last ApnContext.mRefCount is 0, it will call DcTrackerBase.setEnabled(); eventually func DcTracker.
+ applyNewState() will be invoke, then will set:
+
+    ApnContext.setEnabled()
+    ApnContext.setDependencyMet()
+
+  these two field are important when DcTracker try set up connection;
+
+###############################################################
+###############################################################
+
+ CdmaLteServiceStateTracker.handlePollStateResultMessage() handle what == EVENT_POLL_STATE_GPRS,
+ cause register getDataRegistrationState() from RIL
+
+ In handle process will set ServiceStateTracker.mNewSS through ServiceState.setDataRegState(), after
+ will notify DcTracker cause it reigster through registerForDataConnectionAttached();
+
+ DcTracker handle notify in EVENT_DATA_CONNECTION_ATTACHED message case:
+   onDataConnectionAttached() -> setupDataOnConnectableApns()
+
+   in this case mPrioritySortedApnContexts that init in initApnContexts() are all in IDLE state, will
+   do nothing; but if specific ApnContext is connectable will invoke DcTracker.trySetupData();
+
+
+###############################################################
+###############################################################
+
+prefer APN
+
+
+
+GMS >>> CDMA
+    private final BroadcastReceiver sConfigChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            logd("Carrier config changed. Reloading config");
+            if (intent.getAction().equals(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED)) {
+                mCommandsInterface.getVoiceRadioTechnology(
+                        obtainMessage(EVENT_REQUEST_VOICE_RADIO_TECH_DONE));
+            }
+        }
+    };
+
+    RIL_REQUEST_VOICE_RADIO_TECH
+
+    case EVENT_UPDATE_PHONE_OBJECT:
+        phoneObjectUpdater(msg.arg1);
+
+   VOICE_REGISTRATION_STATE
+   DATA_REGISTRATION_STATE
+
+
+null APN && no connect && apn setting
+    RuimRecords getOperatorNumberic is null
+
+
+
+gsm:
+  3gpp
+   radioTechnology == RIL_RADIO_TECHNOLOGY_GPRS
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_EDGE
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_UMTS
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_HSDPA
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_HSUPA
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_HSPA
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_LTE
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_HSPAP
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_GSM
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_TD_SCDMA
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_IWLAN
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_LTE_CA
+
+
+cdma:
+  3gpp2
+   radioTechnology == RIL_RADIO_TECHNOLOGY_IS95A
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_IS95B
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_1xRTT
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_EVDO_0
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_EVDO_A
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_EVDO_B
+           || radioTechnology == RIL_RADIO_TECHNOLOGY_EHRPD
+

@@ -1,0 +1,28 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:sharedUserId="android.uid.system"
+    package="com.srw.demo_app">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".ControlTest"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <service
+            android:name=".MiscTest"
+            android:label="@string/app_name">
+
+        </service>
+
+    </application>
+
+</manifest>

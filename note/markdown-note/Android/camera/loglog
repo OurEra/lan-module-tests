@@ -1,0 +1,540 @@
+04-09 07:02:36.959  4993  4993 D         : mct-debug cpp entity found: name=v4l-subdev9
+04-09 07:02:37.031  4993  4993 D         : mct-debug init mod imglib_faceproc get 0xf087f7c0
+04-09 07:02:37.035  4993  4993 D         : mct-debug init mod hdr get 0xf087f820
+04-09 07:02:37.053  4993  4993 D         : mct-debug init mod imglib_chroma_flash get 0xf087f880
+04-09 07:02:37.060  4993  4993 D         : mct-debug init mod imglib_optizoom get 0xf087f9a0
+04-09 07:02:37.061  4993  4993 D         : mct-debug init mod imglib_ubifocus get 0x0
+04-09 07:02:37.062  4993  4993 D         : mct-debug init mod imglib_refocus get 0x0
+04-09 07:02:37.071  4993  4993 D         : mct-debug init mod imglib_trueportrait get 0xf087fac0
+04-09 07:02:37.079  4993  4993 D         : mct-debug init mod imglib_stillmore get 0xf087fc40
+04-09 07:02:37.079  4993  4993 D         : mct-debug init mod imglib_oem1 get 0x0
+04-09 07:02:37.108  4993  5047 D mm-camera-iface2: mct-debug iface_start_session-189 save session 3 under index 0
+04-09 07:02:37.184  4993  4993 D         : mct-debug pack identity session 3 stream 15
+04-09 07:02:37.184  4993  4993 D mm-camera-iface2: mct-debug iface_util_add_stream_to_sink_port-845 add stream 15 to iface port
+04-09 07:02:37.184  4993  4993 D         : mct-debug stream 0x3000f module:sensor -- iface, link port:imx3270 -- iface_sink0
+04-09 07:02:37.185  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 2
+04-09 07:02:37.185  4993  4993 D mm-camera-isp2: mct-debug isp_handler_create_internal_link num_isp 0 stream type 10
+04-09 07:02:37.185  4993  4993 D         : mct-debug stream 0x3000f module:iface -- isp, link port:iface_src0 -- isp_sink0
+04-09 07:02:37.185  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.185  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.185  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.185  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.185  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.186  4993  4993 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link tmod -- paaf
+04-09 07:02:37.188  4993  4993 D         : mct-debug stream 0x3000f module:tmod -- paaf, link port:tmod_src_0 -- paaf_d2_i0
+04-09 07:02:37.188  4993  4993 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link paaf -- sat
+04-09 07:02:37.189  4993  4993 D         : mct-debug stream 0x3000f module:paaf -- sat, link port:paaf_d1_i0 -- sat_d2_i0
+04-09 07:02:37.189  4993  4993 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link sat -- sac
+04-09 07:02:37.191  4993  4993 D         : mct-debug stream 0x3000f module:sat -- sac, link port:sat_d1_i0 -- sac_d2_i0
+04-09 07:02:37.191  4993  4993 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link sac -- ppeiscore
+04-09 07:02:37.192  4993  4993 D         : mct-debug stream 0x3000f module:sac -- ppeiscore, link port:sac_d1_i0 -- ppeiscore_d2_i0
+04-09 07:02:37.192  4993  4993 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link ppeiscore -- c2d
+04-09 07:02:37.193  4993  4993 D         : mct-debug stream 0x3000f module:ppeiscore -- c2d, link port:ppeiscore_d1_i0 -- c2d_sink_0
+04-09 07:02:37.193  4993  4993 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link c2d -- cpp
+04-09 07:02:37.193  4993  4993 D         : mct-debug stream 0x3000f module:c2d -- cpp, link port:c2d_src_0 -- cpp_sink_0
+04-09 07:02:37.193  4993  4993 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link cpp -- rtbdm
+04-09 07:02:37.194  4993  4993 D         : mct-debug stream 0x3000f module:cpp -- rtbdm, link port:cpp_src_0 -- rtbdm_d2_i0
+04-09 07:02:37.194  4993  4993 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link rtbdm -- rtb
+04-09 07:02:37.195  4993  4993 D         : mct-debug stream 0x3000f module:rtbdm -- rtb, link port:rtbdm_d1_i0 -- rtb_d2_i0
+04-09 07:02:37.195  4993  4993 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link rtb -- ezt
+04-09 07:02:37.195  4993  4993 D         : mct-debug stream 0x3000f module:rtb -- ezt, link port:rtb_d1_i0 -- ezt_sink_0
+04-09 07:02:37.195  4993  4993 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link ezt -- quadracfa
+04-09 07:02:37.196  4993  4993 D         : mct-debug stream 0x3000f module:ezt -- quadracfa, link port:ezt_src_0 -- quadracfa_d2_i0
+04-09 07:02:37.196  4993  4993 D         : mct-debug stream 0x3000f module:isp -- pproc, link port:isp_src4 -- pproc_sink_0
+04-09 07:02:37.197  4993  4993 D         : mct-debug stream 0x3000f module:pproc -- imglib, link port:pproc_source_0 -- imglib_d2_i0
+04-09 07:02:37.197  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.197  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.197  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.197  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.197  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.197  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.198  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.198  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.198  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.198  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.198  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.198  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.198  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.198  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.198  4993  4993 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:37.201  4993  4993 D         : mct-debug stream 0x3000f module:isp -- stats, link port:isp_src14 -- stats_sink
+04-09 07:02:52.074  4993  5199 D mm-camera-iface2: mct-debug iface_start_session-189 save session 3 under index 0
+04-09 07:02:52.137  4993  5079 D         : mct-debug pack identity session 3 stream 15
+04-09 07:02:52.138  4993  5079 D mm-camera-iface2: mct-debug iface_util_add_stream_to_sink_port-845 add stream 15 to iface port
+04-09 07:02:52.138  4993  5079 D         : mct-debug stream 0x3000f module:sensor -- iface, link port:imx3270 -- iface_sink0
+04-09 07:02:52.138  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 2
+04-09 07:02:52.138  4993  5079 D mm-camera-isp2: mct-debug isp_handler_create_internal_link num_isp 0 stream type 10
+04-09 07:02:52.138  4993  5079 D         : mct-debug stream 0x3000f module:iface -- isp, link port:iface_src0 -- isp_sink0
+04-09 07:02:52.138  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.138  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.138  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.138  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.138  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.139  4993  5079 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link tmod -- paaf
+04-09 07:02:52.141  4993  5079 D         : mct-debug stream 0x3000f module:tmod -- paaf, link port:tmod_src_0 -- paaf_d2_i0
+04-09 07:02:52.141  4993  5079 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link paaf -- sat
+04-09 07:02:52.142  4993  5079 D         : mct-debug stream 0x3000f module:paaf -- sat, link port:paaf_d1_i0 -- sat_d2_i0
+04-09 07:02:52.142  4993  5079 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link sat -- sac
+04-09 07:02:52.144  4993  5079 D         : mct-debug stream 0x3000f module:sat -- sac, link port:sat_d1_i0 -- sac_d2_i0
+04-09 07:02:52.144  4993  5079 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link sac -- ppeiscore
+04-09 07:02:52.145  4993  5079 D         : mct-debug stream 0x3000f module:sac -- ppeiscore, link port:sac_d1_i0 -- ppeiscore_d2_i0
+04-09 07:02:52.145  4993  5079 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link ppeiscore -- c2d
+04-09 07:02:52.145  4993  5079 D         : mct-debug stream 0x3000f module:ppeiscore -- c2d, link port:ppeiscore_d1_i0 -- c2d_sink_0
+04-09 07:02:52.145  4993  5079 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link c2d -- cpp
+04-09 07:02:52.146  4993  5079 D         : mct-debug stream 0x3000f module:c2d -- cpp, link port:c2d_src_0 -- cpp_sink_0
+04-09 07:02:52.146  4993  5079 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link cpp -- rtbdm
+04-09 07:02:52.147  4993  5079 D         : mct-debug stream 0x3000f module:cpp -- rtbdm, link port:cpp_src_0 -- rtbdm_d2_i0
+04-09 07:02:52.147  4993  5079 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link rtbdm -- rtb
+04-09 07:02:52.148  4993  5079 D         : mct-debug stream 0x3000f module:rtbdm -- rtb, link port:rtbdm_d1_i0 -- rtb_d2_i0
+04-09 07:02:52.148  4993  5079 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link rtb -- ezt
+04-09 07:02:52.148  4993  5079 D         : mct-debug stream 0x3000f module:rtb -- ezt, link port:rtb_d1_i0 -- ezt_sink_0
+04-09 07:02:52.148  4993  5079 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link ezt -- quadracfa
+04-09 07:02:52.149  4993  5079 D         : mct-debug stream 0x3000f module:ezt -- quadracfa, link port:ezt_src_0 -- quadracfa_d2_i0
+04-09 07:02:52.149  4993  5079 D         : mct-debug stream 0x3000f module:isp -- pproc, link port:isp_src4 -- pproc_sink_0
+04-09 07:02:52.150  4993  5079 D         : mct-debug stream 0x3000f module:pproc -- imglib, link port:pproc_source_0 -- imglib_d2_i0
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.150  4993  5079 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.152  4993  5079 D         : mct-debug stream 0x3000f module:isp -- stats, link port:isp_src14 -- stats_sink
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.155  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.156  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.156  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.170  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.171  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.184  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.184  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.184  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.184  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.184  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.184  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.184  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.184  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.184  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.184  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.195  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.202  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.202  4993  5196 D mm-camera-isp2: mct-debug CAM_INTF_META_STREAM_INFO
+04-09 07:02:52.202  4993  5196 D mm-camera-isp2: mct-debug resource allocate num_isp before 0 after 1 offline 0
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug handle stream info num_isp before 0 after 1
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_map_streams_to_hw_hal1 pre 0 hw 3
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_map_streams_to_hw_hal1 pri str 2
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_sort_streams sort type 1 norm 1280x720 sensor 1948x1097
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_sort_streams sort type 1 after norm 1280x720
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_sort_streams sort type 11 norm 640x360 sensor 1948x1097
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_sort_streams sort type 11 after norm 640x360
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_sort_streams sort type 3 norm 1920x1080 sensor 1948x1097
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_sort_streams sort type 3 after norm 1920x1080
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_map_streams prio out 2 hw id 2 for type 11
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_map_streams prio out 1 hw id 0 for type 3
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_map_streams PIX hw id 1 for type 1
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_decide_stream_mapping hal 0x1
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_decide_stream_mapping type 3 res 1920x1080
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_decide_stream_mapping type 1 res 1280x720
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_util_decide_stream_mapping type 11 res 640x360
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug before isp_resource_create_link pos3
+04-09 07:02:52.203  4993  5196 D mm-camera-isp2: mct-debug isp_stream_resource_allocate stream info type 10
+04-09 07:02:52.204  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link black_level48 -- linearization40
+04-09 07:02:52.204  4993  5196 D         : mct-debug stream 0x3000f module:black_level48 -- linearization40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.204  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link linearization40 -- pdaf48
+04-09 07:02:52.204  4993  5196 D         : mct-debug stream 0x3000f module:linearization40 -- pdaf48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.204  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link pdaf48 -- demux48
+04-09 07:02:52.204  4993  5196 D         : mct-debug stream 0x3000f module:pdaf48 -- demux48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.204  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link demux48 -- hdr48
+04-09 07:02:52.204  4993  5196 D         : mct-debug stream 0x3000f module:demux48 -- hdr48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.204  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr48 -- bpc48
+04-09 07:02:52.204  4993  5196 D         : mct-debug stream 0x3000f module:hdr48 -- bpc48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.204  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bpc48 -- abf48
+04-09 07:02:52.204  4993  5196 D         : mct-debug stream 0x3000f module:bpc48 -- abf48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.204  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link abf48 -- mesh_rolloff44
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:abf48 -- mesh_rolloff44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link mesh_rolloff44 -- gic48
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:mesh_rolloff44 -- gic48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gic48 -- demosaic48
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:gic48 -- demosaic48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link demosaic48 -- bf_stats47
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:demosaic48 -- bf_stats47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bf_stats47 -- bg_stats46
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:bf_stats47 -- bg_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bg_stats46 -- aec_bg_stats47
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:bg_stats46 -- aec_bg_stats47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link aec_bg_stats47 -- hdr_be_stats46
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:aec_bg_stats47 -- hdr_be_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr_be_stats46 -- hdr_bhist_stats44
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:hdr_be_stats46 -- hdr_bhist_stats44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr_bhist_stats44 -- rs_stats46
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:hdr_bhist_stats44 -- rs_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link rs_stats46 -- cs_stats46
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:rs_stats46 -- cs_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link cs_stats46 -- ihist_stats46
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:cs_stats46 -- ihist_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link ihist_stats46 -- bhist_stats44
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:ihist_stats46 -- bhist_stats44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bhist_stats44 -- color_correct46
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:bhist_stats44 -- color_correct46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link color_correct46 -- gtm46
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:color_correct46 -- gtm46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gtm46 -- gamma44
+04-09 07:02:52.205  4993  5196 D         : mct-debug stream 0x3000f module:gtm46 -- gamma44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.205  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gamma44 -- ltm47
+04-09 07:02:52.207  4993  5196 D         : mct-debug stream 0x3000f module:gamma44 -- ltm47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.207  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link ltm47 -- chroma_enhan40
+04-09 07:02:52.207  4993  5196 D         : mct-debug stream 0x3000f module:ltm47 -- chroma_enhan40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.207  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link chroma_enhan40 -- chroma_suppress40
+04-09 07:02:52.207  4993  5196 D         : mct-debug stream 0x3000f module:chroma_enhan40 -- chroma_suppress40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.207  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link chroma_suppress40 -- mce40
+04-09 07:02:52.207  4993  5196 D         : mct-debug stream 0x3000f module:chroma_suppress40 -- mce40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.207  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link mce40 -- sce40
+04-09 07:02:52.207  4993  5196 D         : mct-debug stream 0x3000f module:mce40 -- sce40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.207  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link sce40 -- color_xform_viewfinder46
+04-09 07:02:52.207  4993  5196 D         : mct-debug stream 0x3000f module:sce40 -- color_xform_viewfinder46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.207  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link color_xform_viewfinder46 -- scaler_viewfinder46
+04-09 07:02:52.207  4993  5196 D         : mct-debug stream 0x3000f module:color_xform_viewfinder46 -- scaler_viewfinder46, link port:isp_sub_module_src -- scaler46_sink
+04-09 07:02:52.207  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link scaler_viewfinder46 -- fovcrop_viewfinder46
+04-09 07:02:52.207  4993  5196 D         : mct-debug stream 0x3000f module:scaler_viewfinder46 -- fovcrop_viewfinder46, link port:scaler46_src -- fovcrop46_sink
+04-09 07:02:52.207  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link fovcrop_viewfinder46 -- clamp_viewfinder40
+04-09 07:02:52.207  4993  5196 D         : mct-debug stream 0x3000f module:fovcrop_viewfinder46 -- clamp_viewfinder40, link port:fovcrop46_src -- isp_sub_module_sink
+04-09 07:02:52.207  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link sce40 -- color_xform_encoder46
+04-09 07:02:52.207  4993  5196 D         : mct-debug stream 0x3000f module:sce40 -- color_xform_encoder46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.208  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link color_xform_encoder46 -- scaler_encoder46
+04-09 07:02:52.208  4993  5196 D         : mct-debug stream 0x3000f module:color_xform_encoder46 -- scaler_encoder46, link port:isp_sub_module_src -- scaler46_sink
+04-09 07:02:52.208  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link scaler_encoder46 -- fovcrop_encoder46
+04-09 07:02:52.208  4993  5196 D         : mct-debug stream 0x3000f module:scaler_encoder46 -- fovcrop_encoder46, link port:scaler46_src -- fovcrop46_sink
+04-09 07:02:52.208  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link fovcrop_encoder46 -- clamp_encoder40
+04-09 07:02:52.208  4993  5196 D         : mct-debug stream 0x3000f module:fovcrop_encoder46 -- clamp_encoder40, link port:fovcrop46_src -- isp_sub_module_sink
+04-09 07:02:52.208  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link sce40 -- color_xform_video46
+04-09 07:02:52.208  4993  5196 D         : mct-debug stream 0x3000f module:sce40 -- color_xform_video46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.208  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link color_xform_video46 -- scaler_video46
+04-09 07:02:52.208  4993  5196 D         : mct-debug stream 0x3000f module:color_xform_video46 -- scaler_video46, link port:isp_sub_module_src -- scaler46_sink
+04-09 07:02:52.208  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link scaler_video46 -- fovcrop_video46
+04-09 07:02:52.208  4993  5196 D         : mct-debug stream 0x3000f module:scaler_video46 -- fovcrop_video46, link port:scaler46_src -- fovcrop46_sink
+04-09 07:02:52.208  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link fovcrop_video46 -- clamp_video40
+04-09 07:02:52.208  4993  5196 D         : mct-debug stream 0x3000f module:fovcrop_video46 -- clamp_video40, link port:fovcrop46_src -- isp_sub_module_sink
+04-09 07:02:52.209  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.213  4993  5196 D         : mct-debug pack identity session 3 stream 1
+04-09 07:02:52.217  4993  5196 D         : mct-debug pack identity session 3 stream 2
+04-09 07:02:52.217  4993  5196 D mm-camera-iface2: mct-debug iface_util_add_stream_to_sink_port-845 add stream 2 to iface port
+04-09 07:02:52.217  4993  5196 D         : mct-debug stream 0x30002 module:sensor -- iface, link port:imx3270 -- iface_sink0
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 2
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_handler_create_internal_link num_isp 1 stream type 1
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug before isp_resource_create_link pos1
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_stream_resource_allocate stream info type 1
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link black_level48 -- linearization40
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:black_level48 -- linearization40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link linearization40 -- pdaf48
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:linearization40 -- pdaf48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link pdaf48 -- demux48
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:pdaf48 -- demux48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link demux48 -- hdr48
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:demux48 -- hdr48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr48 -- bpc48
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:hdr48 -- bpc48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bpc48 -- abf48
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:bpc48 -- abf48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link abf48 -- mesh_rolloff44
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:abf48 -- mesh_rolloff44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link mesh_rolloff44 -- gic48
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:mesh_rolloff44 -- gic48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gic48 -- demosaic48
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:gic48 -- demosaic48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link demosaic48 -- bf_stats47
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:demosaic48 -- bf_stats47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bf_stats47 -- bg_stats46
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:bf_stats47 -- bg_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bg_stats46 -- aec_bg_stats47
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:bg_stats46 -- aec_bg_stats47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link aec_bg_stats47 -- hdr_be_stats46
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:aec_bg_stats47 -- hdr_be_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr_be_stats46 -- hdr_bhist_stats44
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:hdr_be_stats46 -- hdr_bhist_stats44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr_bhist_stats44 -- rs_stats46
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:hdr_bhist_stats44 -- rs_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link rs_stats46 -- cs_stats46
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:rs_stats46 -- cs_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link cs_stats46 -- ihist_stats46
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:cs_stats46 -- ihist_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link ihist_stats46 -- bhist_stats44
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:ihist_stats46 -- bhist_stats44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bhist_stats44 -- color_correct46
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:bhist_stats44 -- color_correct46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link color_correct46 -- gtm46
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:color_correct46 -- gtm46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gtm46 -- gamma44
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:gtm46 -- gamma44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gamma44 -- ltm47
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:gamma44 -- ltm47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link ltm47 -- chroma_enhan40
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:ltm47 -- chroma_enhan40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link chroma_enhan40 -- chroma_suppress40
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:chroma_enhan40 -- chroma_suppress40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link chroma_suppress40 -- mce40
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:chroma_suppress40 -- mce40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link mce40 -- sce40
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:mce40 -- sce40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link sce40 -- color_xform_encoder46
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:sce40 -- color_xform_encoder46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link color_xform_encoder46 -- scaler_encoder46
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:color_xform_encoder46 -- scaler_encoder46, link port:isp_sub_module_src -- scaler46_sink
+04-09 07:02:52.218  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link scaler_encoder46 -- fovcrop_encoder46
+04-09 07:02:52.218  4993  5196 D         : mct-debug stream 0x30002 module:scaler_encoder46 -- fovcrop_encoder46, link port:scaler46_src -- fovcrop46_sink
+04-09 07:02:52.219  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link fovcrop_encoder46 -- clamp_encoder40
+04-09 07:02:52.219  4993  5196 D         : mct-debug stream 0x30002 module:fovcrop_encoder46 -- clamp_encoder40, link port:fovcrop46_src -- isp_sub_module_sink
+04-09 07:02:52.219  4993  5196 D         : mct-debug stream 0x30002 module:iface -- isp, link port:iface_src0 -- isp_sink0
+04-09 07:02:52.219  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.219  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.219  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.219  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.219  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.219  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.219  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.219  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.219  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.219  4993  5196 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link tmod -- paaf
+04-09 07:02:52.220  4993  5196 D         : mct-debug stream 0x30002 module:tmod -- paaf, link port:tmod_src_1 -- paaf_d2_i2
+04-09 07:02:52.220  4993  5196 D mm-camera-pp: mct-debug pproc_port_add_modules_to_stream link paaf -- cpp
+04-09 07:02:52.220  4993  5196 D         : mct-debug stream 0x30002 module:paaf -- cpp, link port:paaf_d1_i2 -- cpp_sink_1
+04-09 07:02:52.220  4993  5196 D         : mct-debug stream 0x30002 module:isp -- pproc, link port:isp_src8 -- pproc_sink_1
+04-09 07:02:52.220  4993  5196 D         : mct-debug stream 0x30002 module:pproc -- imglib, link port:pproc_source_1 -- imglib_d2_i1
+04-09 07:02:52.220  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.220  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.221  4993  5196 D         : mct-debug stream 0x30002 module:isp -- stats, link port:isp_src14 -- stats_sink
+04-09 07:02:52.232  4993  5196 D         : mct-debug pack identity session 3 stream 3
+04-09 07:02:52.232  4993  5196 D mm-camera-iface2: mct-debug iface_util_add_stream_to_sink_port-845 add stream 3 to iface port
+04-09 07:02:52.232  4993  5196 D         : mct-debug stream 0x30003 module:sensor -- iface, link port:imx3270 -- iface_sink0
+04-09 07:02:52.232  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 2
+04-09 07:02:52.232  4993  5196 D mm-camera-isp2: mct-debug isp_handler_create_internal_link num_isp 1 stream type 3
+04-09 07:02:52.232  4993  5196 D mm-camera-isp2: mct-debug before isp_resource_create_link pos1
+04-09 07:02:52.232  4993  5196 D mm-camera-isp2: mct-debug isp_stream_resource_allocate stream info type 3
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link black_level48 -- linearization40
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:black_level48 -- linearization40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link linearization40 -- pdaf48
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:linearization40 -- pdaf48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link pdaf48 -- demux48
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:pdaf48 -- demux48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link demux48 -- hdr48
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:demux48 -- hdr48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr48 -- bpc48
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:hdr48 -- bpc48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bpc48 -- abf48
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:bpc48 -- abf48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link abf48 -- mesh_rolloff44
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:abf48 -- mesh_rolloff44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link mesh_rolloff44 -- gic48
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:mesh_rolloff44 -- gic48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gic48 -- demosaic48
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:gic48 -- demosaic48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link demosaic48 -- bf_stats47
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:demosaic48 -- bf_stats47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bf_stats47 -- bg_stats46
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:bf_stats47 -- bg_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bg_stats46 -- aec_bg_stats47
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:bg_stats46 -- aec_bg_stats47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link aec_bg_stats47 -- hdr_be_stats46
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:aec_bg_stats47 -- hdr_be_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr_be_stats46 -- hdr_bhist_stats44
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:hdr_be_stats46 -- hdr_bhist_stats44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr_bhist_stats44 -- rs_stats46
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:hdr_bhist_stats44 -- rs_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.233  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link rs_stats46 -- cs_stats46
+04-09 07:02:52.233  4993  5196 D         : mct-debug stream 0x30003 module:rs_stats46 -- cs_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link cs_stats46 -- ihist_stats46
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:cs_stats46 -- ihist_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link ihist_stats46 -- bhist_stats44
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:ihist_stats46 -- bhist_stats44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bhist_stats44 -- color_correct46
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:bhist_stats44 -- color_correct46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link color_correct46 -- gtm46
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:color_correct46 -- gtm46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gtm46 -- gamma44
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:gtm46 -- gamma44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gamma44 -- ltm47
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:gamma44 -- ltm47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link ltm47 -- chroma_enhan40
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:ltm47 -- chroma_enhan40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link chroma_enhan40 -- chroma_suppress40
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:chroma_enhan40 -- chroma_suppress40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link chroma_suppress40 -- mce40
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:chroma_suppress40 -- mce40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link mce40 -- sce40
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:mce40 -- sce40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link sce40 -- color_xform_viewfinder46
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:sce40 -- color_xform_viewfinder46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link color_xform_viewfinder46 -- scaler_viewfinder46
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:color_xform_viewfinder46 -- scaler_viewfinder46, link port:isp_sub_module_src -- scaler46_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link scaler_viewfinder46 -- fovcrop_viewfinder46
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:scaler_viewfinder46 -- fovcrop_viewfinder46, link port:scaler46_src -- fovcrop46_sink
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link fovcrop_viewfinder46 -- clamp_viewfinder40
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:fovcrop_viewfinder46 -- clamp_viewfinder40, link port:fovcrop46_src -- isp_sub_module_sink
+04-09 07:02:52.234  4993  5196 D         : mct-debug stream 0x30003 module:iface -- isp, link port:iface_src0 -- isp_sink0
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.234  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.235  4993  5196 D         : mct-debug stream 0x30003 module:isp -- stats, link port:isp_src14 -- stats_sink
+04-09 07:02:52.240  4993  5196 D         : mct-debug pack identity session 3 stream 4
+04-09 07:02:52.241  4993  5196 D mm-camera-iface2: mct-debug iface_util_add_stream_to_sink_port-845 add stream 4 to iface port
+04-09 07:02:52.241  4993  5196 D         : mct-debug stream 0x30004 module:sensor -- iface, link port:imx3270 -- iface_sink0
+04-09 07:02:52.241  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 2
+04-09 07:02:52.241  4993  5196 D mm-camera-isp2: mct-debug isp_handler_create_internal_link num_isp 1 stream type 11
+04-09 07:02:52.241  4993  5196 D mm-camera-isp2: mct-debug before isp_resource_create_link pos1
+04-09 07:02:52.241  4993  5196 D mm-camera-isp2: mct-debug isp_stream_resource_allocate stream info type 11
+04-09 07:02:52.241  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link black_level48 -- linearization40
+04-09 07:02:52.241  4993  5196 D         : mct-debug stream 0x30004 module:black_level48 -- linearization40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.241  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link linearization40 -- pdaf48
+04-09 07:02:52.241  4993  5196 D         : mct-debug stream 0x30004 module:linearization40 -- pdaf48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.241  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link pdaf48 -- demux48
+04-09 07:02:52.241  4993  5196 D         : mct-debug stream 0x30004 module:pdaf48 -- demux48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link demux48 -- hdr48
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:demux48 -- hdr48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr48 -- bpc48
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:hdr48 -- bpc48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bpc48 -- abf48
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:bpc48 -- abf48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link abf48 -- mesh_rolloff44
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:abf48 -- mesh_rolloff44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link mesh_rolloff44 -- gic48
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:mesh_rolloff44 -- gic48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gic48 -- demosaic48
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:gic48 -- demosaic48, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link demosaic48 -- bf_stats47
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:demosaic48 -- bf_stats47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bf_stats47 -- bg_stats46
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:bf_stats47 -- bg_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bg_stats46 -- aec_bg_stats47
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:bg_stats46 -- aec_bg_stats47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link aec_bg_stats47 -- hdr_be_stats46
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:aec_bg_stats47 -- hdr_be_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr_be_stats46 -- hdr_bhist_stats44
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:hdr_be_stats46 -- hdr_bhist_stats44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link hdr_bhist_stats44 -- rs_stats46
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:hdr_bhist_stats44 -- rs_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link rs_stats46 -- cs_stats46
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:rs_stats46 -- cs_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link cs_stats46 -- ihist_stats46
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:cs_stats46 -- ihist_stats46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link ihist_stats46 -- bhist_stats44
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:ihist_stats46 -- bhist_stats44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link bhist_stats44 -- color_correct46
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:bhist_stats44 -- color_correct46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link color_correct46 -- gtm46
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:color_correct46 -- gtm46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.242  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gtm46 -- gamma44
+04-09 07:02:52.242  4993  5196 D         : mct-debug stream 0x30004 module:gtm46 -- gamma44, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link gamma44 -- ltm47
+04-09 07:02:52.243  4993  5196 D         : mct-debug stream 0x30004 module:gamma44 -- ltm47, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link ltm47 -- chroma_enhan40
+04-09 07:02:52.243  4993  5196 D         : mct-debug stream 0x30004 module:ltm47 -- chroma_enhan40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link chroma_enhan40 -- chroma_suppress40
+04-09 07:02:52.243  4993  5196 D         : mct-debug stream 0x30004 module:chroma_enhan40 -- chroma_suppress40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link chroma_suppress40 -- mce40
+04-09 07:02:52.243  4993  5196 D         : mct-debug stream 0x30004 module:chroma_suppress40 -- mce40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos1 link mce40 -- sce40
+04-09 07:02:52.243  4993  5196 D         : mct-debug stream 0x30004 module:mce40 -- sce40, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link sce40 -- color_xform_video46
+04-09 07:02:52.243  4993  5196 D         : mct-debug stream 0x30004 module:sce40 -- color_xform_video46, link port:isp_sub_module_src -- isp_sub_module_sink
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link color_xform_video46 -- scaler_video46
+04-09 07:02:52.243  4993  5196 D         : mct-debug stream 0x30004 module:color_xform_video46 -- scaler_video46, link port:isp_sub_module_src -- scaler46_sink
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link scaler_video46 -- fovcrop_video46
+04-09 07:02:52.243  4993  5196 D         : mct-debug stream 0x30004 module:scaler_video46 -- fovcrop_video46, link port:scaler46_src -- fovcrop46_sink
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_resource_link_modules pos2 link fovcrop_video46 -- clamp_video40
+04-09 07:02:52.243  4993  5196 D         : mct-debug stream 0x30004 module:fovcrop_video46 -- clamp_video40, link port:fovcrop46_src -- isp_sub_module_sink
+04-09 07:02:52.243  4993  5196 D         : mct-debug stream 0x30004 module:iface -- isp, link port:iface_src0 -- isp_sink0
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.243  4993  5196 D mm-camera-isp2: mct-debug isp_port_check_caps_reserve type 1
+04-09 07:02:52.244  4993  5196 D         : mct-debug stream 0x30004 module:isp -- pproc, link port:isp_src9 -- pproc_sink_2
+04-09 07:02:52.244  4993  5196 D         : mct-debug stream 0x30004 module:pproc -- imglib, link port:pproc_source_2 -- imglib_d2_i2
+04-09 07:02:52.246  4993  5196 D mm-camera-isp2: mct-debug isp port process downstream MCT_EVENT_CONTROL_SET_PARM
+04-09 07:02:52.249  4993  5196 D         : mct-debug send MCT_EVENT_CONTROL_STREAMON mct_pipeline_process_set-4198
+04-09 07:02:52.260  4993  5196 D         : mct-debug send MCT_EVENT_CONTROL_STREAMON mct_pipeline_process_set-4198
+04-09 07:02:52.268  4993  5196 D mm-camera-iface2: mct-debug iface_util_set_hw_stream_config_pix num pix 3
+04-09 07:02:52.280  4993  5203 D mm-camera-iface2: mct-debug iface session thread IFACE_ASYNC_COMMAND_STREAMON
+04-09 07:02:52.291  4993  5196 D mm-camera-isp2: mct-debug forward event no submod ports
+04-09 07:02:52.296  4993  5196 D         : mct-debug send MCT_EVENT_CONTROL_STREAMON mct_pipeline_process_set-4198
+04-09 07:02:52.297  4993  5203 D mm-camera-iface2: mct-debug iface session thread IFACE_ASYNC_COMMAND_STREAMON
+04-09 07:02:52.297  4993  5196 D mm-camera-isp2: mct-debug forward event no submod ports
+04-09 07:02:52.305  4993  5196 D         : mct-debug send MCT_EVENT_CONTROL_STREAMON mct_pipeline_process_set-4198
+04-09 07:02:52.306  4993  5203 D mm-camera-iface2: mct-debug iface session thread IFACE_ASYNC_COMMAND_STREAMON
+04-09 07:02:52.306  4993  5196 D mm-camera-isp2: mct-debug forward event no submod ports
+04-09 07:02:52.312  4993  5196 D mm-camera-isp2: mct-debug forward event no submod ports
+04-09 07:02:52.379  4993  5197 D         : mct-debug MCT_EVENT_CONTROL_SET_SUPER_PARM
+04-09 07:02:52.

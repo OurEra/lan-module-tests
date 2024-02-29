@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define BUF_SIZE 102
+
+int main(int argc, char* argv[])
+{
+	int iRet 	= 0;
+	int iLine	=0;
+	FILE *fp1 	= NULL;
+	FILE fp2 	= NULL;
+	char cArrBff1[BUF_IZE] = {0};
+	char cArrBuff2[BUF_SIZE] = {0};

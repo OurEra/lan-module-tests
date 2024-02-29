@@ -1,0 +1,469 @@
+diff --git a/core/java/android/app/ActivityThread.java b/core/java/android/app/ActivityThread.java
+index da21eaf..614380c 100644
+--- a/core/java/android/app/ActivityThread.java
++++ b/core/java/android/app/ActivityThread.java
+@@ -3166,6 +3166,7 @@ public final class ActivityThread {
+                 l.softInputMode |= forwardBit;
+                 if (a.mVisibleFromClient) {
+                     a.mWindowAdded = true;
++                    Log.d("WMDEBUG", "[AT] add view " + decor + " from " + this);
+                     wm.addView(decor, l);
+                 }
+ 
+diff --git a/core/java/android/view/ViewRootImpl.java b/core/java/android/view/ViewRootImpl.java
+index 42402eb..398df81 100644
+--- a/core/java/android/view/ViewRootImpl.java
++++ b/core/java/android/view/ViewRootImpl.java
+@@ -528,6 +528,9 @@ public final class ViewRootImpl implements ViewParent,
+                     mOrigWindowType = mWindowAttributes.type;
+                     mAttachInfo.mRecomputeGlobalAttributes = true;
+                     collectViewAttributes();
++
++                    Log.d("WMDEBUG", "[VR] setView before addToDisplay, VR: " + this + " window: " + mWindow +
++                                    " type " + mWindowAttributes.type + " view " + mView);
+                     res = mWindowSession.addToDisplay(mWindow, mSeq, mWindowAttributes,
+                             getHostVisibility(), mDisplay.getDisplayId(),
+                             mAttachInfo.mContentInsets, mAttachInfo.mStableInsets,
+@@ -5412,6 +5415,7 @@ public final class ViewRootImpl implements ViewParent,
+                 params.type = mOrigWindowType;
+             }
+         }
++        Log.d("WMDEBUG", "[VR] relayoutWindow this: " + this + " view " + mView);
+         int relayoutResult = mWindowSession.relayout(
+                 mWindow, mSeq, params,
+                 (int) (mView.getMeasuredWidth() * appScale + 0.5f),
+diff --git a/services/core/java/com/android/server/wm/WindowManagerService.java b/services/core/java/com/android/server/wm/WindowManagerService.java
+index 922e86b..5e3a9ca 100644
+--- a/services/core/java/com/android/server/wm/WindowManagerService.java
++++ b/services/core/java/com/android/server/wm/WindowManagerService.java
+@@ -1310,6 +1310,11 @@ public class WindowManagerService extends IWindowManager.Stub
+                     if (addToToken) {
+                         if (DEBUG_ADD_REMOVE) Slog.v(TAG, "Adding " + win + " to " + token);
+                         token.windows.add(i, win);
++                        if (token.windows.size() > 1) {
++                            Log.d("WMDEBUG2", "token " + token);
++                            for (int index = 0; index < token.windows.size(); index++)
++                                Log.d("WMDEBUG2", "window " + token.windows.get(index));
++                        }
+                     }
+                     placeWindowBefore(wSublayer >= 0 ? attached : w, win);
+                     break;
+@@ -1321,6 +1326,11 @@ public class WindowManagerService extends IWindowManager.Stub
+                     if (addToToken) {
+                         if (DEBUG_ADD_REMOVE) Slog.v(TAG, "Adding " + win + " to " + token);
+                         token.windows.add(i, win);
++                        if (token.windows.size() > 1) {
++                            Log.d("WMDEBUG2", "token " + token);
++                            for (int index = 0; index < token.windows.size(); index++)
++                                Log.d("WMDEBUG2", "window " + token.windows.get(index));
++                        }
+                     }
+                     placeWindowBefore(w, win);
+                     break;
+@@ -1331,6 +1341,12 @@ public class WindowManagerService extends IWindowManager.Stub
+             if (addToToken) {
+                 if (DEBUG_ADD_REMOVE) Slog.v(TAG, "Adding " + win + " to " + token);
+                 token.windows.add(win);
++                if (token.windows.size() > 1) {
++                    Log.d("WMDEBUG2", "token " + token);
++                    for (int index = 0; index < token.windows.size(); index++)
++                        Log.d("WMDEBUG2", "window " + token.windows.get(index));
++                }
++
+             }
+             if (sublayer < 0) {
+                 placeWindowBefore(attached, win);
+@@ -1357,6 +1373,12 @@ public class WindowManagerService extends IWindowManager.Stub
+             if (addToToken) {
+                 if (DEBUG_ADD_REMOVE) Slog.v(TAG, "Adding " + win + " to " + token);
+                 token.windows.add(tokenWindowsPos, win);
++                if (token.windows.size() > 1) {
++                    Log.d("WMDEBUG2", "token " + token);
++                    for (int index = 0; index < token.windows.size(); index++)
++                        Log.d("WMDEBUG2", "window " + token.windows.get(index));
++                }
++
+             }
+         } else {
+             addAttachedWindowToListLocked(win, addToToken);
+@@ -1507,6 +1529,7 @@ public class WindowManagerService extends IWindowManager.Stub
+             }
+         }
+ 
++        Log.d("WMDEBUG", "[WMS] findDesiredInputMethodWindowIndexLocked i " + i);
+         //Slog.i(TAG, "Placing input method @" + (i+1));
+         if (w != null) {
+             if (willMove) {
+@@ -1550,6 +1573,8 @@ public class WindowManagerService extends IWindowManager.Stub
+ 
+     void setInputMethodAnimLayerAdjustment(int adj) {
+         if (DEBUG_LAYERS) Slog.v(TAG, "Setting im layer adj to " + adj);
++
++        Log.d("WMDEBUG", "[WMS] setInputMethodAnimLayerAdjustment adj " + adj);
+         mInputMethodAnimLayerAdjustment = adj;
+         WindowState imw = mInputMethodWindow;
+         if (imw != null) {
+@@ -1773,6 +1798,7 @@ public class WindowManagerService extends IWindowManager.Stub
+         }
+ 
+         if (needAssignLayers) {
++            Log.d("WMDEBUG", "[WMS] moveInputMethodWindowsIfNeededLocked before assignLayersLocked");
+             assignLayersLocked(windows);
+         }
+ 
+@@ -2408,8 +2434,10 @@ public class WindowManagerService extends IWindowManager.Stub
+                 return WindowManagerGlobal.ADD_PERMISSION_DENIED;
+             }
+ 
++
+             boolean addToken = false;
+             WindowToken token = mTokenMap.get(attrs.token);
++            Log.d("WMDEBUG", "[WMS] addWindow attrs.token: " + attrs.token + " type: " + type + " mTokenMap get " + token);
+             if (token == null) {
+                 if (type >= FIRST_APPLICATION_WINDOW && type <= LAST_APPLICATION_WINDOW) {
+                     Slog.w(TAG, "Attempted to add application window with unknown token "
+@@ -2622,6 +2650,7 @@ public class WindowManagerService extends IWindowManager.Stub
+                 moveInputMethodWindowsIfNeededLocked(false);
+             }
+ 
++            Log.d("WMDEBUG", "[WMS] addWindow before assignLayersLocked");
+             assignLayersLocked(displayContent.getWindowList());
+             // Don't do layout here, the window must call
+             // relayout to be displayed, so we'll do it there.
+@@ -2804,6 +2833,7 @@ public class WindowManagerService extends IWindowManager.Stub
+             return;
+         }
+ 
++        Log.d("WMDEBUG", "[WMS] removeWindowInnerLocked: " + win);
+         for (int i=win.mChildWindows.size()-1; i>=0; i--) {
+             WindowState cwin = win.mChildWindows.get(i);
+             Slog.w(TAG, "Force-removing child win " + cwin + " from container "
+@@ -2891,6 +2921,7 @@ public class WindowManagerService extends IWindowManager.Stub
+         if (windows != null) {
+             windows.remove(win);
+             if (!mInLayout) {
++                Log.d("WMDEBUG", "[WMS] removeWindowInnerLocked before assignLayersLocked");
+                 assignLayersLocked(windows);
+                 final DisplayContent displayContent = win.getDisplayContent();
+                 if (displayContent != null) {
+@@ -3245,6 +3276,7 @@ public class WindowManagerService extends IWindowManager.Stub
+                 }
+                 try {
+                     if (!win.mHasSurface) {
++                        Log.d("WMDEBUG", "[WMS] relayoutWindow before createSurfaceLocked");
+                         surfaceChanged = true;
+                     }
+                     SurfaceControl surfaceControl = winAnimator.createSurfaceLocked();
+@@ -3321,6 +3353,7 @@ public class WindowManagerService extends IWindowManager.Stub
+                             if (mInputMethodWindow == win) {
+                                 mInputMethodWindow = null;
+                             }
++                            Log.d("WMDEBUG", "[WMS] in relayoutWindow call destroySurfaceLocked " + winAnimator);
+                             winAnimator.destroySurfaceLocked();
+                         }
+                         //TODO (multidisplay): Magnification is supported only for the default
+@@ -3352,6 +3385,7 @@ public class WindowManagerService extends IWindowManager.Stub
+                 // its layer recomputed.  However, if the IME was hidden
+                 // and isn't actually moved in the list, its layer may be
+                 // out of data so we make sure to recompute it.
++                Log.d("WMDEBUG", "[WMS] relayoutWindow before assignLayersLocked");
+                 assignLayersLocked(win.getWindowList());
+             }
+ 
+@@ -3621,6 +3655,7 @@ public class WindowManagerService extends IWindowManager.Stub
+ 
+     @Override
+     public void addWindowToken(IBinder token, int type) {
++        Log.d("WMDEBUG", "[WMS] addWindowToken token " + token + " type " + type);
+         if (!checkCallingPermission(android.Manifest.permission.MANAGE_APP_TOKENS,
+                 "addWindowToken()")) {
+             throw new SecurityException("Requires MANAGE_APP_TOKENS permission");
+@@ -3723,6 +3758,8 @@ public class WindowManagerService extends IWindowManager.Stub
+     public void addAppToken(int addPos, IApplicationToken token, int taskId, int stackId,
+             int requestedOrientation, boolean fullscreen, boolean showForAllUsers, int userId,
+             int configChanges, boolean voiceInteraction, boolean launchTaskBehind) {
++
++        Log.d("WMDEBUG", "[WMS] addAppToken token " + token);
+         if (!checkCallingPermission(android.Manifest.permission.MANAGE_APP_TOKENS,
+                 "addAppToken()")) {
+             throw new SecurityException("Requires MANAGE_APP_TOKENS permission");
+@@ -4123,6 +4160,7 @@ public class WindowManagerService extends IWindowManager.Stub
+             throw new SecurityException("Requires MANAGE_APP_TOKENS permission");
+         }
+ 
++        Log.d("WMDEBUG", "[WMS] setFocusedApp token " + token);
+         synchronized(mWindowMap) {
+             final AppWindowToken newFocus;
+             if (token == null) {
+@@ -4348,6 +4386,7 @@ public class WindowManagerService extends IWindowManager.Stub
+                                 "Removing starting " + startingWindow + " from " + ttoken);
+                         ttoken.windows.remove(startingWindow);
+                         ttoken.allAppWindows.remove(startingWindow);
++                        Log.d("WMDEBUG2", "setAppStartingWindow before addwindow " + startingWindow);
+                         addWindowToListInOrderLocked(startingWindow, true);
+ 
+                         // Propagate other interesting state between the
+@@ -5006,9 +5045,11 @@ public class WindowManagerService extends IWindowManager.Stub
+         final WindowList windows = win.getWindowList();
+         // Adding child windows relies on mChildWindows being ordered by mSubLayer.
+         final int NCW = win.mChildWindows.size();
++        Log.d("[WMDEBUG]", "[WMS] child window size " + NCW + " in WindowState " + win);
+         boolean winAdded = false;
+         for (int j=0; j<NCW; j++) {
+             WindowState cwin = win.mChildWindows.get(j);
++            Log.d("[WMDEBUG]", "[WMS] child window " + cwin);
+             if (!winAdded && cwin.mSubLayer >= 0) {
+                 if (DEBUG_WINDOW_MOVEMENT) Slog.v(TAG, "Re-adding child window at "
+                         + index + ": " + cwin);
+@@ -5040,6 +5081,7 @@ public class WindowManagerService extends IWindowManager.Stub
+         for (int i=0; i<NW; i++) {
+             final WindowState win = token.windows.get(i);
+             final DisplayContent winDisplayContent = win.getDisplayContent();
++            Log.d("WMDEBUG", "[WMS] windows size " + NW + " in WindowToken " + token);
+             if (winDisplayContent == displayContent || winDisplayContent == null) {
+                 win.mDisplayContent = displayContent;
+                 index = reAddWindowLocked(index, win);
+@@ -5053,6 +5095,7 @@ public class WindowManagerService extends IWindowManager.Stub
+         final WindowList windows = displayContent.getWindowList();
+         mTmpWindows.addAll(windows);
+ 
++        Log.d("WMDEBUG", "[WMS] moveStackWindowsLocked before rebuildAppWindowListLocked");
+         rebuildAppWindowListLocked(displayContent);
+ 
+         // Set displayContent.layoutNeeded if window order changed.
+@@ -5085,6 +5128,8 @@ public class WindowManagerService extends IWindowManager.Stub
+ 
+         if (!updateFocusedWindowLocked(UPDATE_FOCUS_WILL_PLACE_SURFACES,
+                 false /*updateInputWindows*/)) {
++
++            Log.d("WMDEBUG", "[WMS] moveStackWindowsLocked before assignLayersLocked");
+             assignLayersLocked(displayContent.getWindowList());
+         }
+ 
+@@ -5119,6 +5164,7 @@ public class WindowManagerService extends IWindowManager.Stub
+                 if (mAppTransition.isTransitionSet()) {
+                     task.setSendingToBottom(false);
+                 }
++                Log.d("WMDEBUG", "[WMS] moveTaskToTop before moveStackWindowsLocked");
+                 moveStackWindowsLocked(displayContent);
+             }
+         } finally {
+@@ -5141,6 +5187,7 @@ public class WindowManagerService extends IWindowManager.Stub
+                 if (mAppTransition.isTransitionSet()) {
+                     task.setSendingToBottom(true);
+                 }
++                Log.d("WMDEBUG", "[WMS] moveTaskToBottom before moveStackWindowsLocked");
+                 moveStackWindowsLocked(stack.getDisplayContent());
+             }
+         } finally {
+@@ -5167,6 +5214,7 @@ public class WindowManagerService extends IWindowManager.Stub
+                     }
+                     stack.attachDisplayContent(displayContent);
+                     displayContent.attachStack(stack);
++                    Log.d("WMDEBUG", "[WMS] attachStack before moveStackWindowsLocked");
+                     moveStackWindowsLocked(displayContent);
+                     final WindowList windows = displayContent.getWindowList();
+                     for (int winNdx = windows.size() - 1; winNdx >= 0; --winNdx) {
+@@ -5692,6 +5740,8 @@ public class WindowManagerService extends IWindowManager.Stub
+             for (int displayNdx = 0; displayNdx < numDisplays; ++displayNdx) {
+                 final DisplayContent displayContent = mDisplayContents.valueAt(displayNdx);
+                 displayContent.switchUserStacks();
++
++                Log.d("WMDEBUG", "[WMS] setCurrentUser before rebuildAppWindowListLocked");
+                 rebuildAppWindowListLocked(displayContent);
+             }
+             performLayoutAndPlaceSurfacesLocked();
+@@ -8767,6 +8817,8 @@ public class WindowManagerService extends IWindowManager.Stub
+     }
+ 
+     private void rebuildAppWindowListLocked(final DisplayContent displayContent) {
++
++        Log.d("WMDEBUG", "[WMS] BEGIN rebuildAppWindowListLocked ==============");
+         final WindowList windows = displayContent.getWindowList();
+         int NW = windows.size();
+         int i;
+@@ -8781,6 +8833,7 @@ public class WindowManagerService extends IWindowManager.Stub
+         i=0;
+         while (i < NW) {
+             WindowState w = windows.get(i);
++            Log.d("WMDEBUG", "[WMS] NW " + NW + " mAppToken " + w.mAppToken + " type " + w.mAttrs.type);
+             if (w.mAppToken != null) {
+                 WindowState win = windows.remove(i);
+                 win.mRebuilding = true;
+@@ -8802,6 +8855,7 @@ public class WindowManagerService extends IWindowManager.Stub
+         // by skipping them.
+         lastBelow++;
+         i = lastBelow;
++        Log.d("WMDEBUG", "[WMS] lastBelow " + lastBelow);
+ 
+         // First add all of the exiting app tokens...  these are no longer
+         // in the main app list, but still have windows shown.  We put them
+@@ -8812,6 +8866,8 @@ public class WindowManagerService extends IWindowManager.Stub
+         for (int stackNdx = 0; stackNdx < numStacks; ++stackNdx) {
+             AppTokenList exitingAppTokens = stacks.get(stackNdx).mExitingAppTokens;
+             int NT = exitingAppTokens.size();
++            Log.d("WMDEBUG", "[WMS] exit token size " + NT +
++                    " in TaskStack " + stacks.get(stackNdx));
+             for (int j = 0; j < NT; j++) {
+                 i = reAddAppWindowsLocked(displayContent, i, exitingAppTokens.get(j));
+             }
+@@ -8824,6 +8880,9 @@ public class WindowManagerService extends IWindowManager.Stub
+             for (int taskNdx = 0; taskNdx < numTasks; ++taskNdx) {
+                 final AppTokenList tokens = tasks.get(taskNdx).mAppTokens;
+                 final int numTokens = tokens.size();
++
++                Log.d("WMDEBUG", "[WMS] app token size " + numTokens +
++                        " in TaskStack " + stacks.get(stackNdx) + " in Task " + tasks.get(taskNdx));
+                 for (int tokenNdx = 0; tokenNdx < numTokens; ++tokenNdx) {
+                     final AppWindowToken wtoken = tokens.get(tokenNdx);
+                     if (wtoken.mIsExiting) {
+@@ -8834,6 +8893,8 @@ public class WindowManagerService extends IWindowManager.Stub
+             }
+         }
+ 
++        Log.d("WMDEBUG", "[WMS] END rebuildAppWindowListLocked ==================");
++
+         i -= lastBelow;
+         if (i != numRemoved) {
+             displayContent.layoutNeeded = true;
+@@ -8871,6 +8932,7 @@ public class WindowManagerService extends IWindowManager.Stub
+ 
+         boolean anyLayerChanged = false;
+ 
++        Log.d("WMDEBUG", "[WMS] BEGIN assignLayersLocked ============");
+         for (i=0; i<N; i++) {
+             final WindowState w = windows.get(i);
+             final WindowStateAnimator winAnimator = w.mWinAnimator;
+@@ -8904,6 +8966,9 @@ public class WindowManagerService extends IWindowManager.Stub
+             } else if (w.mIsWallpaper) {
+                 winAnimator.mAnimLayer += mWallpaperAnimLayerAdjustment;
+             }
++            Log.d("WMDEBUG", "[WMS] assignLayersLocked { SC: " + winAnimator.mSurfaceControl
++                    + " window: "  +  w.mClient
++                    + " WS.mLayer: " + w.mLayer + " WSA.mAnimLayer: " + winAnimator.mAnimLayer + " }");
+             if (winAnimator.mAnimLayer != oldLayer) {
+                 layerChanged = true;
+                 anyLayerChanged = true;
+@@ -8923,6 +8988,8 @@ public class WindowManagerService extends IWindowManager.Stub
+             //    "Assigned layer " + curLayer + " to " + w.mClient.asBinder());
+         }
+ 
++        Log.d("WMDEBUG", "[WMS] END assignLayersLocked =================");
++
+         //TODO (multidisplay): Magnification is supported only for the default display.
+         if (mAccessibilityController != null && anyLayerChanged
+                 && windows.get(windows.size() - 1).getDisplayId() == Display.DEFAULT_DISPLAY) {
+@@ -9270,6 +9337,7 @@ public class WindowManagerService extends IWindowManager.Stub
+ 
+             mH.removeMessages(H.APP_TRANSITION_TIMEOUT);
+ 
++            Log.d("WMDEBUG", "[WMS] handleAppTransitionReadyLocked before rebuildAppWindowListLocked");
+             rebuildAppWindowListLocked();
+ 
+             // if wallpaper is animating in or out set oldWallpaper to null else to wallpaper
+@@ -9589,6 +9657,7 @@ public class WindowManagerService extends IWindowManager.Stub
+             // TODO(multidisplay): IMEs are only supported on the default display.
+             if (windows == getDefaultWindowListLocked()
+                     && !moveInputMethodWindowsIfNeededLocked(true)) {
++                Log.d("WMDEBUG", "[WMS] handleAppTransitionReadyLocked before assignLayersLocked");
+                 assignLayersLocked(windows);
+             }
+             updateFocusedWindowLocked(UPDATE_FOCUS_PLACING_SURFACES, true /*updateInputWindows*/);
+@@ -9630,6 +9699,8 @@ public class WindowManagerService extends IWindowManager.Stub
+                 }
+             }
+         }
++
++        Log.d("WMDEBUG", "[WMS] handleAnimatingStoppedAndTransitionLocked before rebuildAppWindowListLocked");
+         rebuildAppWindowListLocked();
+ 
+         changes |= PhoneWindowManager.FINISH_LAYOUT_REDO_LAYOUT;
+@@ -9939,6 +10010,7 @@ public class WindowManagerService extends IWindowManager.Stub
+                     if ((displayContent.pendingLayoutChanges &
+                             WindowManagerPolicy.FINISH_LAYOUT_REDO_WALLPAPER) != 0 &&
+                             adjustWallpaperWindowsLocked()) {
++                        Log.d("WMDEBUG", "[WMS] performLayoutAndPlaceSurfacesLockedInner before assignLayersLocked");
+                         assignLayersLocked(windows);
+                         displayContent.layoutNeeded = true;
+                     }
+@@ -10387,6 +10459,8 @@ public class WindowManagerService extends IWindowManager.Stub
+             }
+ 
+             for (DisplayContent displayContent : displayList) {
++
++                Log.d("WMDEBUG", "[WMS] performLayoutAndPlaceSurfacesLockedInner before assignLayersLocked");
+                 assignLayersLocked(displayContent.getWindowList());
+                 displayContent.layoutNeeded = true;
+             }
+@@ -10689,6 +10763,8 @@ public class WindowManagerService extends IWindowManager.Stub
+                 } else if (mode == UPDATE_FOCUS_WILL_PLACE_SURFACES) {
+                     // Client will do the layout, but we need to assign layers
+                     // for handleNewWindowLocked() below.
++
++                    Log.d("WMDEBUG", "[WMS] updateFocusedWindowLocked before assignLayersLocked");
+                     assignLayersLocked(displayContent.getWindowList());
+                 }
+             }
+diff --git a/services/core/java/com/android/server/wm/WindowState.java b/services/core/java/com/android/server/wm/WindowState.java
+index c2548de..d345fdc 100644
+--- a/services/core/java/com/android/server/wm/WindowState.java
++++ b/services/core/java/com/android/server/wm/WindowState.java
+@@ -56,6 +56,7 @@ import android.os.IBinder;
+ import android.os.RemoteException;
+ import android.os.UserHandle;
+ import android.util.Slog;
++import android.util.Log;
+ import android.view.DisplayInfo;
+ import android.view.Gravity;
+ import android.view.IApplicationToken;
+@@ -429,8 +430,13 @@ final class WindowState implements WindowManagerPolicy.WindowState {
+             mAttachedWindow = attachedWindow;
+             if (WindowManagerService.DEBUG_ADD_REMOVE) Slog.v(TAG, "Adding " + this + " to " + mAttachedWindow);
+ 
++
+             final WindowList childWindows = mAttachedWindow.mChildWindows;
+             final int numChildWindows = childWindows.size();
++
++            Log.d("WMDEBUG", "[WS] windowstate " + this + " type " + mAttrs.type +
++                                " baseLayer " + mBaseLayer + " subLayer " + mSubLayer +
++                                " attached window " + attachedWindow + " attached window exist childs " + childWindows);
+             if (numChildWindows == 0) {
+                 childWindows.add(this);
+             } else {
+diff --git a/services/core/java/com/android/server/wm/WindowStateAnimator.java b/services/core/java/com/android/server/wm/WindowStateAnimator.java
+index 42042b9..9bbe5ef 100644
+--- a/services/core/java/com/android/server/wm/WindowStateAnimator.java
++++ b/services/core/java/com/android/server/wm/WindowStateAnimator.java
+@@ -41,6 +41,7 @@ import android.graphics.Region;
+ import android.os.Debug;
+ import android.os.RemoteException;
+ import android.util.Slog;
++import android.util.Log;
+ import android.view.Display;
+ import android.view.DisplayInfo;
+ import android.view.MagnificationSpec;
+@@ -374,6 +375,7 @@ class WindowStateAnimator {
+         if (mAnimator.mWindowDetachedWallpaper == mWin) {
+             mAnimator.mWindowDetachedWallpaper = null;
+         }
++        Log.d("WMDEBUG", "[WSA] stepAnimationLocked set mAnimLayer to " + mWin.mLayer + " " + this);
+         mAnimLayer = mWin.mLayer;
+         if (mWin.mIsImWindow) {
+             mAnimLayer += mService.mInputMethodAnimLayerAdjustment;
+@@ -920,6 +922,7 @@ class WindowStateAnimator {
+                     if (displayContent != null) {
+                         mSurfaceControl.setLayerStack(displayContent.getDisplay().getLayerStack());
+                     }
++                    Log.d("WMDEBUG", "[WSA] createSurfaceLocked setLayer to " + mAnimLayer + " " + this);
+                     mSurfaceControl.setLayer(mAnimLayer);
+                     mSurfaceControl.setAlpha(0);
+                     mSurfaceShown = false;
+@@ -1510,6 +1513,8 @@ class WindowStateAnimator {
+                     mSurfaceAlpha = mShownAlpha;
+                     mSurfaceControl.setAlpha(mShownAlpha);
+                     mSurfaceLayer = mAnimLayer;
++                    Log.d("WMDEBUG", "[WSA] prepareSurface setLayer to " + mAnimLayer +
++                                      " SC " + mSurfaceControl);
+                     mSurfaceControl.setLayer(mAnimLayer);
+                     mSurfaceControl.setMatrix(
+                             mDsDx * w.mHScale, mDtDx * w.mVScale,

@@ -1,0 +1,6 @@
+http://note.qidong.name/2017/08/android-blueprint/
+
+Android.bp --> Blueprint --> Soong --> Ninja
+Makefile or Android.mk --> kati --> Ninja
+
+(Android.mk --> Soong --> Blueprint --> Android.bp)

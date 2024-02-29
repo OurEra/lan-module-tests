@@ -1,0 +1,395 @@
+*****************************************
+
+  BASIC DATA STRUCTURE (SDM660 SDK25)
+
+*****************************************
+
+QCamera2HardwareInterface::setCallBacks()
+1 framework层调用HAL接口camera_device_t.ops.set_callbacks()
+  来向HAL实现层设置几个重要回调函数:
+
+  __notify_cb()         保存至QCamera2HardwareInterface.mNotifyCb
+  __data_cb()           保存至                         .mDataCb
+  __data_cb_timestamp() 保存至                         .mDataCbTimestamp
+  __get_memory()        保存至                         .mGetMemory
+
+2 调用QCameraCbNotifier::setCallbacks(), 把上面的几个回调也保存到
+  QCameraCbNotifier.mNotifyCb/mDataCb/mDataCbTimestamp
+
+QCameraCbNotifier::setCallbacks()
+1 保存入参的回调函数
+2 调用QCameraCbNotifier.mProcTh的launch()创建
+　线程tid:  mProcTh.cmd_pid
+      run:  QCameraCbNotifier::cbNotifyRoutine()
+      arg:  QCameraCbNotifier*
+      name: "CAM_cbNotify"
+
+QCamera2HardwareInterface::allocateStreamBuf()
+1 该函数为QCamera2HardwareInterface继承QCameraAllocator 
+  实现的接口函数之一
+2 根据入参cam_stream_type_t来调用不用处理,如:
+  CAM_STREAM_TYPE_PREVIEW
+  QCameraGrallocMemory()
+
+  CAM_STREAM_TYPE_VIDEO
+  QCameraVideoMemory()
+3 调用上面各个QCameraMemory实现类的allocate()接口并返回 
+
+
+QCameraVideoMemory::QCameraVideoMemory()
+1 赋值一些类成员,调用父类构造QCameraStreamMemory(),
+  传入camera_request_memory函数指针
+
+QCameraStreamMemory::QCameraStreamMemory()
+1 保存传入的camera_request_memory至mGetMemory, 调用
+  父类构造QCameraMemory()
+
+QCameraMemory::QCameraMemory()
+1 赋值一些入参到类成员中,如mStreamType, mBufType
+
+
+QCameraVideoMemory::allocate()
+1 调用QCameraStreamMemory::allocate()实现
+2 调用allocateMeta()
+3 对于mNativeHandle[], 调用updateNativeHandle()来填充
+  mMemInfo[].fd/size到对应native_handle_t.data[]中
+
+QCameraStreamMemory::allocate()
+1 调用QCameraMemory::alloc()
+2 循环依次拿出上一步得到的mMemInfo[].fd/size, 调用mGetMemory
+  返回camera_memory_t至mCameraMemory[]
+
+QCameraMemory::alloc()
+1 根据mBufferCount来循环调用allocOneBuffer(),
+  传入QCameraMemInfo mMemInfo[]
+
+QCameraMemory::allocOneBuffer()
+1 打开"/dev/ion"节点, 通过ION_IOC_ALLOC分配buffer后,
+  填充相关信息到入参QCameraMemInfo的各个成员中 
+
+QCameraVideoMemory::allocateMeta()
+1 根据入参'buf_cnt'来循环,依次调用mGetMemory函数, 分配
+  media_metadata_buffer结构的空间至mMetadata[]
+2 调用native_handle_create()创建native_handle_t*至 
+  mNativeHandle[]
+3 设置mNativeHandle[].data[]中的值; 设置mMetadata[].data
+  即media_metadata_buffer的eType为kMetadataBufferTypeNativeHandleSource
+
+QCameraHeapMemory()
+1 调用父类QCameraMemory够造,并初始化成员
+
+QCameraHeapMemory::allocate()
+1 调用父类QCameraMemory::alloc()实现
+2 对于分配的mMemInfo[].fd/size通过mmap()获取用户地址,
+  对应保存到mPtr[]中
+
+
+QCameraGrallocMemory()
+1 调用父类构造QCameraMemory()
+2 保存入参camera_request_memory至mGetMemory, 初始一些成员
+
+QCameraGrallocMemory::setWindowInfo()
+1 保存preview_stream_ops_t至mWindow, 同时赋值其他成员,如
+  mWidth/mHeight/mFormat
+
+QCameraGrallocMemory::allocate()
+1 调用preview_stream_ops_t.set_buffers_geometry()传入当前
+  宽高信息
+2 根据入参循环依次调用, preview_stream_ops_t.dequeue_buffer()
+  至mBufferHandle[]
+3 将对应mBufferHandle[]强转成private_handle_t至mPrivateHandle[],
+  打开"/dev/ion"至mMemInfo[].main_ion_fd
+4 拿出mPrivateHandle[].fd填充到struct ion_fd_data.fd中,通过ION_IOC_IMPORT
+  获取对应的ion_info_fd.handle, 更新fd和handle到对应的mMemInfo[].fd/handle
+5 调用mGetMemory传入已有的mPrivateHandle[].fd, 返回camera_memory_t至mCameraMemory[]
+
+
+QCamera2HardwareInterface::addChannel()
+1 根据入参qcamera_ch_type_enum_t做不同处理,如:               
+
+  QCAMERA_CH_TYPE_PREVIEW
+  调用
+  addPreviewChannel()
+
+  QCAMERA_CH_TYPE_SNAPSHOT
+  调用
+  addSnapshotChannel()
+
+QCamera2HardwareInterface::addPreviewChannel()
+1 调用QCameraChannel()创建对象,传入mCameraHandle.ops, 即
+  mm_camera_ops_t mm_camera_ops
+2 调用上面QCameraChannel::init(), 传入参数都为空
+3 调用addStreamToChannel()两次, 传入:
+
+  CAM_STREAM_TYPE_METADATA
+  metadata_stream_cb_routine()
+
+  CAM_STREAM_TYPE_PREVIEW
+  preview_stream_cb_routine()
+
+preview_stream_cb_routine()
+1 从入参mm_camera_super_buf_t中拿出对应的QCameraGrallocMemory,
+  以及对应的mm_camera_buf_def_t 
+2 调用QCameraGrallocMemory::enqueueBuffer()传入mm_camera_buf_def_t.buf_idx
+  送去显示
+3 根据上一步enqueu的数目，调用QCameraGrallocMemory::dequeueBuffer()从对应
+  window中拿出相同数目的buffer, 然后
+
+  调用QCamera2HardwareInterface::sendPreviewCallback()回调buffer给framework
+
+  调用QCameraStream::bufDone()归还buffer给v4l2
+
+QCamera2HardwareInterface::sendPreviewCallback()
+1 当format符合要求时, 判断当前buffer的大小和需要回调
+  buffer格式的大小一致时:
+
+  调用mGetMemory()返回camera_memory_t *, 传入根据入参拿到的fd
+  QCameraMemory.getFd(idx)
+
+  当前buffer和需要回调的buffer对应格式打下不一致时:
+  调用mGetMemory()分配一个新的buffer, 然后把根据入参QCameraMemory.getMemory(idx)
+  返回的buffer拷贝到新的camera_memory_t*
+
+  
+  然后填充
+  qcamera_callback_argm_t.user_data为camera_memory_t *
+                         .cb_type为QCAMERA_DATA_CALLBACK
+                         .msg_type为CAMERA_MSG_PREVIEW_FRAME
+  然后调用QCameraCbNotifier::notifyCallback(), 由线程"CAM_cbNotify"
+  异步处理
+
+
+QCameraChannel::QCameraChannel()
+1 保存入参mm_camera_ops_t至m_camOps, 以及初始其他成员
+
+QCameraChannel::init()
+1 调用m_camOps.add_channel()实现,即mm_camera_intf_add_channel(),
+  传入mm_camera_buf_notify_t, 返回值至m_handle 
+
+mm_camera_intf_add_channel()
+1 入参mm_camera_buf_notify_t, void *userdata等,
+  调用mm_camera_add_channel()
+
+mm_camera_add_channel()
+1 更新mm_channel_t.state为MM_CHANNEL_STATE_STOPPED   
+2 调用mm_channel_init()
+
+
+mm_channel_init()
+1 将入参mm_camera_buf_notify_t和void *userdata存至
+  mm_channel_t.bundle.super_buf_notify_cb/bundle.user_data
+2 调用mm_camera_poll_thread_launch()创建
+　线程tid:  mm_channel_t.poll_thread[0].pid
+      run:  mm_camera_poll_thread()
+      arg:  mm_channel_t.poll_thread[0]
+      name: "CAM_dataPoll"
+
+
+QCamera2HardwareInterface::addStreamToChannel()
+1 调用allocateStreamInfoBuf(), 返回QCameraHeapMemory对象
+2 调用QCameraChannel::addStream(), 传入
+  QCameraAllocator引用,即QCamera2HardwareInterface;
+  上步返回的QCameraHeapMemory;
+  入参stream_cb_routine 
+
+
+QCamera2HardwareInterface::allocateStreamInfoBuf()
+1 创建QCameraHeapMemory对象, 并调用其allocate()按参数
+  分配多个cam_stream_info_t结构空间
+2 对于上一步分配的cam_stream_info_t, 依次调用initStreamInfoBuf()
+  初始化结构成员
+
+
+QCameraChannel::addStream()
+1 调用QCameraStream(), 传入入参QCameraAllocator, QCameraChannel.m_camOps
+2 调用QCameraStream::init(), 传入QCameraHeapMemory, stream_cb_routine 
+
+
+QCameraStream::QCameraStream()
+1 保存入参QCameraAllocator至mAllocator, mm_camera_ops_t至mCamOps
+2 初始化成员mm_camera_stream_mem_vtbl_t mMemVtbl, 如
+    mMemVtbl.get_bufs为get_bufs
+            .invalidate_buf为invalidate_buf
+
+QCameraStream::init()
+1 保存入参QCameraHeapMemory至mStreamInfoBuf, 同时
+  调用mStreamInfoBuf->getPtr(0), 保存至mStreamInfo 
+2 调用mCamOps.add_stream实现,即mm_camera_intf_add_stream()
+  最后调用到
+  mm_stream_fsm_inited()
+3 调用mapBufs(), 把mStreamInfoBuf通过mm_camera_intf_map_stream_bufs()
+  和vendor映射共享
+4 调用configStream()
+5 保存入参stream_cb_routine到mDataCB 
+
+mm_stream_fsm_inited()
+1 调用mm_stream_init()
+2 打开对应节点至mm_stream_t.fd
+
+mm_stream_init()
+1 初始化mm_stream_t成员，其中
+  mm_stream_t.map_ops.map_ops为mm_camera_map_stream_buf_ops
+             .map_ops.unmap_ops为mm_camera_unmap_stream_buf_ops
+
+QCameraStream::configStream()
+1 准备mm_camera_stream_config_t结构, 如
+  stream_info为mStreamInfo
+  mem_vtbl为mMemVtbl
+  stream_cb为dataNotifyCB
+
+  然后传参调用到mm_camera_intf_config_stream()
+
+QCameraStream::dataNotifyCB()
+1 复制入参mm_camera_super_buf_t, 调用processDataNotify()
+
+QCameraStream::processDataNotify()
+1 将mm_camera_super_buf_t添加到mDataQ, 然后向mProcTh发送
+  CAMERA_CMD_TYPE_DO_NEXT_JOB由线程"CAM_strmDatProc"异步处理
+
+mm_stream_config()
+1 将入参mm_camera_stream_config_t中相关成员保存到
+  mm_stream_t成员中, 如
+
+  mm_camera_stream_config_t.stream_info
+  到
+  mm_stream_t stream_info
+
+  mm_camera_stream_config_t.mem_vtbl
+  到
+  mm_stream_t mem_vtbl 
+
+  mm_camera_stream_config_t.stream_cb
+  到
+  mm_stream_t.buf_cb[].cb 
+  等
+2 调用mm_stream_sync_info(), 同步信息到vendor
+3 调用mm_stream_set_fmt()
+4 调用mm_stream_t.mem_vtbl.set_config_ops即
+  QCameraStream::set_config_ops(), 传入
+  mm_stream_t.map_ops
+
+
+QCamera2HardwareInterface::addSnapshotChannel()
+
+
+QCamera2HardwareInterface::startChannel()
+1 调用对应QCameraChannel *m_channels[]中对应实例的start()函数
+
+
+QCameraChannel::start()
+1 调用mStreams中各个成员的QCameraStream::start()函数
+2 调用mm_camera_intf_start_channel(()
+  最后调用到
+  mm_channel_start()
+
+
+QCameraStream::start()
+1 通过QCameraCmdThread mProcTh创建
+　线程tid:  mProcTh.cmd_pid
+      run:  QCameraStream::dataProcRoutine()
+      arg:  QCameraStream*
+      name: "CAM_strmDatProc"
+
+
+QCameraStream::dataProcRoutine()
+1 从对应QCameraCmdThread.cmd_queue中拿出一个camera_cmd_type_t,
+  当为CAMERA_CMD_TYPE_DO_NEXT_JOB时,则从QCameraStream.mDataQ拿出
+  一个mm_camera_super_buf_t, 并回调给stream_cb_routine mDataCB 
+
+  如果没有回调需要, 则调用QCameraStream::bufDone()
+
+
+mm_channel_start()
+1 当mm_channel_t.bundle.super_buf_notify_cb非空时:
+    初始化mm_channel_t.bundle.superbuf_queue
+2 调用mm_camera_cmd_thread_launch()创建
+　线程tid:  mm_channel_t.cb_thread.cmd_pid
+      run:  mm_camera_cmd_thread()
+            ->
+            mm_channel_t.cb_thread.cb  = mm_channel_dispatch_super_buf()
+      arg:  mm_channel_t.cb_thread
+      name: "CAM_SuperBuf"
+3 调用mm_camera_cmd_thread_launch()创建
+　线程tid:  mm_channel_t.cmd_thread.cmd_pid
+      run:  mm_camera_cmd_thread()
+            ->
+            mm_channel_t.cmd_thread.cb  = mm_channel_process_stream_buf()
+      arg:  mm_channel_t.cmd_thread
+      name: "CAM_SuperBufCB"
+4 遍历mm_channel_t.streams[]中有效的mm_stream_t, 依次调用
+  4.1 调用mm_stream_init_bufs()
+  4.2 调用mm_stream_reg_buf()
+  4.3 如果mm_stream_t.buf_cb[].cb非空, 调用mm_camera_cmd_thread_launch()创建
+　    线程tid:  mm_stream_t.cmd_thread.cmd_pid
+          run:  mm_camera_cmd_thread()
+                ->
+                mm_stream_t.cmd_thread.cb  = mm_stream_dispatch_app_data()
+          arg:  mm_stream_t.cmd_thread
+          name: "CAM_StrmAppData"
+
+      调用mm_stream_streamon()
+
+
+mm_channel_process_stream_buf()
+
+
+mm_stream_dispatch_app_data()
+1 mm_stream_t.buf_cb[].cb_type非MM_CAMERA_STREAM_CB_TYPE_SYNC,
+  则回调mm_stream_t.buf_cb[].cb, 传入mm_camera_super_buf_t, 其中
+  super_buf.bufs[0]即为mm_camera_buf_info_t.buf
+
+  (cb这里一般就是QCameraStream::dataNotifyCB)
+
+
+mm_stream_init_bufs()
+1 调用mm_stream_t.mem_vtbl.get_bufs获取buffer，至
+  mm_stream_t.buf数组
+
+mm_stream_reg_buf()
+1 调用mm_stream_request_buf(), 通过VIDIOC_REQBUFS
+  来让kernel知道v4l2的buffer数目
+2 依次拿出mm_stream_t.buf[], 调用mm_stream_qbuf()
+
+mm_stream_qbuf()
+1 通过VIDIOC_QBUF, 将入参mm_camera_buf_def_t对应的buf
+  传递给kernel
+2 如果第一次做qbuf, 则调用mm_camera_poll_thread_add_poll_fd()
+  更新mm_stream_t.ch_obj.poll_thread[0].poll_entries[].fd
+                                                      .notify_cb 
+  为
+  mm_stream_t.fd
+  mm_stream_data_notify()
+
+mm_stream_data_notify()
+1 调用mm_stream_read_msm_frame(), 通过VIDIOC_DQBUF获取一个struct v4l2_buffer,
+  根据v4l2_buffer.index对应mm_stream_t.buf[], 然后和其他信息填充到mm_camera_buf_info_t
+2 如果mm_stream_t.buf_cb[].cb_type中有MM_CAMERA_STREAM_CB_TYPE_SYNC,
+  则回调mm_camera_buf_info_t给mm_stream_t.buf_cb[].cb
+3 调用mm_stream_handle_rcvd_buf()
+
+mm_stream_handle_rcvd_buf()
+1 调用mm_stream_notify_channel(), 构造mm_camera_cmdcb_t结构,
+  其中cmd_type为MM_CAMERA_CMD_TYPE_DATA_CB
+      u.buf为mm_camera_buf_info_t 
+
+  然后将结构添加到mm_channel.cmd_thread.cmd_queue, 由线程"CAM_SuperBufCB"
+  异步处理
+2 构造mm_camera_cmdcb_t结构
+  其中cmd_type为MM_CAMERA_CMD_TYPE_DATA_CB
+      u.buf为mm_camera_buf_info_t 
+
+  然后将结构添加到mm_stream_t.cmd_thread.cmd_queue, 由线程"CAM_StrmAppData"
+  异步处理
+
+###########################################
+###########################################
+FAQ
+1 preview, snapshot时分配的buffer宽高由哪里决定
+
+2 preview时window对应的宽高和stream宽高不一致时，使用哪一个
+
+3 zsl和非zsl拍照有什么区别
+
+4 preview时buffer流转
+
+5 video时buffer流转

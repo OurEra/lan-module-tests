@@ -1,0 +1,106 @@
+*****************************************
+
+  Based on SDK 25
+
+*****************************************
+
+ java_vm_ext.cc
+   ||
+   ||  jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args)
+   ||
+   ||
+
+ Runtime
+   ||
+   ||  heap_                     --  gc::Heap*
+   ||  java_vm_                  --  JavaVMExt*
+   ||  class_linker_             --  ClassLinker*
+   ||  oat_file_manager_         --  OatFileManager*
+   ||
+   ||  Create(RuntimeArgumentMap&& runtime_options)
+   ||  Init(RuntimeArgumentMap&& runtime_options_in)
+   ||
+
+  Runtime can be create in two condition:
+  1. when zygote start, will call JNI_CreateJavaVM() in AndroidRuntime::startVm();
+  2. when run dex2oat command, will call Runtime::Create() in CreateRuntime();
+
+ OatFileManager 
+   ||
+   ||  std::vector<std::unique_ptr<const DexFile>> OpenDexFilesFromOat(
+   ||               const char* dex_location,
+   ||               const char* oat_location,
+   ||               jobject class_loader,
+   ||               jobjectArray dex_elements,
+   ||               /*out*/ const OatFile** out_oat_file,
+   ||               /*out*/ std::vector<std::string>* error_msgs)
+
+ OatFileAssistant 
+   ||
+   ||  dex_location_             --  std::string
+   ||  cached_oat_file_          --  std::unique_ptr<OatFile>
+   ||
+   ||  ResultOfAttemptToUpdate MakeUpToDate(CompilerFilter::Filter target_compiler_filter,
+   ||                                       std::string* error_msg)
+   ||
+   ||  ResultOfAttemptToUpdate GenerateOatFile(CompilerFilter::Filter filter, std::string* error_msg)
+   ||
+   ||  bool Dex2Oat(const std::vector<std::string>& args, std::string* error_msg)
+   ||
+
+
+
+ ImageSpace : public MemMapSpace
+   ||
+   ||  ImageSpace* CreateBootImage(const char* image,
+   ||                              InstructionSet image_isa,
+   ||                              bool secondary_image,
+   ||                              std::string* error_msg)
+
+
+ ClassLinker
+   ||
+   ||  bool InitFromBootImage(std::string* error_msg)
+   ||
+   ||  bool AddImageSpace(gc::space::ImageSpace* space,
+   ||               Handle<mirror::ClassLoader> class_loader,
+   ||               jobjectArray dex_elements,
+   ||               const char* dex_location,
+   ||               std::vector<std::unique_ptr<const DexFile>>* out_dex_files,
+   ||               std::string* error_msg)
+   ||
+
+ dalvik_system_DexFile.cc
+   ||
+   ||  jobject DexFile_openDexFileNative(JNIEnv* env,
+   ||                                    jclass,
+   ||                                    jstring javaSourceName,
+   ||                                    jstring javaOutputName,
+   ||                                    jint flags ATTRIBUTE_UNUSED,
+   ||                                    jobject class_loader,
+   ||                                    jobjectArray dex_elements)
+
+  When APP start will create their own ClassLoader to load jar/apk, details in LoadedApk.java;
+  the classloader class is PathClassLoader:
+    PathClassLoader 
+    | - BaseDexClassLoader
+    |   | - DexPathList 
+    |   |   | - loadDexFile()
+    |   |   |   | -  DexFile
+    |   |   |   |    | - openDexFile()
+
+
+##############################################################
+##############################################################
+
+1. mainly resources in art;
+   Runtime & gc && Thread
+
+2. common funcs procedure
+   Object.wait
+   JNI_CreateJavaVM
+
+3. class object native allocate
+
+4. overview about gc and dex2oat
+

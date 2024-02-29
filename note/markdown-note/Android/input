@@ -1,0 +1,107 @@
+ ViewRootImpl implements ViewParent,
+   ||    View.AttachInfo.Callbacks,
+   ||    HardwareRenderer.HardwareDrawCallbacks
+   ||
+   ||  mInputChannel             --  InputChannel 
+   ||
+   ||
+
+
+ WindowState implements WindowManagerPolicy.WindowState
+   ||
+   ||
+   ||  mInputWindowHandle        --  InputWindowHandle 
+   ||  mInputChannel             --  InputChannel 
+   ||
+   ||
+
+
+ InputManagerService extends IInputManager.Stub
+   ||    implements Watchdog.Monitor
+   ||
+   ||
+   ||  mPtr                      --  long 
+   ||
+   ||  void registerInputChannel(InputChannel inputChannel,
+   ||                       InputWindowHandle inputWindowHandle) 
+   ||
+   ||  native void nativeSetShowTouches(long ptr, boolean enabled)
+   ||  native void nativeSetPointerSpeed(long ptr, int speed)
+   ||  
+
+ InputChannel implements Parcelable
+   ||  
+   ||  InputChannel[] openInputChannelPair(String name)
+   ||  
+   ||  
+
+ NativeInputManager : public virtual RefBase,
+   ||    public virtual InputReaderPolicyInterface,
+   ||    public virtual InputDispatcherPolicyInterface,
+   ||    public virtual PointerControllerPolicyInterface
+   ||  
+   ||  mInputManager             --  sp<InputManager> 
+   ||
+   ||  status_t registerInputChannel(JNIEnv* env, const sp<InputChannel>& inputChannel,
+   ||         const sp<InputWindowHandle>& inputWindowHandle, bool monitor)
+   ||
+
+
+ InputManager : public InputManagerInterface
+   ||
+   ||
+   ||  mReader                   --  sp<InputReaderInterface> 
+   ||  mReaderThread             --  sp<InputReaderThread> 
+   ||  mDispatcher               --  sp<InputDispatcherInterface> 
+   ||  mDispatcherThread         --  sp<InputDispatcherThread> 
+   ||
+   ||  InputManager(const sp<EventHubInterface>& eventHub,
+   ||        const sp<InputReaderPolicyInterface>& readerPolicy,
+   ||        const sp<InputDispatcherPolicyInterface>& dispatcherPolicy)
+
+
+
+ EventHub : public EventHubInterface
+   ||
+   ||
+   ||
+   ||
+
+
+
+ InputReader : public InputReaderInterface
+   ||
+   ||
+   ||
+   ||
+
+ InputListenerInterface : public virtual RefBase
+   ||
+   ||  virtual void notifyConfigurationChanged(const NotifyConfigurationChangedArgs* args)
+   ||  virtual void notifyKey(const NotifyKeyArgs* args)
+   ||  virtual void notifyMotion(const NotifyMotionArgs* args)
+   ||  ...
+   ||
+
+
+ InputDispatcherInterface : public virtual RefBase,
+   ||    public InputListenerInterface
+   ||
+   ||  virtual void setInputWindows(const Vector<sp<InputWindowHandle> >& inputWindowHandles)
+   ||
+   ||  virtual status_t registerInputChannel(const sp<InputChannel>& inputChannel,
+   ||       const sp<InputWindowHandle>& inputWindowHandle, bool monitor)
+   ||
+
+ InputDispatcher : public InputDispatcherInterface
+   ||
+   ||
+   ||
+   || || 
+   || ||Connection : public RefBase 
+   || || 
+   || ||  inputChannel           --  sp<InputChannel> 
+   || ||  inputWindowHandle     --  sp<InputWindowHandle>
+
+ 
+

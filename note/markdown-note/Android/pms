@@ -1,0 +1,151 @@
+
+
+ZygoteInit.java
+handleSystemServerProcess()
+
+SYSTEMSERVERCLASSPATH=/system/framework/services.jar:/system/framework/ethernet-service.jar:/system/framework/wifi-service.jar
+
+BOOTCLASSPATH=/system/framework/core-oj.jar:/system/framework/core-libart.jar:/system/framework/conscrypt.jar:/system/framework/okhttp.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/telephony-common.jar:/system/framework/voip-common.jar:/system/framework/ims-common.jar:/system/framework/apache-xml.jar:/system/framework/org.apache.http.legacy.boot.jar:/system/framework/tcmiface.jar:/system/framework/WfdCommon.jar:/system/framework/oem-services.jar:/system/framework/qcom.fmradio.jar:/system/framework/qcmediaplayer.jar:/system/framework/telephony-ext.jar
+
+
+compiler filter:
+[pm.dexopt.ab-ota]: [speed-profile]
+[pm.dexopt.bg-dexopt]: [speed-profile]
+[pm.dexopt.boot]: [verify-profile]
+[pm.dexopt.core-app]: [speed]
+[pm.dexopt.first-boot]: [interpret-only]
+[pm.dexopt.forced-dexopt]: [speed]
+[pm.dexopt.install]: [interpret-only]
+[pm.dexopt.nsys-library]: [speed]
+[pm.dexopt.shared-apk]: [speed]
+
+-->
+
+class CompilerFilter FINAL {
+ public:
+  // Note: Order here matters. Later filter choices are considered "as good
+  // as" earlier filter choices.
+  enum Filter {
+    kVerifyNone,          // Skip verification but mark all classes as verified anyway.
+    kVerifyAtRuntime,     // Delay verication to runtime, do not compile anything.
+    kVerifyProfile,       // Verify only the classes in the profile, compile only JNI stubs.
+    kInterpretOnly,       // Verify everything, compile only JNI stubs.
+    kTime,                // Compile methods, but minimize compilation time.
+    kSpaceProfile,        // Maximize space savings based on profile.
+    kSpace,               // Maximize space savings.
+    kBalanced,            // Good performance return on compilation investment.
+    kSpeedProfile,        // Maximize runtime performance based on profile.
+    kSpeed,               // Maximize runtime performance.
+    kEverythingProfile,   // Compile everything capable of being compiled based on profile.
+    kEverything,          // Compile everything capable of being compiled.
+  };
+...
+
+
+
+load art:
+6f2bf000-6f4c1000 rw-p 00000000 fd:00 32811                              /data/dalvik-cache/arm/system@framework@boot.art
+6f4c1000-6f5db000 rw-p 00000000 fd:00 32813                              /data/dalvik-cache/arm/system@framework@boot-core-libart.art
+6f5db000-6f605000 rw-p 00000000 fd:00 32817                              /data/dalvik-cache/arm/system@framework@boot-conscrypt.art
+6f605000-6f62f000 rw-p 00000000 fd:00 32818                              /data/dalvik-cache/arm/system@framework@boot-okhttp.art
+6f62f000-6f631000 rw-p 00000000 fd:00 32821                              /data/dalvik-cache/arm/system@framework@boot-core-junit.art
+6f631000-6f669000 rw-p 00000000 fd:00 32823                              /data/dalvik-cache/arm/system@framework@boot-bouncycastle.art
+6f669000-6f6a0000 rw-p 00000000 fd:00 32824                              /data/dalvik-cache/arm/system@framework@boot-ext.art
+6f6a0000-6fc6c000 rw-p 00000000 fd:00 32825                              /data/dalvik-cache/arm/system@framework@boot-framework.art
+6fc6c000-6fcf2000 rw-p 00000000 fd:00 32827                              /data/dalvik-cache/arm/system@framework@boot-telephony-common.art
+6fcf2000-6fcf8000 rw-p 00000000 fd:00 32828                              /data/dalvik-cache/arm/system@framework@boot-voip-common.art
+6fcf8000-6fd03000 rw-p 00000000 fd:00 32831                              /data/dalvik-cache/arm/system@framework@boot-ims-common.art
+6fd03000-6fd1b000 rw-p 00000000 fd:00 32833                              /data/dalvik-cache/arm/system@framework@boot-apache-xml.art
+6fd1b000-6fd3b000 rw-p 00000000 fd:00 32835                              /data/dalvik-cache/arm/system@framework@boot-org.apache.http.legacy.boot.art
+6fd3b000-6fd3c000 rw-p 00000000 fd:00 32836                              /data/dalvik-cache/arm/system@framework@boot-tcmiface.art
+6fd3c000-6fd3e000 rw-p 00000000 fd:00 32838                              /data/dalvik-cache/arm/system@framework@boot-WfdCommon.art
+6fd3e000-6fd3f000 rw-p 00000000 fd:00 32840                              /data/dalvik-cache/arm/system@framework@boot-oem-services.art
+6fd3f000-6fd42000 rw-p 00000000 fd:00 32842                              /data/dalvik-cache/arm/system@framework@boot-qcom.fmradio.art
+6fd42000-6fd43000 rw-p 00000000 fd:00 32844                              /data/dalvik-cache/arm/system@framework@boot-qcmediaplayer.art
+6fd43000-6fd44000 rw-p 00000000 fd:00 32846                              /data/dalvik-cache/arm/system@framework@boot-telephony-ext.art
+
+dexpath(DexPathList.java):
+6016  6016 : PMSDBG devPath /system/app/UvcButtonService/UvcButtonService.apk librarySearchPath /system/app/UvcButtonService/lib/arm64:/system/lib64:/vendor/lib64
+6030  6030 : PMSDBG devPath /system/priv-app/KedaLauncher/KedaLauncher.apk librarySearchPath /system/priv-app/KedaLauncher/lib/arm64:/system/lib64:/vendor/lib64
+6058  6058 : PMSDBG devPath /system/app/PrintSpooler/PrintSpooler.apk librarySearchPath /system/app/PrintSpooler/lib/arm64:/system/app/PrintSpooler/PrintSpooler.apk!/lib/arm64-v8a:/system/lib64:/vendor/lib64
+6081  6081 : PMSDBG devPath /system/app/RomUpdate/RomUpdate.apk librarySearchPath /system/app/RomUpdate/lib/arm64:/system/fake-libs64:/system/app/RomUpdate/RomUpdate.apk!/lib/arm64-v8a:/system/lib64:/vendor/lib64
+6097  6097 : PMSDBG devPath /system/app/XtraDownloadPolicyService/XtraDownloadPolicyService.apk librarySearchPath /system/app/XtraDownloadPolicyService/lib/arm64:/system/lib64:/vendor/lib64
+6115  6115 : PMSDBG devPath /system/app/Csm/Csm.apk librarySearchPath /system/app/Csm/lib/arm64:/system/fake-libs64:/system/app/Csm/Csm.apk!/lib/arm64-v8a:/system/lib64:/vendor/lib64
+4335  4335 : PMSDBG devPath /system/framework/com.qti.location.sdk.jar:/system/framework/com.qti.dpmframework.jar:/system/framework/dpmapi.jar:/system/priv-app/dpmserviceapp/dpmserviceapp.apk librarySearchPath /system/priv-app/dpmserviceapp/lib/arm64:/system/priv-app/dpmserviceapp/dpmserviceapp.apk!/lib/arm64-v8a:/system/lib64:/vendor/lib64
+4352  4352 : PMSDBG devPath /system/framework/qcrilhook.jar:/system/app/datastatusnotification/datastatusnotification.apk librarySearchPath /system/app/datastatusnotification/lib/arm64:/system/app/datastatusnotification/datastatusnotification.apk!/lib/arm64-v8a:/system/lib64:/vendor/lib64
+5093  5093 : PMSDBG devPath /system/app/atfwd/atfwd.apk librarySearchPath /system/app/atfwd/lib/arm64:/system/app/atfwd/atfwd.apk!/lib/arm64-v8a:/system/lib64:/vendor/lib64
+4335  4335 : PMSDBG devPath /system/framework/com.qti.dpmframework.jar librarySearchPath null
+
+
+
+
+LOCAL_JNI_SHARED_LIBRARIES
+lrw-r--r-- 1 root root 31 2018-08-14 18:28 /system/app/NfcNci/lib/arm64/libnfc_nci_jni.so -> /system/lib64/libnfc_nci_jni.so
+
+linklib(const char* uuid, const char* pkgname, const char* asecLibDir, int userId)
+ls /data/data/com.srw.demov7media/ -l
+drwxrwx--x 2 system system 4096 2018-01-01 10:22 cache
+drwxrwx--x 2 system system 4096 2018-01-01 10:22 code_cache
+lrwxrwxrwx 1 root   root     39 2018-01-01 10:22 lib -> /data/app/com.srw.demov7media-1/lib/arm
+
+
+init.rc:
+mkdir /data/user 0711 system system
+mkdir /data/user_de 0711 system system
+symlink /data/data /data/user/0
+
+  PackageParser.Package scanPackageTracedLI(File scanFile, final int parseFlags,
+          int scanFlags, long currentTime, UserHandle user)
+      |
+      | - PackageParser.Package scanPackageLI(File scanFile, int parseFlags, int scanFlags,
+      |   |   long currentTime, UserHandle user)
+      |   |
+      |   | - Package parsePackage(File packageFile, int flags)
+      |   |
+      |   | - PackageParser.Package scanPackageLI(PackageParser.Package pkg, File scanFile,
+      |   |     final int policyFlags, int scanFlags, long currentTime, UserHandle user)
+      |   |   |
+      |   |   | - PackageParser.Package scanPackageInternalLI(PackageParser.Package pkg, File scanFile,
+      |   |   |         int policyFlags, int scanFlags, long currentTime, UserHandle user)
+      |   |   |   |
+      |   |   |   | - PackageParser.Package scanPackageLI(PackageParser.Package pkg, final int policyFlags,
+      |   |   |   |     int scanFlags, long currentTime, UserHandle user)
+      |   |   |   |   |
+      |   |   |   |   | - PackageParser.Package scanPackageDirtyLI(PackageParser.Package pkg,
+      |   |   |   |   |         final int policyFlags, final int scanFlags, long currentTime, UserHandle user)
+      |   |   |   |   |   |
+      |   |   |   |   |   | - void derivePackageAbi(PackageParser.Package pkg, File scanFile,
+      |   |   |   |   |   |         String cpuAbiOverride, boolean extractLibs)
+
+
+
+
+
+  PackageParser.Package scanPackageTracedLI(PackageParser.Package pkg,
+            final int policyFlags, int scanFlags, long currentTime, UserHandle user)
+      |
+      | - PackageParser.Package scanPackageLI(PackageParser.Package pkg, final int policyFlags,
+      |     int scanFlags, long currentTime, UserHandle user)
+      |   |
+      |   | - PackageParser.Package scanPackageDirtyLI(PackageParser.Package pkg,
+      |   |         final int policyFlags, final int scanFlags, long currentTime, UserHandle user)
+      |   |
+
+system app install
+third app install
+
+1. oat/dex file boot.oat,etc
+
+2. native lib file
+
+3. where is the png
+
+############################################
+############################################
+
+1. 将apk文件复制到data/app目录
+2. 解析apk信息
+3. dexopt操作
+4. 更新权限信息
+5. 完成安装,发送Intent.ACTION_PACKAGE_ADDED广播
+

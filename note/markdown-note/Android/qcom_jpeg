@@ -1,0 +1,125 @@
+*****************************************
+
+  SDM660 hw jpeg encoder
+  DEBUG: persist.camera.mmstill.logs
+         1 -> only error logs
+         2 -> error and high
+         3 -> error, high, medium
+         4 -> error, high, medium and low
+         TAG: mm-still jpeg_hw
+*****************************************
+
+ mm_jpeg.c
+   ||
+   ||
+   ||
+   ||
+   ||
+   ||
+
+
+ qomx_core.c
+   ||
+   ||
+   ||
+   ||
+   ||
+   ||
+   ||
+   ||
+
+ qomx_core_component.cpp
+   ||
+   ||  void *create_component_fns(OMX_PTR aobj)
+   ||
+   ||
+
+ QOMXImageCodec 
+   ||
+   ||  mInOMXBufferData          --  QOMX_Buffer_Data_t *
+   ||  mOutOMXBufferData         --  QOMX_Buffer_Data_t *
+   ||  m_inputQIBuffer           --  QIBuffer *
+   ||  m_outputQIBuffer          --  QIBuffer *
+   ||  m_factory                 --  QImageCodecFactoryHB_v2 
+   ||
+   ||  virtual OMX_ERRORTYPE omx_component_set_parameter(
+   ||                               OMX_IN OMX_HANDLETYPE hComp,
+   ||                               OMX_IN OMX_INDEXTYPE paramIndex,
+   ||                               OMX_IN OMX_PTR paramData) = 0
+   ||  virtual OMX_ERRORTYPE omx_component_allocate_buffer(
+   ||                               OMX_IN OMX_HANDLETYPE hComp,
+   ||                               OMX_INOUT OMX_BUFFERHEADERTYPE** bufferHdr,
+   ||                               OMX_IN OMX_U32 port,
+   ||                               OMX_IN OMX_PTR appData,
+   ||                               OMX_IN OMX_U32 bytes) = 0
+   ||  virtual OMX_ERRORTYPE omx_component_empty_this_buffer(
+   ||                               OMX_IN OMX_HANDLETYPE hComp,
+   ||                               OMX_IN OMX_BUFFERHEADERTYPE* buffer)
+   ||  virtual OMX_ERRORTYPE omx_component_fill_this_buffer(
+   ||                               OMX_IN OMX_HANDLETYPE hComp,
+   ||                               OMX_IN OMX_BUFFERHEADERTYPE* buffer)
+   ||  ...
+
+ OMXImageEncoder : public QOMXImageCodec,
+   ||              public QThreadObject
+   ||
+   ||  m_IONBuffer               --  QOMX_WORK_BUFFER 
+   ||  m_inputMainImage          --  QImage 
+   ||  m_outputMainImage         --  QImage 
+   ||  m_inThumbImage            --  QImage 
+   ||  m_outThumbImage           --  QImage 
+   ||
+
+
+ OMXJpegEncoder: public OMXImageEncoder,
+   ||            QImageEncoderObserver,
+   ||            QImageWriterObserver
+   ||
+   ||
+   ||  extern "C" void *getInstance()
+   ||
+
+ OMXJpegEncoderPipeline: public OMXImageEncoder,
+   ||                    QImageEncoderObserver,
+   ||                    QImageWriterObserver
+   ||
+   ||
+   ||  extern "C" void *getInstance()
+   ||
+
+
+ QImageHW10Encoder : public QImageEncoderInterface,
+   ||                public QThreadObject
+   ||
+   ||  mJpegeLib                 --  QJpegeLib_t 
+   ||
+   ||  int Load()
+   ||
+
+ jpege_lib.c
+   ||
+   ||  int jpege_lib_init(...)
+   ||  int jpege_lib_encode(jpege_hw_obj_t jpege_hw_obj)
+   ||  int jpege_lib_hw_config(...)
+   ||  ..
+
+ jpege_lib_hw.c
+   ||
+   ||
+   ||
+   ||
+   ||
+
+
+  m_outputQIBuffer(QIBuffer) -> init when  OMXJpegEncoder::configureBuffers(), it's set by omx use buffer
+
+  m_IONBuffer(QOMX_WORK_BUFFER) -> init when OMXImageEncoder::omx_component_set_config(), QOMX_IMAGE_EXT_WORK_BUFFER
+
+  writeExifData() fill exif data in  m_outputQIBuffer
+
+  m_outputMainImage(QImage) construct use m_IONBuffer(sdm660)/m_outputQIBuffer(8953) will add to hw encoder
+
+  last:
+      memcpy(m_outputQIBuffer->Addr() + m_outputQIBuffer->FilledLen(),
+        m_outputMainImage->BaseAddr(), m_outputMainImage->FilledLen());
+

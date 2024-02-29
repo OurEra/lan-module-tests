@@ -1,0 +1,385 @@
+*****************************************
+
+  Based on SDK 25
+
+*****************************************
+
+ ConnectivityService extends
+   || IConnectivityManager.Stub
+   ||
+   ||  mTethering                --  Tethering
+   ||  mNetworkFactoryInfos      --  HashMap<Messenger, NetworkFactoryInfo>
+   ||  mNetworkForNetId          --  SparseArray<NetworkAgentInfo>
+   ||  mNetworkAgentInfos        --  HashMap<Messenger, NetworkAgentInfo>
+   ||  mNetworkRequests          --  HashMap<NetworkRequest, NetworkRequestInfo>
+   ||  mNetworkForRequestId      --  SparseArray<NetworkAgentInfo>
+   ||  mLegacyTypeTracker        --  LegacyTypeTracker
+   ||  mTrackerHandler           --  NetworkStateTrackerHandler
+   ||  mHandler                  --  InternalHandler
+   ||  mDefaultRequest           --  NetworkRequest
+   ||
+   ||  void registerNetworkFactory(Messenger messenger, String name)
+   ||
+   ||  int registerNetworkAgent(Messenger messenger, NetworkInfo networkInfo,
+   ||           LinkProperties linkProperties, NetworkCapabilities networkCapabilities,
+   ||           int currentScore, NetworkMisc networkMisc)
+   ||
+   ||  NetworkRequest requestNetwork(NetworkCapabilities networkCapabilities,
+   ||         Messenger messenger, int timeoutMs, IBinder binder, int legacyType)
+   ||
+   ||  NetworkRequest listenForNetwork(NetworkCapabilities networkCapabilities,
+   ||         Messenger messenger, IBinder binder)
+   || ||
+   || ||LegacyTypeTracker
+   || ||
+   || ||  mTypeLists             --  ArrayList<NetworkAgentInfo> []
+   || ||
+   || ||  void add(int type, NetworkAgentInfo nai)
+   || ||  void remove(int type, NetworkAgentInfo nai, boolean wasDefault)
+
+  1. When one interface implements a class that extend NetworkFactory and call
+     NetworkFactory.register(), will invoke into CS.registerNetworkFactory();
+  1.1 Instance NetworkFactoryInfo and send EVENT_REGISTER_NETWORK_FACTORY to own handler;
+  1.2 Handle message in handleRegisterNetworkFactory():
+      1.2.1 first put the newly NetworkFactoryInfo to mNetworkFactoryInfos;
+      1.2.2 connect mTrackerHandler and NetworkFactory.mMessenger through
+            NetworkFactoryInfo.asyncChannel; after receive AsyncChannel's
+            CMD_CHANNEL_HALF_CONNECTED, will get all NetworkRequest and
+            send CMD_REQUEST_NETWORK to this newly added NetworkFactory.
+
+  2. When an interface is ready to work, will construct a NetworkAgent and save all
+     related network info in it; In it's constructor, registerNetworkAgent() will
+     be invoke:
+  2.1 Instance a NetworkAgentInfo and send EVENT_REGISTER_NETWORK_AGENT;
+  2.2 Handle message in handleRegisterNetworkAgent:
+      2.2.1 Put the newly NetworkAgentInfo to mNetworkAgentInfos;
+      2.2.2 Connect mTrackerHandler and Messenger that construct base on
+            NetworkAgent through NetworkAgentInfo.asyncChannel; after receive
+            AsyncChannel's CMD_CHANNEL_HALF_CONNECTED, CMD_CHANNEL_FULL_CONNECTION
+            will be send back to NetworkAgent.
+      2.2.3 updateNetworkInfo()
+
+  3.
+
+ NetworkManagementService extends
+   || INetworkManagementService.Stub
+   ||
+   ||  mConnector                --  NativeDaemonConnector
+   ||  mNetdService              --  INetd
+   ||
+   ||  void registerObserver(INetworkManagementEventObserver observer)
+
+  One can get notify about interface status by registerObserver(), callback are like:
+    void interfaceLinkStateChanged(String iface, boolean up)
+    void addressRemoved(String iface, in LinkAddress address)
+    void interfaceAdded(String iface)
+    void routeUpdated(in RouteInfo route)
+    ...
+
+  NetworkMonitor extends StateMachine
+   ||
+   ||  mDefaultState             --  State
+   ||  mValidatedState           --  State
+   ||  mMaybeNotifyState         --  State
+   ||  mEvaluatingState          --  State
+   ||  mCaptivePortalState       --  State
+   ||
+
+      mDefaultState
+   /                 \
+  mValidatedState mMaybeNotifyState
+                   /          \
+             mEvaluatingState mCaptivePortalState
+
+
+ NetworkFactory extends Handler
+   ||
+   ||  mScore                    --  int
+   ||  mCapabilityFilter         --  NetworkCapabilities
+   ||  mMessenger                --  Messenger
+   ||  mNetworkRequests          --  SparseArray<NetworkRequestInfo>
+   ||
+   ||  void register()
+   ||  void unregister()
+   ||  void evalRequest(NetworkRequestInfo n)
+   ||  void startNetwork()                       # overwrite to do real stuff
+   ||  void stopNetwork()                        # overwrite to do real stuff
+
+
+ abstract
+ NetworkAgent extends Handler
+   ||
+   ||  netId                     --  int
+   ||  mAsyncChannel             --  AsyncChannel
+   ||
+   ||  abstract
+   ||  void unwanted()
+   ||
+
+ NetworkAgentInfo
+   ||  implements Comparable<NetworkAgentInfo>
+   ||
+   ||  networkInfo               --  NetworkInfo
+   ||  network                   --  Network
+   ||  linkProperties            --  LinkProperties
+   ||  networkCapabilities       --  NetworkCapabilities
+   ||  networkMonitor            --  NetworkMonitor
+   ||  created                   --  boolean
+   ||  everConnected             --  boolean
+   ||  everValidated             --  boolean
+   ||  lastValidated             --  boolean
+   ||  avoidUnvalidated          --  boolean
+   ||  everCaptivePortalDetected --  boolean
+   ||  lastCaptivePortalDetected --  boolean
+   ||  mNetworkRequests          --  SparseArray<NetworkRequest>
+   ||  mLingering                --  boolean
+   ||  currentScore              --  int
+   ||
+   ||  int  getCurrentScore(boolean pretendValidated)
+
+  'currentScore' is the score that every network defines:
+  ethernet                           EthernetNetworkFactory.NETWORK_SCORE = 70
+  wifi                               WifiStateMachine.WifiNetworkFactory with hard code 60
+  cellular                           TelephonyNetworkFactory.TELEPHONY_NETWORK_SCORE = 50
+
+  when invoke getCurrentScore() can directly return score value with 'pretendValidated' true,
+  otherwise, getCurrentScore() will sub a value UNVALIDATED_SCORE_PENALTY = 40
+
+
+ NetworkInfo
+   ||
+   ||  mNetworkType              --  int
+   ||  mState                    --  State
+   ||  mDetailedState            --  DetailedState
+   ||
+
+  mNetworkType is one of the type:
+  ConnectivityManager.TYPE_WIFI
+  ConnectivityManager.TYPE_MOBILE
+  ConnectivityManager.TYPE_ETHERNET
+  ConnectivityManager.TYPE_WIFI_P2P
+
+  State
+  CONNECTING, CONNECTED, SUSPENDED, DISCONNECTING, DISCONNECTED, UNKNOWN
+
+  DetailedState
+  IDLE, SCANNING, CONNECTING, AUTHENTICATING, OBTAINING_IPADDR, CONNECTED,
+  SUSPENDED, DISCONNECTING, DISCONNECTED, FAILED, BLOCKED, VERIFYING_POOR_LINK, CAPTIVE_PORTAL_CHECK
+
+ NetworkRequest
+   ||
+   ||  networkCapabilities       --  NetworkCapabilities
+   ||  requestId                 --  int
+   ||  legacyType                --  int
+   ||  type                      --  Type
+
+  Type
+  NONE, LISTEN, TRACK_DEFAULT, REQUEST, BACKGROUND_REQUEST
+
+ NetworkCapabilities
+   ||
+   ||  mNetworkCapabilities      --  long
+   ||  mSignalStrength           --  int
+   ||  mLinkUpBandwidthKbps      --  int
+   ||  mLinkDownBandwidthKbps    --  int
+
+  NET_CAPABILITY_MMS
+  NET_CAPABILITY_SUPL
+  NET_CAPABILITY_DUN
+  ...
+
+ LinkProperties
+   ||
+   ||  mIfaceName                --  String
+   ||  mLinkAddresses            --  ArrayList<LinkAddress>
+   ||  mDnses                    --  ArrayList<InetAddress>
+   ||  mRoutesmRoutes            --  ArrayList<RouteInfo>
+   ||  mMtu                      --  int
+   ||
+
+ Network
+   ||
+   ||  netId                     --  int
+   ||
+
+
+ Tethering extends BaseNetworkObserver
+   ||  implements IControlsTethering
+   ||
+   ||  mTetherStates             --  ArrayMap<String, TetherState>
+   ||
+   ||  void startTethering(int type, ResultReceiver receiver,
+   ||        boolean showProvisioningUi)
+   ||  int tether(String iface)
+   ||
+   || ||
+   || ||TetherState
+   || ||
+   || ||  mStateMachine          --  TetherInterfaceStateMachine
+   || ||  mLastState             --  int
+   || ||  mLastError             --  int
+   ||
+   || ||
+   || ||TetherMasterSM extends StateMachine
+   || ||
+   || ||  mInitialState                         --  State
+   || ||  mTetherModeAliveState                 --  State
+   || ||  mSetIpForwardingEnabledErrorState     --  State
+   || ||  mSetIpForwardingDisabledErrorState    --  State
+   || ||  mStartTetheringErrorState             --  State
+   || ||  mStopTetheringErrorState              --  State
+   || ||  mSetDnsForwardersErrorState           --  State
+
+  TetherMasterSM have seven seperate state, start from mInitialState
+
+ TetherInterfaceStateMachine extends StateMachine
+   ||
+   ||  mInitialState             --  State
+   ||  mTetheredState            --  State
+   ||  mUnavailableState         --  State
+   ||
+
+  Three seperate state, start from mInitialState
+
+
+
+ ACRONYM
+   NMS                           NetworkManagementService
+   CS                            ConnectivityService
+
+
+#########################################################
+#########################################################
+1. new interface link up
+2. interface link down
+3. request network & rematch
+
+
+*****************************************
+
+  FUNCTION DETAILS
+
+*****************************************
+
+  (1)
+  updateNetworkInfo()
+  |-- NetworkInfo.mState is CONNECTED and NetworkAgentInfo.created is false:
+  |      mNetd.createPhysicalNetwork()
+  |      NetworkAgentInfo.created assign with true
+  |-- NetworkInfo.mState is CONNECTED and NetworkAgentInfo.everConnected is false:
+  |     NetworkAgentInfo.everConnected assign with true
+  |     updateLinkProperties()                                                                     (2)
+  |     send CMD_NETWORK_CONNECTED to NetworkAgentInfo.networkMonitor
+  |     rematchNetworkAndRequests()                                                                (3)
+  |-- NetworkInfo.mState is DISCONNECTED:
+  |     NetworkAgentInfo.asyncChannel.disconnect()
+  |     after disconnect, NetworkAgent and ConnectivityService.mTrackerHandler
+  |     receive CMD_CHANNEL_DISCONNECTED:
+  |     1. NetworkAgent.unwanted() will be invoke;
+  |     2. handleAsyncChannelDisconnected();                                                       (4)
+
+  (2)
+  updateLinkProperties()
+  |--  updateInterfaces()
+  |      mNetd.addInterfaceToNetwork / removeInterfaceFromNetwork()
+  |--  updateMtu()
+  |      mNetd.setMtu()
+  |--  updateTcpBufferSizes()
+  |      write value to file under /sys/kernel/ipv4/tcp_*
+  |      set property sys.sysctl.tcp_def_init_rwnd
+  |--  updateRoutes()
+  |      mNetd.addRoute() / removeRoute()
+  |--  updateDnses()
+  |      mNetd.setDnsConfigurationForNetwork()
+  |      setDefaultDnsSystemProperties()
+  |      flushVmDnsCache()
+
+  (3)
+  rematchNetworkAndRequests(NetworkAgentInfo newNetwork,
+                   ReapUnvalidatedNetworks reapUnvalidatedNetworks, long now)
+  |-- skip newNetwork.everConnected is false
+  |-- iterate NetworkRequestInfo in ConnectivityService.mNetworkRequests:
+  |   | -- skip NetworkRequestInfo.request.isListen()
+  |   | -- try get NetworkAgentInfo from mNetworkForRequestId, mark as 'currentNetwork'
+  |   | -- continue if currentNetwork equal with newNetwork and newNetwork.satisfies()
+  |   |    NetworkRequestInfo.request
+  |   | -- if newNetwork.satisfies() NetworkRequestInfo.request and currentNetwork is null
+  |   |    or currentNetwork.currentScore lower than newNetwork.currentScore
+  |   |      remove request from currentNetwork.mNetworkRequests
+  |   |      do currentNetwork.lingerRequest() to this request
+  |   |      do newNetwork.unlingerRequest() to this request
+  |   |      update newNetwork and requestId to mNetworkForRequestId
+  |   |      pass with newNetwork.currentScore and the request to sendUpdatedScoreToFactories()    (5)
+  |   | -- if newNetwork.satisfies() is false, but newNetwork.isSatisfyingRequest()
+  |   |      remove request from newNetwork.mNetworkRequests
+  |   |      remove requestId from mNetworkForRequestId
+  |   |      sendUpdatedScoreToFactories() with score 0
+  |
+  |-- if previous newly NetworkAgentInfo satisfies mDefaultRequest
+  |     makeDefault()
+  |-- processListenRequests()
+  |     iterate mNetworkRequests which NetworkRequest.type is LISTEN
+  |     when newNetwork.satisfies() this NetworkRequest and isSatisfyingRequest()
+  |     is false, then add NetworkRequest to newNetwork.mNetworkRequests and callback
+  |     ConnectivityManager.CALLBACK_AVAILABLE
+  |
+  |     when newNetwork.satisfies() is false and isSatisfyingRequest() is true,
+  |     then remove NetworkRequest from newNetwork.mNetworkRequests and callback
+  |     ConnectivityManager.CALLBACK_LOST
+  |
+  |-- notifyNetworkCallback() for all NetworkRequestInfo matched with newNetwork - addedRequests,
+  |   notify will send ConnectivityManager.CALLBACK_AVAILABLE to NetworkRequestInfo.messenger
+  |-- updateLingerState() for all currentNetwork that replace by newNetwork - affectedNetworks     (6)
+  |-- updateLingerState() for newNetwork
+
+
+  (4)
+  handleAsyncChannelDisconnected()
+  |
+  |
+  |
+
+
+  (5)
+  sendUpdatedScoreToFactories(NetworkRequest networkRequest, int score)
+  |
+  | Send the 'networkRequest' with minimum 'score' to every NetworkFactory that records in
+  | CS.mNetworkFactoryInfos
+  |
+  | -- NetworkFactory.handleAddRequest() handle incoming request
+  |      invoke NetworkFactory.evalRequest():
+  |      1. NetworkFactory.mScore bigger than 'score' and NetworkFactory.mCapabilityFilter
+  |         can satisfy NetworkRequest.networkCapabilities, then NetworkFactory.mRefCount
+  |         self add, if mRefCount is 0 before self add then startNetwork() will be invoke;
+  |      2. NetworkFactory.mScore smaller than 'score' or NetworkFactory.mCapabilityFilter
+  |         can not satisfy NetworkRequest.networkCapabilities, then NetworkFactory.mRefCount
+  |         self sub, if mRefCount is 0 after self sub then stopNetwork() will be invoke;
+
+
+  (6)
+  updateLingerState(NetworkAgentInfo nai, long now)
+  |-- updateLingerTimer() that get last NetworkAgentInfo.mLingerTimers and
+  |   compare with NetworkAgentInfo.mLingerExpiryMs, if changed then schedule
+  |   send message EVENT_NETWORK_LINGER_COMPLETE to CS after LingerTimer.expiryMs
+  |-- if NetworkAgentInfo.isLingering() but numForegroundNetworkRequests() bigger
+  |   than 0, than unlinger this NetworkAgentInfo
+  |-- if unneeded() and NetworkAgentInfo.mLingerExpiryMs bigger than 0, then mark                  (7)
+  |   NetworkAgentInfo.mLingering as true and notify ConnectivityManager.CALLBACK_LOSING
+  |   to all NetworkAgentInfo.mNetworkRequests
+
+  (7)
+  unneeded(NetworkAgentInfo nai, UnneededFor reason)
+  |
+  | Try to determine 'nai' is unneeded with specific reason UnneededFor.TEARDOWN/LINGER
+  | -- if reason is TEARDOWN and nai.mNumRequestNetworkRequests > 0 then nai is still needed,
+  |    if (nai.mNumRequestNetworkRequests - nai.mNumBackgroundNetworkRequests) > 0 with reason
+  |    LINGER then nai is needed
+  | -- if 'nai' still satisfies one NetworkRequest in CS.mNetworkRequests and this NetworkRequest
+  |    still have record in 'nai.mNetworkRequests', then nai is still needed
+  | -- if 'nai' still satisfies one NetworkRequest in CS.mNetworkRequests and the score retrieved
+  |    from CS.mNetworkForRequestId according to NetworkRequest.requestId is small than 'nai.currentScore',
+  |    then nai is still needed
+
+
+
+

@@ -1,0 +1,26 @@
+
+SDK接口:
+  BluetoothAdapter.isEnabled()
+  BluetoothAdapter.startDiscovery()
+
+使能:
+    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+
+    RequestPermissionActivity处理Intent
+    然后经过RequestPermissionHelperActivity弹出dialog
+    确认后调用LocalBluetoothAdapter.enable()
+
+    systemui使能时会调用另外一个接口:
+    LocalBluetoothAdapter.setBluetoothEnabled()
+
+
+
+BluetoothManagerService实现IBluetoothManager
+
+AdapterService.AdapterServiceBinder实现IBluetooth
+  static {
+      System.load("/system/lib/libbluetooth_jni.so");
+      classInitNative();
+  }
+

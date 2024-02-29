@@ -1,0 +1,84 @@
+*****************************************
+
+  Based on SDK 25
+
+*****************************************
+
+ CameraManager
+   ||
+   ||
+   ||  CameraCharacteristics getCameraCharacteristics(String cameraId)
+   ||
+   ||  void openCamera(String cameraId,
+   ||         final CameraDevice.StateCallback callback, Handler handler)
+   ||
+   ||  CameraDevice openCameraDeviceUserAsync(String cameraId,
+   ||         CameraDevice.StateCallback callback, Handler handler, final int uid)
+   ||
+   ||
+
+  When use camera2 APIs, the first step is invoke openCamera() and pass a StateCallback to receive
+  a CameraDevice reference; what happened behind is in openCameraDeviceUserAsync() function, the
+  reference that callback to user is the instance of CameraDeviceImpl, CameraDeviceImpl's field
+  mRemoteDevice is also assigned in this step;
+
+  mRemoteDevice is a wrapper class reference, what's matter is ICameraDeviceUserWrapper.mRemoteDevice
+  field, it's a ICameraDeviceUser interface that corresponding to native ICameraDeviceUser; when camera
+  server support camrea2 APIs, ICameraDeviceUser is the java Bp binder handle returned by camera server
+  CameraService::connectDevice(); otherwise, is the reference of wrapper class CameraDeviceUserShim that
+  will play a adapter between camrea2 API cand camera API;
+
+
+ CameraDeviceImpl extends CameraDevice
+   ||     implements IBinder.DeathRecipient
+   ||
+   ||  TEMPLATE_PREVIEW          --  int
+   ||  TEMPLATE_STILL_CAPTURE    --  int
+   ||  TEMPLATE_RECORD           --  int
+   ||  TEMPLATE_VIDEO_SNAPSHOT   --  int
+   ||  TEMPLATE_ZERO_SHUTTER_LAG --  int
+   ||  TEMPLATE_MANUAL           --  int
+   ||  mRemoteDevice             --  ICameraDeviceUserWrapper
+   ||
+   ||  CaptureRequest.Builder createCaptureRequest(int templateType)
+   ||
+   ||  void createCaptureSession(List<Surface> outputs,
+   ||         CameraCaptureSession.StateCallback callback, Handler handler)
+   ||
+   ||
+   || ||
+   || ||StateCallback
+   || ||
+   || ||  void onOpened(CameraDevice camera)
+   || ||  void onDisconnected(@NonNull CameraDevice camera)
+   || ||  ...
+
+  After get CameraDevice reference, next step is to create a session through createCaptureSession()
+  and get a CameraCaptureSession reference in callback, CameraDevice also provide other API to create
+  different session for other purpose;
+
+
+ CaptureRequest extends CameraMetadata<CaptureRequest.Key<?>>
+   ||    implements Parcelable
+   ||
+   ||  mSurfaceSet               --  HashSet<Surface>
+   ||
+   ||
+   ||
+   ||
+
+ CameraCaptureSessionImpl extends CameraCaptureSession
+   ||    implements CameraCaptureSessionCore
+   ||
+   ||
+   ||  int setRepeatingRequest(CaptureRequest request, CaptureCallback callback, Handler handler)
+   ||
+   ||
+   ||
+   ||
+
+
+
+##############################################
+SnapdragonCamera force use camera2: boolean isCamera2On() in SettingsManager.java
+

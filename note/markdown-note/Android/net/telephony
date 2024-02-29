@@ -1,0 +1,362 @@
+*****************************************
+
+  OVERVIEW (Android 6.0.1)
+
+*****************************************
+
+1. The package com.android.providers.telephony are running in the process com.android.phone, it is
+   responsible for query/update/insert/delete records of SIMs and APNs in sqlite file telephony.db,
+   mainly source code are in class TelephonyProvider;
+
+2. package com.android.phone, entry is class PhoneApp
+   related to phone operation
+
+
+3. package com.android.server.telecom running process system
+   Telecom framework manages audio and video calls on an Android device. This includes SIM-based calls
+   (e.g. using the Telephony framework) as well as VOIP calls provided by implementors of the ConnectionService API
+
+   TelecomLoaderService start along with system_server as a SystemService, and add Context.TELECOM_SERVICE
+   to ServiceManager, the telecom service implements are TelecomServiceImpl;
+
+
+ PhoneApp extends Application
+   ||
+   ||  mPhoneGlobals             --  PhoneGlobals
+   ||  mTelephonyGlobals         --  TelephonyGlobals
+   ||
+
+ PhoneGlobals extends ContextWrapper
+   ||
+   ||
+   ||  void onCreate()
+   ||
+
+  In onCreate() will invoke:
+  1. TelephonyPluginDelegate.init(this)
+  2. TelephonyPluginDelegate.getInstance().makeDefaultPhones(this)
+
+ TelephonyPluginDelegate
+   ||
+   ||  sPlugin                   --  TelephonyPluginBase
+   ||
+   ||  void init(Context context)
+   ||  void makeDefaultPhones(Context context)
+
+  init() will choose the TelephonyPluginBase class name, use DefaultTelephonyPlugin or a platform
+  implements;
+
+  makeDefaultPhones() will invoke sPlugin's correspond method, at last will use PhoneFactory's func;
+
+ QtiTelephonyPlugin extends TelephonyPluginBase
+   ||    implements TelephonyPluginInterface
+   ||
+   ||
+   ||  PhoneBase makeGSMPhone(Context context, CommandsInterface ci,
+   ||         PhoneNotifier notifier, int phoneId)
+   ||
+   ||  PhoneBase makeCDMALTEPhone(Context context, CommandsInterface ci,
+   ||         PhoneNotifier notifier, int phoneId)
+   ||
+   ||  PhoneProxy makePhoneProxy(PhoneBase phone)
+   ||
+   ||  DctController makeDctController(PhoneProxy[] phones)
+   ||
+   ||  DcTracker makeDcTracker(PhoneBase p)
+
+ PhoneProxy extends Handler
+   ||    implements Phone
+   ||
+   ||  mActivePhone              --  Phone
+   ||  mCommandsInterface        --  CommandsInterface
+   ||  mIccSmsInterfaceManager   --  IccSmsInterfaceManager
+   ||  mIccCardProxy             --  IccCardProxy
+   ||
+
+  Qcom's implements is QtiPhoneProxy;
+  mCommandsInterface is the field in mActivePhone.mCi;
+
+ CDMALTEPhone extends CDMAPhone
+   ||
+   ||  mCT                       --  CdmaCallTracker
+   ||
+   ||
+
+  Qcom's implements is QtiCDMALTEPhone;
+  CDMAPhone is extends PhoneBase;
+  CDMAPhone.mCT is instance in CDMAPhone.init() function;
+
+ CdmaCallTracker extends CallTracker
+   ||
+   ||  mConnections            --  CdmaConnection []
+   ||
+   ||
+
+ CdmaConnection extends Connection
+   ||
+   ||
+   ||
+   ||
+
+ PhoneBase
+   ||
+   ||  mPhoneId                  --  int
+   ||  mCi                       --  CommandsInterface
+   ||  mDcTracker                --  DcTrackerBase
+   ||
+   ||  int getSubId()
+
+   mDcTracker is instance in is's child class, like CDMAPhone.init();
+   mPhoneId is assign with the index when first instance according to phone count;
+
+ DcTracker extends DcTrackerBase
+   ||
+   ||
+   ||
+   ||
+
+ DcTrackerBase extends Handler
+   ||
+   ||  mDcc                      --  DcController
+   ||  mDataConnections          --  HashMap<Integer, DataConnection>
+   ||  mDataConnectionAcHashMap  --  HashMap<Integer, DcAsyncChannel>
+   ||
+
+  mDcc is instance in DcTrackerBase constructor;
+
+ DataConnection extends StateMachine
+   ||
+   ||  mInactiveState            --  DcInactiveState
+   ||  mActivatingState          --  DcActivatingState
+   ||  mActiveState              --  DcActiveState
+   ||
+   || ||
+   || ||DcInactiveState extends State
+   || ||
+   || ||  boolean processMessage(Message msg)
+   ||
+   || ||
+   || ||DcActiveState  extends State
+   || ||
+   || ||  boolean processMessage(Message msg)
+   ||
+   || ||DcActivatingState   extends State
+   || ||
+   || ||  boolean processMessage(Message msg)
+
+
+  mInactiveState
+  mActivatingState
+  mActiveState
+  mDisconnectingState
+  mDisconnectingErrorCreatingConnection
+
+  All State have the same parent State - mDefaultState
+
+ PhoneFactory
+   ||
+   ||  sProxyPhones              --  PhoneProxy[]
+   ||  sProxyPhone               --  PhoneProxy
+   ||  sCommandsInterfaces       --  CommandsInterface[]
+   ||  sCommandsInterface        --  CommandsInterface
+   ||  sSubInfoRecordUpdater     --  SubscriptionInfoUpdater
+   ||  mProxyController          --  ProxyController
+   ||  mUiccController           --  UiccController
+   ||
+   ||  void makeDefaultPhone(Context context)
+   ||
+
+  makeDefaultPhone() will init many related resources:
+  1. get the system phone count through TelephonyManager.getPhoneCount();
+  2. instance RIL as much as phone number;
+  3. according to every phone's type: PHONE_TYPE_GSM or PHONE_TYPE_CDMA instance a Phone through
+     makeGSMPhone() or makeCDMALTEPhone() respectively, and instance a PhoneProxy through function
+     makePhoneProxy();
+  4. instance a ProxyController and pass the PhoneProxy and CommandsInterface;
+
+ ProxyController
+   ||
+   ||  mDctController            --  DctController
+   ||  mUiccSmsController        --  UiccSmsController
+   ||  mProxyPhones              --  PhoneProxy[]
+   ||  mCi                       --  CommandsInterface[]
+   ||
+   ||
+
+  Instance DctController through makeDctController() in it's constructor;
+
+ DctController extends Handler
+   ||
+   ||  mPhones                   --  PhoneProxy[]
+   ||  mDcSwitchStateMachine     --  DcSwitchStateMachine[]
+   ||  mDcSwitchAsyncChannel     --  DcSwitchAsyncChannel[]
+   ||  mDcSwitchStateHandler     --  Handler[]
+
+   In it's constructor hold mPhones that pass from outside, instance resrouce mDcSwitchStateMachine,
+   mDcSwitchAsyncChannel, mDcSwitchStateHandler according to phone number;
+
+ UiccController
+   ||
+   ||  mUiccCards                --  UiccCard[]
+   ||
+   ||
+
+  mUiccCards will be instance or update UiccCard in UiccController.onGetIccCardStatusDone();
+
+ UiccCard
+   ||
+   ||  mUiccApplications         --  UiccCardApplication[]
+   ||
+   ||  void update(Context c, CommandsInterface ci, IccCardStatus ics)
+   ||
+
+  mUiccApplications will be create or update in UiccCard.update(); the update() parameter 'ics' is
+  pass from UiccController, it get through RIL.getIccCardStatus();
+
+ UiccCardApplication
+   ||
+   ||  mIccRecords               --  IccRecords
+   ||
+   ||
+
+ IccRecords extends Handler
+   ||    implements IccConstants
+   ||
+   ||  void registerForImsiReady()
+   ||  void registerForRecordsLoaded()
+   ||  void registerForRecordsEvents()
+
+  IccRecords is a abstract class, will be instance UiccCardApplication.update() or it's constructor;
+  inherits like QtiSIMRecords;
+
+ IccCardProxy extends Handler
+   ||    implements IccCard
+   ||
+   ||  mCurrentAppType           --  int
+   ||  mUiccController           --  UiccController
+   ||  mUiccCard                 --  UiccCard
+   ||  mUiccApplication          --  UiccCardApplication
+   ||  mIccRecords               --  IccRecords
+   ||
+   ||  void setVoiceRadioTech(int radioTech)
+   ||  void updateIccAvailability()
+   ||  void broadcastIccStateChangedIntent(String value, String reason)
+   ||  void broadcastInternalIccStateChangedIntent(String value, String reason)
+
+  PhoneProxy will call setVoiceRadioTech() to set radio tech when construct or tech update; after
+  IccCardProxy receive EVENT_ICC_CHANGED from UiccController will invoke updateIccAvailability(),
+  according to mCurrentAppType get UiccCard, UiccCardApplication, IccRecords reference and register
+  lots of event from them, like UiccCard.registerForAbsent(), IccRecords.registerForRecordsLoaded(),
+  UiccCardApplication.registerForNetworkLocked();
+
+  IccCardProxy will send two kinds of broadcast:
+  1. TelephonyIntents.ACTION_SIM_STATE_CHANGED
+
+  2. IccCardProxy.ACTION_INTERNAL_SIM_STATE_CHANGED
+     this broadcast will send after IccCardProxy receive EVENT_RECORDS_LOADED message, it is notify
+     by SIMRecords(RuimRecords); SIMRecords will invoke fetchSimRecords(), that will fetch data from
+     IccRecords.mFh, mFh can be instance with SIMFileHandler in UiccCardApplication, these data are
+     a part of 3GPP's specification;
+
+     the broadcast receiver is SubscriptionInfoUpdater, it will handle in handleSimLoaded();
+
+ SubscriptionController extends ISub.Stub
+   ||
+   ||  sSlotIdxToSubId           --  Map<Integer, Integer>
+   ||
+   ||  int getSubIdUsingPhoneId(int phoneId)
+
+  getSubIdUsingPhoneId() usually call by PhoneBase.getSubId(), the sub id uses in many occasions,
+  like preference apn set, etc;
+
+
+ SubscriptionInfoUpdater extends Handler
+   ||
+   ||  sReceiver                 --  BroadcastReceiver
+   ||
+   ||  void handleSimLoaded(int slotId)
+   ||  void updateSubscriptionInfoByIccId()
+   ||
+
+ updateSubscriptionInfoByIccId() -> addSubInfoRecord() -> put sSlotIdxToSubId
+
+
+ RIL extends BaseCommands
+   ||    implements CommandsInterface
+   ||
+   ||  mSender                   --  RILSender
+   ||  mReceiver                 --  RILReceiver
+   ||
+   ||  void setupDataCall(String radioTechnology, String profile,
+   ||         String apn, String user, String password, String authType,
+   ||         String protocol, Message result);
+   ||
+
+
+ REFERRER
+   https://developer.android.com/guide/topics/manifest/application-element.html
+   https://developer.android.com/guide/topics/connectivity/sip.html
+   https://developer.android.com/guide/topics/connectivity/telecom/index.html
+
+
+*****************************************
+
+  SMS(Short Message Service) & MMS(Multimedia Messaging Service)
+  IMS(IP Multimedia Subsystem)
+   -- https://source.android.com/devices/tech/connect/ims
+
+*****************************************
+
+       SmsManager
+           |
+           | "isms" service
+           |
+           v
+    UiccSmsController
+           |
+           | CALL
+           |
+           v
+    IccSmsInterfaceManager
+
+ IccSmsInterfaceManager
+   ||
+   ||
+   ||  mDispatcher               --  SMSDispatcher
+   ||
+   ||
+
+  mDispatcher will be instance with ImsSMSDispatcher
+
+ ImsSMSDispatcher extends SMSDispatcher
+   ||
+   ||  mCdmaDispatcher           --  SMSDispatcher
+   ||  mGsmDispatcher            --  SMSDispatcher
+   ||  mGsmInboundSmsHandler     --  GsmInboundSmsHandler
+   ||  mCdmaInboundSmsHandler    --  CdmaInboundSmsHandler
+   ||
+   ||  void sendText(String destAddr, String scAddr, String text,
+   ||                PendingIntent sentIntent, ...)
+   ||
+
+
+ GsmSMSDispatcher extends SMSDispatcher
+   ||
+   ||
+   ||  void sendText(String destAddr, String scAddr, String text,
+   ||                PendingIntent sentIntent, ...)
+   ||
+   ||  void sendSmsByPstn(SmsTracker tracker)
+
+  The message will finally send out through sendSmsByPstn() func.
+
+ GsmInboundSmsHandler extends InboundSmsHandler
+   ||
+   ||
+   ||
+   ||
+   ||
+   ||
+
+  On creation, it will register EVENT_NEW_SMS through BaseCommands.setOnNewGsmSms()
+

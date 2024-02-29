@@ -1,0 +1,121 @@
+
+ ZygoteInit 
+   ||
+   ||  void preload()
+   ||
+   ||  void preloadResources()
+   ||  int preloadColorStateLists(VMRuntime runtime, TypedArray ar)
+   ||  int preloadDrawables(VMRuntime runtime, TypedArray ar)
+   ||
+
+  When start zygote, will preload many resouces which will shares in child processes, like classes,
+  libraries, color/png drawables;
+
+  When preloadResources(), it will first get a static Resources reference Resources.mSystem, then
+  invoke Resources.startPreloading(), next get preloaded_drawables and preloaded_color_state_lists
+  array from system resource file arrays.xml, these two array's item will be traveral and instance
+  to ColorStateList and save in Resources.sPreloadedColorStateLists, or instance to ColorDrawable,
+  BitmapDrawable and get it's ConstantState field and save in Resources.sPreloadedColorDrawables,
+  Resources.sPreloadedDrawables respectively, at last invoke Resources.finishPreloading() to end
+  preload;
+
+ abstract Drawable 
+   ||
+   ||  mBounds                   --  Rect 
+   || 
+   ||  abstract void draw(Canvas canvas)
+   ||
+
+  Drawable is a general abstraction for "something that can be drawn." implements are BitmapDrawable
+  , AnimationDrawable, RotateDrawable, ColorDrawable, etc;
+
+ Resources 
+   ||
+   ||  mSystem                   --  Resources 
+   ||  sPreloadedDrawables       --  LongSparseArray<ConstantState>[] 
+   ||  sPreloadedColorDrawables  --  LongSparseArray<ConstantState> 
+   ||  sPreloadedColorStateLists --  LongSparseArray<android.content.res.ConstantState<ColorStateList>>
+   ||
+   ||  void startPreloading()
+   ||  void finishPreloading()
+   ||
+   ||  int getColor(@ColorRes int id)
+   ||  String getString(@StringRes int id)
+   ||  Drawable getDrawable(@DrawableRes int id)
+   ||
+
+  Resources is for accessing an application's resources, the mSystem contains the common resouces
+  which load in ZygoteInit.preload();
+ 
+ Atlas 
+   ||
+   ||  mPolicy                   --  Policy 
+   ||
+   ||  Atlas(Type type, int width, int height)
+   ||  Entry pack(int width, int height)
+   ||  
+   || || 
+   || ||Type 
+   || || 
+   || ||  SliceMinArea 
+   || ||  SliceMaxArea
+   || ||  SliceShortAxis
+   || ||  SliceLongAxis
+   ||
+   || || 
+   || ||Entry 
+   || || 
+   || ||  x                      --  int 
+   || ||  y                      --  int 
+   ||
+   || || 
+   || ||SlicePolicy extends Policy
+   || ||  
+   || ||  mRoot                  --  Cell 
+   || ||  mSplitDecision         --  SplitDecision 
+   || || 
+   || ||  boolean insert(Cell cell, Cell prev, int width, int height, Entry entry)
+   || ||  
+
+  Atlas is responsible for assessing is there available space to pack incoming bitmap, when instance
+  Atlas can give a Type parameter that will determine the packing algorithm, the width and height is
+  the start size it have;
+
+  Every time caller give a specific bitmap's size to Atlas through Atlas.pack(), then Atlas judge
+  whether can pack this bitmap and return the coordinate it should put; the judge details are in 
+  SlicePolicy.insert(), every time put in a new bitmap SlicePolicy will split the left space into
+  two cell according to SlicePolicy.mSplitDecision;
+
+
+ AssetAtlasService extends IAssetAtlas.Stub
+   ||
+   ||  mBuffer                   --  GraphicBuffer 
+   ||  mAtlasMap                 --  long[] 
+   ||
+   || || 
+   || ||Renderer implements Runnable
+   || || 
+   || ||  void run() 
+   || ||  boolean renderAtlas(GraphicBuffer buffer, Atlas atlas, int packCount)
+   ||
+   || || 
+   || ||ComputeWorker implements Runnable
+   || || 
+   || ||  void run()
+   || ||  int packBitmaps(Atlas.Type type, int width, int height, Atlas.Entry entry)
+
+  AssetAtlasService is responsible for packing preloaded bitmaps into a single atlas texture; the
+  resulting texture can be shared across processes to reduce overall memory usage;
+
+  AssetAtlasService first get all preload bitmaps through Resources.getPreloadedDrawables() and sort
+  it by resolution, then finish the job async in Renderer:
+  1. Get the proper size the texture buffer should allocate, this step is done in ComputeWorker:
+     ComputeWorker try different pack Atlas.Type, also consider MIN_SIZE and MAX_SIZE to get a best
+     result;
+  2. Create the AssetAtlasService.mBuffer, with the result Atlas.Type and size invoke renderAtlas();
+  2.1 use a temp Bitmap and instance a Canvas with it, then draw every preload bitmap on this Canvas
+      , the drawing position is return from Atlas.pack(); every preload bitmap's reference and pos
+      will also hold in AssetAtlasService.mAtlasMap;
+  2.2 invoke native nUploadAtlas() to generate a texture with AssetAtlasService.mBuffer, then render
+      the content in Bitmap on this texture;
+

@@ -1,0 +1,36 @@
+<phone_account_registrar_state version="8">
+<accounts>
+<phone_account>
+<account_handle>
+<phone_account_handle>
+<component_name>com.android.phone/com.android.services.telephony.TelephonyConnectionService</component_name>
+<id>1</id>
+<user_serial_number>0</user_serial_number>
+</phone_account_handle>
+</account_handle>
+<handle>tel:</handle>
+<subscription_number>tel:</subscription_number>
+<capabilities>54</capabilities>
+<icon>AAAAAQGJUE5HDQoaCgAAAA1JSERSAAAAOQAAAEgIBgAAAExmXeEAAAAEc0JJVAgICAh8CGSIAAAB
+8UlEQVR4nO3bu24TQRiG4XfGaSiAKIGKNBwqTESZu0ix1lQkFxUqJC5hJLQFaUCKjCjoKZwo3AN2
+uZFXmRS7jgwiig8zmezP/7aW19+j9UEuxhC5wWCwZ639AjyKfe1bugDOjTGfQgjvvfe/Zw+YmK+S
+Efh3E+DAe38MEZH3CDjrEtj33h9HQTrndoEhsBXjehEbT6fTF711r9ICT4Dt9TdF74G1tloLOQd8
+EmdT/Iwxmyu/XbsAbKtWQjrnXgE/uP9AAOyyT2iBQzoChCV/QuaAz5KsSdTCyK4CYUGkc+458J0O
+AmGBz2RRFDvAVzoKhFvuZFEUO71ebwi8vJs5aboRKQUINyAlAeEfSOfcU5pv0dd3viZRf3zxtMAT
+BAFh7k7OAd/km5MmA7KBAMY59xj4BrzNPSZVFviMYCA0yN3cI1K39F+tLqZIKSlSSoqUkiKlpEgp
+Wf4DqAUe5h6ROvF3ERQpJ0VKSZFSUqSUFCklRUpJkVJSpJQUKSVFSkmRUlKklBQpJUVKyQJV7hGJ
+qyxwlntF4s5sCKHMvSJlIYTS1nV9BIxzj0nUuK7rI1uW5QQ4pDkeK6lL4LAsy4kFaA8479MceJbQ
+hPY8M8D1SdjRaPSr3+9/NMZUNEd3N4GNPBtX6gI4NcZ8AN5573/OHrgCVndyJxP3N/sAAAAASUVO
+RK5CYII=
+</icon>
+<highlight_color>0</highlight_color>
+<label>CHN-CT</label>
+<short_description>CHN-CT</short_description>
+<supported_uri_schemes length="2">
+<value>tel</value>
+<value>voicemail</value>
+</supported_uri_schemes>
+<enabled>true</enabled>
+</phone_account>
+</accounts>
+</phone_account_registrar_state>

@@ -1,0 +1,243 @@
+ Presentation extends Dialog
+   ||
+   ||  
+   ||  mDisplay                  --  Display 
+   ||
+   ||  Context createPresentationContext(
+   ||            Context outerContext, Display display, int theme)
+   ||  
+   ||  
+
+  A Presentation is a special kind of dialog whose purpose is to present content on a secondary
+  display. After get a Display handle through MediaRouter API or DisplayManager API, user instance
+  Presentation, and show it as a normal dialog;
+  
+  What happened undergroud is Dialog will use a different ContextImpl handle and WindowManagerImpl 
+  handle, which created in func Presentation.createPresentationContext(); ContextImpl.mDisplay and
+  WindowManagerImpl.mDisplay is the reference of that Display handle; At last, Display.mDisplayId
+  will pass as a parameter when call WMS.addWindow(), in WMS side will get a DisplayContent handle
+  according to mDisplayId; when set the layer stack to SF by calling SurfaceControl.setLayerStack()
+  in WindowStateAnimator, stack value retrieved through DisplayContent.getDisplay().getLayerStack()
+  is decided by the Display handle in Presentation;
+  
+
+ DisplayManagerService
+   ||    extends SystemService
+   ||
+   ||  mDisplayAdapterListener   --  DisplayAdapterListener 
+   ||  mLogicalDisplays          --  SparseArray<LogicalDisplay> 
+   ||  mVirtualDisplayAdapter    --  VirtualDisplayAdapter 
+   ||  mWifiDisplayAdapter       --  WifiDisplayAdapter 
+   ||  mDisplayAdapters          --  ArrayList<DisplayAdapter> 
+   ||  mDisplayDevices           --  ArrayList<DisplayDevice> 
+   ||  mNextNonDefaultDisplayId  --  int 
+   ||
+   ||  void registerDisplayAdapterLocked(DisplayAdapter adapter)
+   ||  void handleDisplayDeviceAdded(DisplayDevice device)
+   ||  
+   ||  
+   || || 
+   || ||DisplayAdapterListener 
+   || ||    implements DisplayAdapter.Listener
+   || || 
+   || ||  void onDisplayDeviceEvent(DisplayDevice device, int event)
+   || || 
+   || || 
+
+  DMS manages different diplay device, which relies on a collection of DisplayAdapter components;
+  DMS instance LocalDisplayAdapter, WifiDisplayAdapter, etc and pass mDisplayAdapterListener as a
+  parameter. Adapters will notify several event through onDisplayDeviceEvent(); when display device
+  added, DISPLAY_DEVICE_EVENT_ADDED will callback to DMS, then DMS.handleDisplayDeviceAdded() will:
+  1. update DMS.mDisplayDevices;
+  2. call addLogicalDisplayLocked(): instance LogicalDisplay and put it in DMS.mLogicalDisplays;
+     LogicalDisplay.mDisplayId and LogicalDisplay.mLayerStack are returned by function DMS.
+     assignDisplayIdLocked() and DMS.assignLayerStackLocked() respectively;
+
+
+ DisplayDevice
+   ||  
+   ||  
+   ||  mCurrentSurface           --  Surface
+   ||  mCurrentLayerStack        --  int 
+   ||  
+   ||  void setSurfaceInTransactionLocked(Surface surface)       #1
+   ||  void setLayerStackInTransactionLocked(int layerStack)     #2
+
+  #1 invoke SurfaceControl.setDisplaySurface() to set mCurrentSurface to native DisplayState.surface
+  field, it will send to SF by calling SF::setTransactionState(), in  SurfaceFlinger this surface
+  handle will keep in DisplayDeviceState.surface;
+
+  #2 invoke SurfaceControl.setDisplayLayerStack() to set mCurrentLayerStack to native DisplayState.
+  layerStack field, it will send to SurfaceFlinger by calling SF::setTransactionState(), in SF it
+  will keep in DisplayDeviceState.layerStack; 
+
+
+ DisplayAdapter 
+   ||  
+   ||  mListener                 --  Listener 
+   ||  
+   ||  void registerLocked()
+   ||  void sendDisplayDeviceEventLocked(
+   ||         final DisplayDevice device, final int event) 
+   ||  
+   ||  
+   || ||  
+   || ||Listener 
+   || ||  
+   || ||  void onDisplayDeviceEvent(DisplayDevice device, int event) 
+   || ||  void onTraversalRequested()
+   || || 
+
+
+ LocalDisplayAdapter
+   ||    extends DisplayAdapter
+   ||  
+   ||  mDevices                  --  SparseArray<LocalDisplayDevice> 
+   ||  mHotplugReceiver          --  HotplugDisplayEventReceiver 
+   ||  
+   ||  void tryConnectDisplayLocked(int builtInDisplayId)
+   ||  
+   || || 
+   || ||LocalDisplayDevice 
+   || ||    extends DisplayDevice
+   || || 
+   || ||  @Override
+   || ||  DisplayDeviceInfo getDisplayDeviceInfoLocked()
+   || ||  
+
+  LocalDisplayAdapter query the display device through SurfaceControl.getBuiltInDisplay() in 
+  tryConnectDisplayLocked(), it only handle BUILT_IN_DISPLAY_ID_MAIN and BUILT_IN_DISPLAY_ID_HDMI;
+  when DisplayAdapter.registerLocked() or receive DisplayEventReceiver.onHotplug() will trigger the
+  query. If queried device, will notify DMS by DisplayAdapter.mListener.onDisplayDeviceEvent();
+  
+ OverlayDisplayAdapter 
+   ||    extends DisplayAdapter
+   ||  
+   ||  
+   ||  
+   || ||OverlayDisplayDevice 
+   || ||    extends DisplayDevice
+   || || 
+   || ||  @Override
+   || ||  DisplayDeviceInfo getDisplayDeviceInfoLocked()
+   || ||  @Override
+   || ||  void performTraversalInTransactionLocked()
+   || || 
+
+  OverlayDisplayAdapter is a adapter that uses overlay windows to simulate secondary displays for 
+  development purposes; when DisplayAdapter.registerLocked() or Settings.Global.OVERLAY_DISPLAY_
+  DEVICES changes, it call updateOverlayDisplayDevices() to add overlay window;
+
+  OverlayDisplayHandle help add a overlay window, it will create OverlayDisplayWindow instance and
+  call it's OverlayDisplayWindow.show() method; when OverlayDisplayWindow ready and callback it's
+  onWindowCreated() method with a valid surafce, it use this surface to create OverlayDisplayDevice
+  instance and notify DMS DISPLAY_DEVICE_EVENT_ADDED; 
+
+  OverlayDisplayWindow actually create a WindowManager.LayoutParams.TYPE_DISPLAY_OVERLAY window
+  and instance TextureView to callback OverlayDisplayHandle; what user will see is a window above
+  other layers and has the content what all other layers composite;
+
+  There is a key flag that allow other layers mirror to this overlay window, cause SF only draw
+  layers to a display which layer's layerStack has the same value to DisplayDevice's layerStack;
+  the display layerStack are set through DisplayDevice#2, the caller is LogicalDisplay.CDL();
+  
+  When instance LogicalDisplay, LogicalDisplay.mLayerStack value are always increase; but before
+  invoke LogicalDisplay.CDL(), DMS will choose LogicalDisplay from DMS.mLogicalDisplays in DMS.CDL()       
+  , it get DisplayDeviceInfo through DisplayDevice.getDisplayDeviceInfoLocked() and check whether
+  DisplayDeviceInfo.flags is set DisplayDeviceInfo.FLAG_OWN_CONTENT_ONLY, if not then will use
+  DEFAULT_DISPLAY's LogicalDisplay.mLayerStack set to the DisplayDevice, so all layers that draw on
+  primary display will also mirror on the newly overlay display;
+
+  ALIAS 
+    LogicalDisplay.CDL()  LogicalDisplay.configureDisplayInTransactionLocked()
+    DMS.CDL               DisplayManagerService.configureDisplayInTransactionLocked()
+
+ WifiDisplayAdapter
+   ||    extends DisplayAdapter
+   ||  
+   ||  mDisplayDevice            --  WifiDisplayDevice  
+   ||  mDisplayController        --  WifiDisplayController 
+   ||  mWifiDisplayListener      --  WifiDisplayController.Listener
+   ||  
+   ||  
+   || || 
+   || ||WifiDisplayDevice
+   || ||    extends DisplayDevice
+   || ||
+   || ||  @Override
+   || ||  void performTraversalInTransactionLocked()      #1
+   || ||  @Override
+   || ||  DisplayDeviceInfo getDisplayDeviceInfoLocked()
+   || || 
+
+  when mWifiDisplayListener.onDisplayConnected(), addDisplayDeviceLocked() will be invoke:
+  1. call SurfaceControl.createDisplay() which at last will call SurfaceFlinger::createDisplay();
+  2. call DisplayAdapter.sendDisplayDeviceEventLocked() which will callback to DMS through func
+     DisplayAdapter.mListener.onDisplayDeviceEvent();
+
+  Function WifiDisplayDevice#1 will be invoke after DMS been callback in onDisplayDeviceEvent();
+  WifiDisplayDevice override it to call DisplayDevice#1, which set surface to SurfaceFlinger;
+
+ WifiDisplayController 
+   ||  
+   ||  
+   ||  mListener                 --  Listener 
+   ||  mWifiP2pManager           --  WifiP2pManager 
+   ||  mRemoteDisplay            --  RemoteDisplay 
+   ||  mExtRemoteDisplay         --  Object 
+   ||  
+   ||  void requestConnect(String address)
+   ||  
+   || ||  
+   || ||Listener  
+   || ||  
+   || ||  void onDisplayConnecting(WifiDisplay display)
+   || ||  void onDisplayConnected(WifiDisplay display,
+   || ||                Surface surface, int width, int height, int flags)
+   || || 
+
+  In WifiDisplayController.updateConnection(), there are two solution to handle WFD connect and 
+  encode&transport:
+  1. ExtendedRemoteDisplayHelper.listen(), which is a QTI-Based WFD solution;
+  2. RemoteDisplay.listen(), which is google's solution.
+
+ RemoteDisplay 
+   ||  
+   ||  mListener                 --  Listener 
+   ||  
+   ||  native long nativeListen(String iface, String opPackageName)  
+   ||  
+   ||  
+   || ||
+   || ||Listener 
+   || || 
+   || ||
+   || ||  void onDisplayConnected(Surface surface,
+   || ||             int width, int height, int flags, int session)
+   || ||  void onDisplayDisconnected()
+   || || 
+   || || 
+
+  RemoteDisplay wrapper around the real WFD connect implementation by calling native funtions, after 
+  been callback in notifyDisplayConnected(), it then callback to upper layer by calling mListener.
+  onDisplayConnected() with a valid surface handle;
+
+  The surface handle is created in SurfaceMediaSource by calling BufferQueue::createBufferQueue(),
+  the producer or surface then callback to upper layer and last set as the composite target buffer
+  in SurfaceFlinger, while SurfaceMediaSource::read() will get the completed buffer from consumer
+  and transport in PlaybackSession.cpp
+
+ ACRONYM
+   DMS                           DisplayManagerService 
+   SF                            SurfaceFlinger
+
+#####################################################
+#####################################################
+
+qcom wfd solution:
+  vendor/qcom/proprietary/wfd
+
+video & audio sort out
+
+wdsm: wireless display session manager
+

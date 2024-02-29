@@ -1,0 +1,366 @@
+
+ linker.cpp
+   ||
+   ||  g_exported_namespaces     --  std::unordered_map<std::string, android_namespace_t*>
+   ||  g_default_namespace       --  android_namespace_t
+   ||  g_anonymous_namespace     --  android_namespace_t*
+   ||
+   ||  android_namespace_t* create_namespace(const void* caller_addr,
+   ||                                       const char* name,
+   ||                                       const char* ld_library_path,
+   ||                                       const char* default_library_path,
+   ||                                       uint64_t type,
+   ||                                       const char* permitted_when_isolated_path,
+   ||                                       android_namespace_t* parent_namespace)
+
+  g_anonymous_namespace default assign with address of g_default_namespace;
+
+  1. init_default_namespaces() is been called in linker __linker_init_post_relocation(), where it
+  parse ld.config.txt and update g_default_namespace field;
+  for every app, linker load is finish when zygote process start, app only fork by zygote but no exec;
+
+  2. InitializeNativeLoader() is been called in JNI_CreateJavaVM() when zygote call
+     AndroidRuntime::startVm(), it will dlopen() library defined in /etc/public.libraries.txt;
+
+  3. CreateClassLoaderNamespace() is been called when an app create it's class loader:
+  3.1 init_anonymous_namespace(const char* shared_lib_sonames, const char* library_search_path)
+      create newly ns "(anonymous)", 'library_search_path' is the app search path; 'shared_lib_sonames'
+      is the libs that defined in public.libraries.txt, the newly ns will link to default ns with these
+      libs; at last assign to g_anonymous_namespace;
+  3.2 app create_namespace() with parent ns is the "(default)"; if the 'ANDROID_NAMESPACE_TYPE_SHARED'
+      is set then all default ns's soinfo and path, link ns will be copy to current ns; if not, the
+      newly ns only contains it's own search path;
+
+ NamespaceLinkConfig
+   ||
+   ||  ns_name_                  --  std::string
+   ||  shared_libs_              --  std::string
+   ||
+
+
+ NamespaceConfig
+   ||
+   ||  name_                     --  std::string
+   ||  isolated_                 --  bool
+   ||  visible_                  --  bool
+   ||  search_paths_             --  std::vector<std::string>
+   ||  permitted_paths_          --  std::vector<std::string>
+   ||  namespace_links_          --  std::vector<NamespaceLinkConfig>
+   ||
+
+
+ linker_config.cpp
+   ||
+   ||  g_config                  --  Config
+   ||
+
+ Config
+   ||
+   ||
+   ||  namespace_configs_        --  std::vector<std::unique_ptr<NamespaceConfig>>
+   ||  namespace_configs_map_    --  std::unordered_map<std::string, NamespaceConfig*>
+   ||
+   ||  bool read_binary_config(const char* ld_config_file_path,
+   ||                          const char* binary_realpath,
+   ||                          bool is_asan,
+   ||                          const Config** config,
+   ||                          std::string* error_msg)
+   ||
+   ||  NamespaceConfig* create_namespace_config(const std::string& name);
+   ||
+   ||
+
+  Config::read_binary_config() responsible to parse content in ld.config.txt, result in g_config;
+  1. In function parse_config_file(), according to 'binary_realpath' find the right section name:
+
+    dir.system = /system/bin/
+    dir.system = /system/xbin/
+    dir.vendor = /vendor/bin/
+
+    [system]
+    ...
+    additional.namespaces = sphal,vndk,rs
+    ...
+
+    [vendor]
+    ...
+
+    so when binary is in system/vendor directory, parser will get property from different section;
+
+  2. parse_config_file() read all the properties of that specific section, return to caller;
+
+  3. create default NamespaceConfig and additional namespace from propery 'additional.namespaces',
+     then assign corresponding field of NamespaceConfig from properties parsed before; all namespace
+     instance is in g_config.namespace_configs_ and return g_config to caller;
+
+  4. in init_default_namespaces() the Config and NamespaceConfig will convert to android_namespace_t,
+     default is 'g_default_namespace'; others namespace will link each other through link_namespaces();
+
+ android_namespace_link_t
+   ||
+   ||  linked_namespace_         --  android_namespace_t*
+   ||  shared_lib_sonames_       --  std::unordered_set<std::string>
+   ||
+
+
+ android_namespace_t
+   ||
+   ||  name_                     --  const char*
+   ||  is_isolated_              --  bool
+   ||  is_greylist_enabled_      --  bool
+   ||  ld_library_paths_         --  std::vector<std::string>
+   ||  default_library_paths_    --  std::vector<std::string>
+   ||  permitted_paths_          --  std::vector<std::string>
+   ||  linked_namespaces_        --  std::vector<android_namespace_link_t>
+   ||  soinfo_list_              --  soinfo_list_t
+   ||
+
+  dlsym_handle_lookup() in Android Oreo is different from Android Nougat, it will also check
+  namespace accessible;
+
+
+  do_dlopen
+  | - get_caller_namespace()
+  |
+  | - find_library()
+  |   | - find_libraries() with 1 library_names_count
+  |   |   | - find_library_internal()                          #Step 1
+  |   |   |   | - find_loaded_library_by_soname()
+  |   |   |   | - load_library()
+  |   |   |   | - find_library_in_linked_namespace() && load_library() if necessary
+  |   |   |   |
+  |   |   |   |
+  |   |   | - LoadTask::load()                                 #Step 2
+  |   |   |   |
+  |   |   | - soinfo::prelink_image()                          #Step 3
+  |   |   |   |
+  |   |   | - DF_1_GLOBAL(RTLD_GLOBAL)                         #Step 4
+  |   |   |   |
+  |   |   | - find_libraries()                                 #Step 5
+  |   |   |   |
+  |   |   | - soinfo::link_image()                             #Step 6
+
+
+*****************************************
+  #Step 1
+*****************************************
+
+bool find_loaded_library_by_soname(android_namespace_t* ns,
+                                         const char* name,
+                                         bool search_linked_namespaces,
+                                         soinfo** candidate)
+
+  function will compare name in ns->soinfo_list_, if search_linked_namespaces
+  then will find it's link namespace which record in ns->linked_namespaces_;
+  to match library in link-ns android_namespace_link_t.shared_lib_sonames_
+  must contains the name;
+
+bool load_library(android_namespace_t* ns,
+                         LoadTask* task,
+                         ZipArchiveCache* zip_archive_cache,                 #1
+                         LoadTaskList* load_tasks,
+                         int rtld_flags,
+                         bool search_linked_namespaces)
+bool load_library(android_namespace_t* ns,
+                         LoadTask* task,
+                         LoadTaskList* load_tasks,                           #2
+                         int rtld_flags,
+                         const std::string& realpath,
+                         bool search_linked_namespaces)
+
+
+  function#1 just need to find the real path of task->get_name():
+  1. task->get_extinfo() has ANDROID_DLEXT_USE_LIBRARY_FD flag, use readlink() to get
+     the path of specific fd;
+  2. invoke open_library()
+     2.1 name start with '/' and contains '!/' then open it with open_library_in_zipfile()
+         and get realpath through readlink(), format like:
+           /vendor/app/QDMA/QDMA.apk!/lib/arm64-v8a/libqdma.so
+     2.2 name only start with '/' then just open it cause it should be a full absolute path,
+         then get realpath through readlink(), format like:
+           /data/dalvik-cache/arm64/system@priv-app@Dialer@Dialer.apk@classes.dex
+           /vendor/lib64/hw/gralloc.qcs605.so
+     2.3 name only contains target itself, then try open it under paths we kown:
+           android_namespace_t.get_ld_library_paths()         - try namespace ld paths
+           soinfo.get_dt_runpath()                            - try needed soinfo's runpath
+           android_namespace_t.get_default_library_paths()    - try namespace default path
+           g_default_namespace.get_default_library_paths()    - try global default namespace path when is_greylisted
+         after open get realpath through readlink(), format like:
+           liblog.so
+           libcutils.so
+
+
+  function#2 do the real thing to load library:
+  1. soinfo_alloc() and call LoadTask.set_soinfo()
+     in soinfo_alloc the newly soinfo will be add to ns through add_soinfo;
+  2. get all current target's DT_NEEDED, create LoadTask and push to LoadTaskList;
+
+  the newly create soinfo and LoadTask will be use in find_libraries();
+
+*****************************************
+  #Step 4
+*****************************************
+
+  this step try find soinfo which have flag DF_1_GLOBAL, if it contains then
+  this soinfo will be add to all ns that passes through find_libraries();
+
+*****************************************
+  #Step 5
+*****************************************
+
+  this step find_libraries() again to handle soinfo's namespace that is
+  differ from current ns, that may happen when soinfo is find in a link ns
+
+
+######################################
+######################################
+https://source.android.com/devices/architecture/vndk/linker-namespace
+
+  apk classloader and it's parent, typically:
+
+        null
+         ^
+         | parent
+         |
+   BootClassLoader
+         |
+         | parent
+         |
+   SystemClassLoader
+         |
+         | parent
+         |
+   LoadedApk.mClassLoader
+
+
+  when invoke CreateClassLoaderNamespace() the parameter 'is_shared' is
+  decide in LoadedApk.java:
+
+     final boolean isBundledApp = mApplicationInfo.isSystemApp()
+                                && !mApplicationInfo.isUpdatedSystemApp();
+
+    this isSystemApp means this application is installed in the
+    device's system image, not system USER;
+
+
+   CreateClassLoaderNamespace()
+   |
+   | - LibraryNamespaces::Create()
+   |   |
+   |   | - LibraryNamespaces::InitPublicNamespace()
+   |   |   |
+   |   |   | - android_init_anonymous_namespace()
+   |   |   |
+   |   |
+   |   | - android_create_namespace
+   |   |
+
+   android_init_anonymous_namespace() will create new namespace with newly search path and
+   share libs, this namespace will overwrite g_anonymous_namespace;
+
+   after android_create_namespace(), newly namespace will save in LibraryNamespaces .namespaces_,
+   when APP load it's jni lib through System.loadLibrary(), art func JavaVMExt::LoadNativeLibrary()
+   will invoke OpenNativeLibrary() where get the namespace from namespaces_;
+
+   when LibraryNamespaces::Create(), if it's a vendor apk, then the newly namespace name will become
+   "vendor-classloader-namespace" ranther than "classloader-namespace", besides, it will get "vndk"
+   namespace from linker and link library define in '/etc/vndksp.libraries.txt' to the newly namespace;
+
+
+######################################
+######################################
+  the public.libraries.txt take effect between sdk25 and sdk27 is different:
+  first, sdk25 and sdk27 will dlopen libs defines in txt when InitializeNativeLoader(),
+  then every app will invoke InitPublicNamespace() before create it's own ns:
+  1. in sdk25 InitPublicNamespace will call linker's init_namespaces() to create
+     anonymous ns, the libs list in txt will pass to init_namespaces and put it
+     in 'g_public_namespace'; when dlopen will check libs in g_public_namespace,
+     then txt defines take effect;
+  2. in sdk27 InitPublicNamespace will call linker's init_anonymous_namespace() to
+     create anonymous ns, the libs list in txt will pass to init_anonymous_namespace
+     and link with default ns; that means anonymous ns can access those libs;
+     but app create ns with parent is default ns, so anonymous ns won' be use, the libs
+     only take effect when ANDROID_NAMESPACE_TYPE_SHARED is set, so app's ns will copy
+     all libs and path from default ns, because default ns already dlopen those libs so
+     the app can access it;
+
+
+log may help:
+09:16:41.644  2647  2647 W linker  : do_dlopen: open /data/app/com.srw.demov7media-a3Rvz3iOYtA_UkgulPjlpw==/oat/arm/base.odex with ns 0xe839f298((default)) caller libart.so
+09:16:41.650  2647  2647 W linker  : do_dlopen: open /data/app/com.srw.demov7media-a3Rvz3iOYtA_UkgulPjlpw==/oat/arm/base.odex with ns 0xe839f298((default)) get soinfo 0xe75ed8d0
+09:16:41.674  2647  2647 W linker  : create_namespace: type 0x1 ns 0xe82ae0d0((anonymous)) parent ns 0xe839f298((default)), path: (null) | /data/app/com.srw.demov7media-a3Rvz3iOYtA_UkgulPjlpw==/lib/arm:/system/fake-libs:/data/app/com.srw.demov7media-a3Rvz3iOYtA_UkgulPjlpw==/base.apk!/lib/armeabi
+09:16:41.675  2647  2647 W linker  : init_anonymous_namespace: anoymous ns 0xe82ae0d0 with shared lib soname libandroid.so:libaaudio.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativewindow.so:libneuralnetworks.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+09:16:41.676  2647  2647 W linker  : caller so libnativeloader.so
+09:16:41.677  2647  2647 W linker  : create_namespace: parent path  | /system/lib:/vendor/lib
+09:16:41.677  2647  2647 W linker  : create_namespace: type 0x8000003 ns 0xe82ae110(classloader-namespace) parent ns 0xe839f298((default)), path: (null) | /data/app/com.srw.demov7media-a3Rvz3iOYtA_UkgulPjlpw==/lib/arm:/system/fake-libs:/data/app/com.srw.demov7media-a3Rvz3iOYtA_UkgulPjlpw==/base.apk!/lib/armeabi
+09:16:41.793  2647  2647 W linker  : do_dlopen: open /system/lib/libqti_performance.so with ns 0xe839f298((default)) caller libart.so
+09:16:41.806  2647  2647 W linker  : do_dlopen: open /system/lib/libqti_performance.so with ns 0xe839f298((default)) get soinfo 0xe75eda90
+09:16:41.897  2647  2665 W linker  : do_dlopen: open /data/app/com.srw.demov7media-a3Rvz3iOYtA_UkgulPjlpw==/lib/arm/libv7test_jni.so with ns 0xe839f298((default)) caller libnativeloader.so
+09:16:41.909  2647  2665 W linker  : do_dlopen: open /data/app/com.srw.demov7media-a3Rvz3iOYtA_UkgulPjlpw==/lib/arm/libv7test_jni.so with ns 0xe82ae110(classloader-namespace) get soinfo 0xe5e70390
+09:16:42.034  2647  2667 W linker  : do_dlopen: open /vendor/lib/hw/gralloc.qcs605.so with ns 0xe839f298((default)) caller libvndksupport.so
+09:16:42.055  2647  2667 W linker  : do_dlopen: open /vendor/lib/hw/gralloc.qcs605.so with ns 0xe82ae010(sphal) get soinfo 0xe5e70550
+09:16:42.131  2647  2667 W linker  : do_dlopen: open libEGL_adreno.so with ns 0xe82ae010(sphal) caller libGLESv2_adreno.so
+09:16:42.132  2647  2667 W linker  : do_dlopen: open libEGL_adreno.so with ns 0xe82ae010(sphal) get soinfo 0xe6cf18d0
+09:16:42.180  2647  2667 W linker  : do_dlopen: open /vendor/lib/hw/android.hardware.graphics.mapper@2.0-impl.so with ns 0xe839f298((default)) caller libvndksupport.so
+09:16:42.182  2647  2667 W linker  : do_dlopen: open /vendor/lib/hw/android.hardware.graphics.mapper@2.0-impl.so with ns 0xe82ae010(sphal) get soinfo 0xe782b010
+09:16:42.184  2647  2667 W linker  : do_dlopen: open /vendor/lib/hw/gralloc.qcs605.so with ns 0xe839f298((default)) caller libvndksupport.so
+09:16:42.188  2647  2667 W linker  : do_dlopen: open /vendor/lib/hw/gralloc.qcs605.so with ns 0xe82ae010(sphal) get soinfo 0xe5e70550
+09:16:42.239  2647  2665 D ModuleCore: WebRTCAPI[L64]:Get sdk 27 band Android; force 1 use vendor 0
+09:16:42.239  2647  2665 D ModuleCore: WebRTCAPI[L72]:Loading 'libqcom_omx_27.so' library.
+09:16:42.240  2647  2665 W linker  : do_dlopen: open libqcom_omx_27.so with ns 0xe82ae110(classloader-namespace) caller libv7test_jni.so
+09:16:42.240  2647  2665 W linker  : find_libraries: step1 load libqcom_omx_27.so linked 1 i 0
+09:16:42.241  2647  2665 W linker  : find_libraries: step1 load libcutils.so linked 1 i 1
+09:16:42.241  2647  2665 W linker  : find_libraries: step1 load libutils.so linked 1 i 2
+09:16:42.241  2647  2665 W linker  : find_libraries: step1 load libstagefright.so linked 1 i 3
+09:16:42.242  2647  2665 W linker  : find_libraries: step1 load libbinder.so linked 1 i 4
+09:16:42.244  2647  2665 W linker  : find_libraries: step1 load libhardware.so linked 1 i 5
+09:16:42.244  2647  2665 W linker  : find_libraries: step1 load libmedia.so linked 1 i 6
+09:16:42.244  2647  2665 W linker  : find_libraries: step1 load libui.so linked 1 i 7
+09:16:42.245  2647  2665 W linker  : find_libraries: step1 load libgui.so linked 1 i 8
+09:16:42.245  2647  2665 W linker  : find_libraries: step1 load libstagefright_foundation.so linked 1 i 9
+09:16:42.245  2647  2665 W linker  : find_libraries: step1 load libstagefright_omx.so linked 1 i 10
+09:16:42.246  2647  2665 W linker  : find_libraries: step1 load libcamera_client.so linked 1 i 11
+09:16:42.246  2647  2665 W linker  : find_libraries: step1 load libjpeg.so linked 1 i 12
+09:16:42.246  2647  2665 W linker  : find_libraries: step1 load libhidlbase.so linked 1 i 13
+09:16:42.246  2647  2665 W linker  : find_libraries: step1 load libhidlmemory.so linked 1 i 14
+09:16:42.246  2647  2665 W linker  : find_libraries: step1 load android.hidl.allocator@1.0.so linked 1 i 15
+09:16:42.247  2647  2665 W linker  : find_libraries: step1 load android.hardware.media.omx@1.0.so linked 1 i 16
+09:16:42.248  2647  2665 W linker  : find_libraries: step1 load liblog.so linked 1 i 17
+09:16:42.248  2647  2665 W linker  : find_libraries: step1 load libc.so linked 1 i 18
+09:16:42.248  2647  2665 W linker  : find_libraries: step1 load libm.so linked 1 i 19
+09:16:42.248  2647  2665 W linker  : find_libraries: step1 load libstdc++.so linked 1 i 20
+09:16:42.248  2647  2665 W linker  : find_libraries: step1 load libc++.so linked 1 i 21
+09:16:42.248  2647  2665 W linker  : find_libraries: step1 load libdl.so linked 1 i 22
+09:16:42.269  2647  2665 W linker  : do_dlopen: open libqcom_omx_27.so with ns 0xe82ae110(classloader-namespace) get soinfo 0xe5e70a90
+09:16:42.273  2647  2665 D ModuleCore: WebRTCAPI[L75]:Dlopen 'libqcom_omx_27.so' library succeed!
+09:16:42.312  2647  2665 W linker  : do_dlopen: open libstagefrighthw.so with ns 0xe839f298((default)) caller libstagefright_omx.so
+09:16:42.314  2647  2665 W linker  : do_dlopen: open libstagefrighthw.so with ns 0xe839f298((default)) get soinfo 0xe5e70c50
+09:16:42.315  2647  2665 W linker  : do_dlopen: open libOmxCore.so with ns 0xe839f298((default)) caller libstagefrighthw.so
+09:16:42.317  2647  2665 W linker  : do_dlopen: open libOmxCore.so with ns 0xe839f298((default)) get soinfo 0xe5e70e10
+09:16:42.319  2647  2665 D ModuleCore: WebRTCAPI[L114]:Init Vendor JPEG api failed.
+09:16:42.896   593  1002 W linker  : do_dlopen: open /vendor/lib/camera/components/com.qti.stats.afd.so with ns 0xf5a36298((default)) caller camera.qcom.so
+09:16:42.897   593  1002 W linker  : do_dlopen: open /vendor/lib/camera/components/com.qti.stats.afd.so with ns 0xf5a36298((default)) get soinfo 0xf5996e10
+09:16:42.916   593  1002 W linker  : do_dlopen: open /vendor/lib/camera/components/com.qti.stats.asd.so with ns 0xf5a36298((default)) caller camera.qcom.so
+09:16:42.917   593  1002 W linker  : do_dlopen: open /vendor/lib/camera/components/com.qti.stats.asd.so with ns 0xf5a36298((default)) get soinfo 0xf598e010
+09:16:42.932   593  1002 W linker  : do_dlopen: open /vendor/lib/libcamxtintlessalgo.so with ns 0xf5a36298((default)) caller camera.qcom.so
+09:16:42.939   593  1002 W linker  : do_dlopen: open /vendor/lib/libcamxtintlessalgo.so with ns 0xf5a36298((default)) get soinfo 0xf594aa90
+09:16:43.167  2647  2665 W linker  : do_dlopen: open libOmxVenc.so with ns 0xe839f298((default)) caller libOmxCore.so
+09:16:43.169   868  2709 W linker  : do_dlopen: open /vendor/lib/hw/android.hardware.graphics.mapper@2.0-impl.so with ns 0xf7786298((default)) caller libvndksupport.so
+09:16:43.189  2647  2665 W linker  : do_dlopen: open libOmxVenc.so with ns 0xe839f298((default)) get soinfo 0xe5eb31d0
+09:16:43.190  2647  2665 W linker  : do_dlopen: open libC2D2.so with ns 0xe839f298((default)) caller libc2dcolorconvert.so
+09:16:43.193  2647  2665 W linker  : do_dlopen: open libC2D2.so with ns 0xe839f298((default)) get soinfo 0xe5eb3710
+09:16:43.194  2647  2665 W linker  : do_dlopen: open libadreno_utils.so with ns 0xe839f298((default)) caller libc2dcolorconvert.so
+09:16:43.195  2647  2665 W linker  : do_dlopen: open libadreno_utils.so with ns 0xe839f298((default)) get soinfo 0xe5eb3a90
+09:16:43.196  2647  2665 W linker  : do_dlopen: open libqti-perfd-client.so with ns 0xe839f298((default)) caller libOmxVenc.so
+09:16:43.198  2647  2665 W linker  : do_dlopen: open libqti-perfd-client.so with ns 0xe839f298((default)) get soinfo 0xe5eb3c50
+09:16:43.205   868  2709 W linker  : do_dlopen: open /vendor/lib/hw/android.hardware.graphics.mapper@2.0-impl.so with ns 0xf7695010(sphal) get soinfo 0xf72441d0
+09:16:43.207   868  2709 W linker  : do_dlopen: open /vendor/lib/hw/gralloc.qcs605.so with ns 0xf7786298((default)) caller libvndksupport.so
+09:16:43.210   868  2709 W linker  : do_dlopen: open /vendor/lib/hw/gralloc.qcs605.so with ns 0xf7695010(sphal) get soinfo 0xf7520a90
+09:16:43.227   593  1002 W linker  : do_dlopen: open /vendor/lib/hw/android.hardware.graphics.mapper@2.0-impl.so with ns 0xf5a36298((default)) caller libhidltransport.so
+09:16:43.229   593  1002 W linker  : do_dlopen: open /vendor/lib/hw/android.hardware.graphics.mapper@2.0-impl.so with ns 0xf5a36298((default)) get soinfo 0xf594ac50
+09:16:43.230   593  1002 W linker  : do_dlopen: open /vendor/lib/hw/gralloc.qcs605.so with ns 0xf5a36298((default)) caller libhardware.so
+09:16:43.233   593  1002 W linker  : do_dlopen: open /vendor/lib/hw/gralloc.qcs605.so with ns 0xf5a36298((default)) get soinfo 0xf594ae10
+09:16:43.454  2647  2724 W linker  : do_dlopen: open libC2D2.so with ns 0xe82ae110(classloader-namespace) caller libqcom_omx_27.so
+09:16:43.466  2647  2724 W linker  : do_dlopen: open libC2D2.so with ns 0xe82ae110(classloader-namespace) get soinfo 0xe5eb3e10
+09:16:43.481  2647  2726 W linker  : do_dlopen: open libc2d30_bltlib.so with ns 0xe82ae110(classloader-namespace) caller libgsl.so
+09:16:43.531  2647  2726 W linker  : do_dlopen: open libc2d30_bltlib.so with ns 0xe82ae110(classloader-namespace) get soinfo 0xe5e711d0

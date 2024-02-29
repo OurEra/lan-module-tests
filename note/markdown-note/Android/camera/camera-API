@@ -1,0 +1,39 @@
+关于Camera SDK接口调用对应libcameraservice中api1/api2, device1/device3以及到HAL层中使用HAL/HAL3的关系:
+参考P2上camera_module_t信息为:
+camera_module_t
+
+  module_api_version:CAMERA_MODULE_API_VERSION_2_4
+  hal_api_version:HARDWARE_HAL_API_VERSION
+  camera_info.device_version: CAMERA_DEVICE_API_VERSION_3_0/
+			      CAMERA_DEVICE_API_VERSION_1_0
+
+device version is decide by 'persist.camera.HAL3.enabled' & sensor is not YUV;
+
+
+使用Camera接口时:
+android.hardware.Camera                          Camera.cpp                       CameraService.cpp  		  CameraClient
+
+openLegacy(int cameraId, int halVersion)         Camera::connectLegacy()          CameraService::connectLegacy     SEE TABLE BELOW
+
+open(int cameraId)                               Camera::connect()                CameraService::connect           SEE TABLE BELOW
+
+
+arg halVersion   module_api_version    camera_info.device_version　　　　CameraClient             cameraDevice	 			HAL
+  0x100          < 0x203              				　　　　　REJECT
+  0x100		 > 0x203               0x100		　　　　　　　　　　　　　api1/CameraClient       device1/CameraHardwareInterface        QCamera2HardwareInterface
+  0x100		 > 0x203	       >0x100　　　　　　　　　　　　　　　　　　　　　　　　api1/CameraClient       device1/CameraHardwareInterface        QCamera2HardwareInterface
+  -1		　　　　　　　　　　　　　　　　　　　　　　　0x1000                        api1/CameraClient       device1/CameraHardwareInterface        QCamera2HardwareInterface
+  -1				       >0x300			　　　　　api1/Camera2Client	 　　　　device3/Camera3Device		    QCamera3HardwareInterface
+
+1. App in 'camera.hal1.packagelist' will force use CAMERA_HAL_API_VERSION_1_0 in android.hardware.Camera;
+2. Use command 'dumpsys media.camera' to check CameraService infos;
+3. device1/CameraHardwareInterface will ensure use HAL1(QCamera2HardwareInterface) by calling camera_module_t.open_legacy() if necessary;
+
+使用CameraManager接口时:
+android.hardware.camera2.CameraManager          CameraService.cpp		CameraClient		cameraDevice		HAL
+
+openCamera()                                    CameraService::connectDevice()	api2/CameraDeviceClient  device3/Camera3Device   QCamera3HardwareInterface
+
+1. camera2 APIs will check through CameraService::supportsCameraApi() and do the connect, otherwise it will
+   use camera APIs;
+
