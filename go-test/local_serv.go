@@ -1,15 +1,19 @@
 package main
 
 import (
+	"compress/gzip"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
-
-	// "encoding/json"
-	"compress/gzip"
-	"io/ioutil"
 )
+
+type Config struct {
+	Enable int `json:"enable"`
+	Mode   int `json:"mode"`
+}
 
 type TestHandler struct {
 	str string
@@ -48,10 +52,28 @@ func testPost(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `{"code":0}`)
 }
 
+func handleGetConfig(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(time.Now().String(), r.URL.Path)
+
+	config := Config{
+		Enable: 1,
+		Mode:   2,
+	}
+	jsonData, err := json.Marshal(config)
+	if err != nil {
+		fmt.Println("JSON encoding error:", err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonData)
+}
+
 func main() {
 	http.Handle("/", &TestHandler{"Hi"})
 	http.HandleFunc("/test", SayHello)
+	http.HandleFunc("/config", handleGetConfig)
 	http.HandleFunc("/report/error/v2", testPost)
 	http.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir("./"))))
-	http.ListenAndServe("100.100.57.138:8000", nil)
+	http.ListenAndServe("192.168.1.129:8001", nil)
 }
