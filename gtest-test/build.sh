@@ -5,6 +5,10 @@
 # cmake ..             # Generate native build scripts for GoogleTest.
 # make -j4
 
-clang -std=c++17 -lstdc++ -lm -lpthread -I../external/gtest/googletest/include basic.cpp \
-        ../external/gtest/build/lib/libgtest.a \
+
+# ./test-gtest --gtest_list_tests
+# ./test-gtest --gtest_filter=SquareRootTest.PositiveNos*
+
+clang -std=c++17 -lstdc++ -lm -lpthread -lcurl -I/home/shiruiwei/thirdparty/googletest/googletest/include basic.cpp \
+        /home/shiruiwei/thirdparty/googletest/build/lib/libgtest.a \
         -o test-gtest
